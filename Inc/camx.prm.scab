@@ -1,0 +1,258 @@
+c-----CAMx v3.10 020410
+c
+c     CAMx.PRM defines model parameters
+c
+c     Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002
+c                     ENVIRON International Corporation
+c
+c     Modifications:
+c        7/5/02      gwilson   Added parameters for IRON-PIG
+c        9/3/02      removed MXVECCL
+c        1/10/03     Added MXVECDP
+c
+c-----------------------------------------------------------------------
+c     Parameters for Grid dimensions:
+c
+c        To make best use of available memory, change these parameters
+c        to correspond to the dimensions of the simulation grid(s).
+c        Set parameters to 0 for unused grid numbers.
+c
+c      MXCOLn  -- number of columns in grid N
+c      MXROWn  -- number of rows in grid N
+c      MXLAYn  -- number of layers in grid N
+c
+c      MXCOLA  -- maximum number of columns across any grids
+c      MXROWA  -- maximum number of rows across any grids
+c      MXLAYA  -- maximum number of layers across any grids
+c                 (NOTE:  The above parametes must be set to the
+c                         maximum value of the numbered set.)
+c
+c      MX1D    -- number of cells in any direction in any grid
+c                 (NOTE:  This parameter must be set to a value that
+c                         is at least as large as any of the mxcol
+c                         or mxrow parameters)
+c
+c      MXCHDRN -- maximum number of children grids for any parent grid
+c      MXGRID  -- maximum number of grids total
+c      MXSECT  -- maximum number of particle sections  
+c-----------------------------------------------------------------------
+c
+      integer   MXCOL1,  MXROW1,  MXLAY1 
+      integer   MXCOL2,  MXROW2,  MXLAY2 
+      integer   MXCOL3,  MXROW3,  MXLAY3 
+      integer   MXCOL4,  MXROW4,  MXLAY4 
+      integer   MXCOL5,  MXROW5,  MXLAY5 
+      integer   MXCOL6,  MXROW6,  MXLAY6 
+      integer   MXCOL7,  MXROW7,  MXLAY7 
+      integer   MXCOL8,  MXROW8,  MXLAY8 
+      integer   MXCOL9,  MXROW9,  MXLAY9 
+      integer   MXCOL10, MXROW10, MXLAY10 
+c
+      parameter ( MXCOL1  =  65, MXROW1  =  40, MXLAY1  = 10 )
+      parameter ( MXCOL2  =   0, MXROW2  =   0, MXLAY2  = 0 )
+      parameter ( MXCOL3  =   0, MXROW3  =   0, MXLAY3  = 0 )
+      parameter ( MXCOL4  =   0, MXROW4  =   0, MXLAY4  = 0 )
+      parameter ( MXCOL5  =   0, MXROW5  =   0, MXLAY5  = 0 )
+      parameter ( MXCOL6  =   0, MXROW6  =   0, MXLAY6  = 0 )
+      parameter ( MXCOL7  =   0, MXROW7  =   0, MXLAY7  = 0 )
+      parameter ( MXCOL8  =   0, MXROW8  =   0, MXLAY8  = 0 )
+      parameter ( MXCOL9  =   0, MXROW9  =   0, MXLAY9  = 0 )
+      parameter ( MXCOL10 =   0, MXROW10 =   0, MXLAY10 = 0 )
+c
+      integer   MXCOLA
+      integer   MXROWA
+      integer   MXLAYA
+c
+      parameter ( MXCOLA  = 65, MXROWA  = 40, MXLAYA  = 10)
+c
+      integer   MX1D
+      integer   MXCHDRN
+      integer   MXGRID
+      integer   MXSECT
+c
+      parameter ( MX1D    =  65 )
+      parameter ( MXCHDRN =   3 )
+      parameter ( MXGRID  =  1 )
+      parameter ( MXSECT  =  10 )
+c
+c-----------------------------------------------------------------------
+c      Parameters for Chemistry:
+c
+c      MXSPEC  -- number of simulated species
+c      MXRADCL -- number of radical species
+c      MXPHT1  -- number of primary photolysis reactions
+c      MXPHT2  -- number of secondary photolysis reactions
+c      NTEMPR  -- number of temperature bins for chemical reactions
+c      TEMPLO  -- minimum temperature for chemical reactions
+c      TEMPHI  -- maximum temperature for chemical reactions
+c      NPRESR  -- number of pressure bins for chemical reactions
+c      PRESLO  -- minimum pressure for chemical reactions
+c      PRESHI  -- maximum pressure for chemical reactions
+c      MXRXN   -- number of chemical reactions
+c      NSPNAM  -- number of recognizable state species
+c      NRADNM  -- number of recognizable radical species
+c-----------------------------------------------------------------------
+c    
+      integer   MXSPEC
+      integer   MXRADCL
+      integer   MXPHT1
+      integer   MXPHT2
+      integer   NTEMPR
+      real      TEMPLO
+      real      TEMPHI
+      integer   NPRESR
+      real      PRESLO
+      real      PRESHI
+      integer   MXRXN
+      integer   NSPNAM
+      integer   NRADNM
+c
+      parameter ( MXSPEC  =   164 )
+      parameter ( MXRADCL =    12 )
+      parameter ( MXPHT1  =     6 )
+      parameter ( MXPHT2  =    10 )
+      parameter ( NTEMPR  =   161 )
+      parameter ( TEMPLO  = 180.0 )
+      parameter ( TEMPHI  = 340.0 )
+      parameter ( NPRESR  =    13 )
+      parameter ( PRESLO  =  68.0 )
+      parameter ( PRESHI  = 1100. )
+      parameter ( MXRXN   =   100 )
+      parameter ( NSPNAM  =   228 )
+      parameter ( NRADNM  =    26 )
+c
+c-----------------------------------------------------------------------
+c     Parameters for various lookup tables:
+c
+c     NOZN   -- number of ozone column values
+c     NALB   -- number of albedo values
+c     NHAZE  -- number of haze values
+c     NHGHT  -- number of height values
+c     NZEN   -- number of zenith values
+c     NLU    -- number of land use categories
+c-----------------------------------------------------------------------
+c
+      integer   NOZN
+      integer   NALB
+      integer   NHAZE
+      integer   NHGHT
+      integer   NZEN
+      integer   NLU
+c
+      parameter ( NOZN  =  5 )
+      parameter ( NALB  =  5 )
+      parameter ( NHAZE =  3 )
+      parameter ( NHGHT = 11 )
+      parameter ( NZEN  = 10 )
+      parameter ( NLU   = 11 )
+c
+c-----------------------------------------------------------------------
+c     Parameters for Point source data:
+c
+c     MXPTSRC  -- maximum number of point sources allowed in the model
+c     MXPIG    -- maximum number of PiG puffs allowed in the model
+c     MXHRS    -- maximum number of hours of simulation
+c-----------------------------------------------------------------------
+c
+      integer   MXPTSRC
+      integer   MXPIG
+      integer   MXHRS
+
+      parameter ( MXPTSRC = 120000 )
+      parameter ( MXPIG   = 25000 )
+      parameter ( MXHRS   =   250 )
+c
+c-----------------------------------------------------------------------
+c     Parameters for dimensioning the scratch vectors:
+c
+c     MXVEC2D  -- size of scratch vectors for 2D fields
+c     MXVEC3D  -- size of scratch vectors for 3D fields
+c     MXVEC4D  -- size of scratch vectors for 4D fields
+c
+c     MXVECEM  -- size of scratch vector for surface emissions fields
+c     MXVECRD  -- size of scratch vectors for 4D fields of radical species
+c     MXVECLU  -- size of scratch vectors for landuse fields
+c     MXVECDP  -- size of scratch vectors for deposition fields
+c
+c     MXVEC3A  -- size of scratch vectors for 3D fields that get written
+c                 over in each grid 
+c
+c-----------------------------------------------------------------------
+c
+      integer   MXVEC2D
+      integer   MXVEC3D
+      integer   MXVEC4D
+
+      integer   MXVECEM
+      integer   MXVECRD
+      integer   MXVECLU
+      integer   MXVECDP
+c
+      integer   MXVEC3A
+c
+      parameter ( MXVEC2D = MXCOL1*MXROW1 + 
+     &                      MXCOL2*MXROW2 +
+     &                      MXCOL3*MXROW3 +
+     &                      MXCOL4*MXROW4 +
+     &                      MXCOL5*MXROW5 +
+     &                      MXCOL6*MXROW6 +
+     &                      MXCOL7*MXROW7 +
+     &                      MXCOL8*MXROW8 +
+     &                      MXCOL9*MXROW9 +
+     &                      MXCOL10*MXROW10)
+c
+      parameter ( MXVEC3D = MXCOL1*MXROW1*MXLAY1 + 
+     &                      MXCOL2*MXROW2*MXLAY2 +
+     &                      MXCOL3*MXROW3*MXLAY3 +
+     &                      MXCOL4*MXROW4*MXLAY4 +
+     &                      MXCOL5*MXROW5*MXLAY5 +
+     &                      MXCOL6*MXROW6*MXLAY6 +
+     &                      MXCOL7*MXROW7*MXLAY7 +
+     &                      MXCOL8*MXROW8*MXLAY8 +
+     &                      MXCOL9*MXROW9*MXLAY9 +
+     &                      MXCOL10*MXROW10*MXLAY10)
+c
+      parameter ( MXVEC4D = MXVEC3D * MXSPEC )
+c
+      parameter ( MXVECEM = MXVEC2D * MXSPEC  )
+      parameter ( MXVECRD = MXVEC3D * MXRADCL )
+      parameter ( MXVECLU = MXVEC2D * NLU     )
+      parameter ( MXVECDP = MXVEC2D * MXSPEC * 3)
+c
+      parameter ( MXVEC3A = MXCOLA * MXROWA * MXLAYA )
+c
+c-----------------------------------------------------------------------
+c     Parameters for IRON PiG
+c
+c     GRESPIG  -- flag for determining if GREASD-PiG is used
+c     IRONPIG  -- flag for determining if IRON-PiG is used
+c     MXRECTR  -- maximum number of in-puff reactors
+c     FLEAK    -- fraction of horizontal scale to start puff leakage
+c     LEAKON   -- toggle to enable/disable puff leakage
+C     LRCTIN   -- switch for specified reactor load fractions
+c                 set by data statement in PIGINIT2
+c     LVISPIG  -- toggle for pig visualization in average file
+c     PGROFAC  -- factor controlling puff growth rate
+c     DXYMAX   -- maximum allowed puff size (meters) before dumping
+c                 If zero, the grid scale is used
+c--------------------------------------------------------------------
+c     
+      integer*4 GRESPIG
+      integer*4 IRONPIG
+      logical   LEAKON
+      logical   LRCTIN
+      integer   MXRECTR
+      real      FLEAK
+      logical   LVISPIG
+      real      PGROFAC
+      real      DXYMAX
+c                 
+      parameter ( GRESPIG = 1 )
+      parameter ( IRONPIG = 2 )
+      parameter ( MXRECTR = 3 )
+      parameter ( FLEAK = .25 )
+      parameter ( LEAKON = .TRUE. )
+      parameter ( LRCTIN = .FALSE. )
+      parameter ( LVISPIG = .TRUE. )
+      parameter ( PGROFAC = 1.0 )
+      parameter ( DXYMAX = 0.0 )

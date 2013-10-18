@@ -1,0 +1,355 @@
+c-----CAMx v4.02 030709
+c
+c     DDMCHM.COM sets species pointers for the DDM chemistry
+c     These equivalences must be consistent with the internal
+c     species lists defined in data statements in READCHM
+c
+c     Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
+c     ENVIRON International Corporation
+c
+c
+      common /lname/ lmap(NSPNAM), lrad(NRADNM)
+
+      integer   lno   ,lno2  ,lo3  
+      integer   lpan  ,lcres ,lpan2
+      integer   lmpan ,lpbzn ,lnphe
+      integer   lrno3 ,ldcb2 ,ldcb3
+      integer   lhno4 ,lacet ,lald2
+      integer   lalk1 ,lalk2 ,lalk3
+      integer   lalk4 ,lalk5 ,laro1
+      integer   laro2 ,lbacl ,lbald
+      integer   lbcl1 ,lbcl2 ,lbuta
+      integer   lccho ,lccrs  
+      integer   lcl2  ,lco   ,lco2h
+      integer   lco3h ,lcooh ,lcprm
+      integer   ldcb1 ,leth  ,lethe
+      integer   letoh ,lfcrs ,lfmcl
+      integer   lform ,lfprm ,lgly 
+      integer   lh2o2 ,lhc2h ,lhcho
+      integer   lhcl  ,lhono ,lhno3
+      integer   lho2h ,lhocl ,licl1
+      integer   licl2 ,lisop ,lispd
+      integer   lmek  ,lmeoh ,lmeth
+      integer   lmgly ,lmvk  ,lna  
+      integer   lnh3  ,lntr  ,lnxoy
+      integer   lole  ,lole1 ,lole2
+      integer   lbpin ,llimo ,lmono ,lsesq
+      integer   lopen ,lpar  ,lpcl 
+      integer   lpec  ,lphen ,lpna 
+      integer   lpnh4 ,lpno3 ,lpoa 
+      integer   lprod ,lpso4 ,lrc2h
+      integer   lrc3h ,lrcho ,lrooh
+      integer   lso2
+      integer   lsulf
+      integer   lterp ,ltol  ,lxn  ,lxyl 
+      integer   lcpo1, lcpo2, lcpo3, lcpo4
+      integer   lcpo5, lcpo6, lcpo7, lcpo8
+      integer   lcpo9, lcpo10
+      integer   lcoo1, lcoo2, lcoo3, lcoo4
+      integer   lcoo5, lcoo6, lcoo7, lcoo8
+      integer   lcoo9, lcoo10
+      integer   lcbs1, lcbs2, lcbs3, lcbs4
+      integer   lcas1, lcas2, lcas3, lcas4
+c
+      integer   lapo1, lapo2, lapo3, lapo4
+      integer   lapo5, lapo6, lapo7, lapo8
+      integer   lapo9, lapo10
+      integer   laoo1, laoo2, laoo3, laoo4
+      integer   laoo5, laoo6, laoo7, laoo8
+      integer   laoo9, laoo10
+      integer   labs1, labs2, labs3, labs4
+      integer   laas1, laas2, laas3, laas4
+c
+      integer   lapo1_1  ,lapo1_2  ,lapo1_3  ,lapo1_4  ,lapo1_5
+      integer   lapo1_6  ,lapo1_7  ,lapo1_8  ,lapo1_9  ,lapo1_10
+      integer   lapo2_1  ,lapo2_2  ,lapo2_3  ,lapo2_4  ,lapo2_5
+      integer   lapo2_6  ,lapo2_7  ,lapo2_8  ,lapo2_9  ,lapo2_10
+      integer   lapo3_1  ,lapo3_2  ,lapo3_3  ,lapo3_4  ,lapo3_5
+      integer   lapo3_6  ,lapo3_7  ,lapo3_8  ,lapo3_9  ,lapo3_10
+      integer   lapo4_1  ,lapo4_2  ,lapo4_3  ,lapo4_4  ,lapo4_5
+      integer   lapo4_6  ,lapo4_7  ,lapo4_8  ,lapo4_9  ,lapo4_10
+      integer   lapo5_1  ,lapo5_2  ,lapo5_3  ,lapo5_4  ,lapo5_5
+      integer   lapo5_6  ,lapo5_7  ,lapo5_8  ,lapo5_9  ,lapo5_10
+      integer   lapo6_1  ,lapo6_2  ,lapo6_3  ,lapo6_4  ,lapo6_5
+      integer   lapo6_6  ,lapo6_7  ,lapo6_8  ,lapo6_9  ,lapo6_10
+      integer   lapo7_1  ,lapo7_2  ,lapo7_3  ,lapo7_4  ,lapo7_5
+      integer   lapo7_6  ,lapo7_7  ,lapo7_8  ,lapo7_9  ,lapo7_10
+      integer   lapo8_1  ,lapo8_2  ,lapo8_3  ,lapo8_4  ,lapo8_5
+      integer   lapo8_6  ,lapo8_7  ,lapo8_8  ,lapo8_9  ,lapo8_10
+      integer   lapo9_1  ,lapo9_2  ,lapo9_3  ,lapo9_4  ,lapo9_5
+      integer   lapo9_6  ,lapo9_7  ,lapo9_8  ,lapo9_9  ,lapo9_10
+      integer   lapo10_1  ,lapo10_2  ,lapo10_3  ,lapo10_4  ,lapo10_5
+      integer   lapo10_6  ,lapo10_7  ,lapo10_8  ,lapo10_9  ,lapo10_10
+
+      integer   laoo1_1  ,laoo1_2  ,laoo1_3  ,laoo1_4  ,laoo1_5
+      integer   laoo1_6  ,laoo1_7  ,laoo1_8  ,laoo1_9  ,laoo1_10
+      integer   laoo2_1  ,laoo2_2  ,laoo2_3  ,laoo2_4  ,laoo2_5
+      integer   laoo2_6  ,laoo2_7  ,laoo2_8  ,laoo2_9  ,laoo2_10
+      integer   laoo3_1  ,laoo3_2  ,laoo3_3  ,laoo3_4  ,laoo3_5
+      integer   laoo3_6  ,laoo3_7  ,laoo3_8  ,laoo3_9  ,laoo3_10
+      integer   laoo4_1  ,laoo4_2  ,laoo4_3  ,laoo4_4  ,laoo4_5
+      integer   laoo4_6  ,laoo4_7  ,laoo4_8  ,laoo4_9  ,laoo4_10
+      integer   laoo5_1  ,laoo5_2  ,laoo5_3  ,laoo5_4  ,laoo5_5
+      integer   laoo5_6  ,laoo5_7  ,laoo5_8  ,laoo5_9  ,laoo5_10
+      integer   laoo6_1  ,laoo6_2  ,laoo6_3  ,laoo6_4  ,laoo6_5
+      integer   laoo6_6  ,laoo6_7  ,laoo6_8  ,laoo6_9  ,laoo6_10
+      integer   laoo7_1  ,laoo7_2  ,laoo7_3  ,laoo7_4  ,laoo7_5
+      integer   laoo7_6  ,laoo7_7  ,laoo7_8  ,laoo7_9  ,laoo7_10
+      integer   laoo8_1  ,laoo8_2  ,laoo8_3  ,laoo8_4  ,laoo8_5
+      integer   laoo8_6  ,laoo8_7  ,laoo8_8  ,laoo8_9  ,laoo8_10
+      integer   laoo9_1  ,laoo9_2  ,laoo9_3  ,laoo9_4  ,laoo9_5
+      integer   laoo9_6  ,laoo9_7  ,laoo9_8  ,laoo9_9  ,laoo9_10
+      integer   laoo10_1  ,laoo10_2  ,laoo10_3  ,laoo10_4  ,laoo10_5
+      integer   laoo10_6  ,laoo10_7  ,laoo10_8  ,laoo10_9  ,laoo10_10
+
+      integer   labs1_1  ,labs1_2  ,labs1_3  ,labs1_4  ,labs1_5
+      integer   labs1_6  ,labs1_7  ,labs1_8  ,labs1_9  ,labs1_10
+      integer   labs2_1  ,labs2_2  ,labs2_3  ,labs2_4  ,labs2_5
+      integer   labs2_6  ,labs2_7  ,labs2_8  ,labs2_9  ,labs2_10
+      integer   labs3_1  ,labs3_2  ,labs3_3  ,labs3_4  ,labs3_5
+      integer   labs3_6  ,labs3_7  ,labs3_8  ,labs3_9  ,labs3_10
+      integer   labs4_1  ,labs4_2  ,labs4_3  ,labs4_4  ,labs4_5
+      integer   labs4_6  ,labs4_7  ,labs4_8  ,labs4_9  ,labs4_10
+
+      integer   laas1_1  ,laas1_2  ,laas1_3  ,laas1_4  ,laas1_5
+      integer   laas1_6  ,laas1_7  ,laas1_8  ,laas1_9  ,laas1_10
+      integer   laas2_1  ,laas2_2  ,laas2_3  ,laas2_4  ,laas2_5
+      integer   laas2_6  ,laas2_7  ,laas2_8  ,laas2_9  ,laas2_10
+      integer   laas3_1  ,laas3_2  ,laas3_3  ,laas3_4  ,laas3_5
+      integer   laas3_6  ,laas3_7  ,laas3_8  ,laas3_9  ,laas3_10
+      integer   laas4_1  ,laas4_2  ,laas4_3  ,laas4_4  ,laas4_5
+      integer   laas4_6  ,laas4_7  ,laas4_8  ,laas4_9  ,laas4_10
+
+c
+      integer   lpoc_1
+      integer   lpoc_2   ,lpoc_3   ,lpoc_4
+      integer   lpoc_5   ,lpoc_6   ,lpoc_7
+      integer   lpoc_8   ,lpoc_9   ,lpoc_10
+      integer   lpec_1   ,lpec_2   ,lpec_3
+      integer   lpec_4   ,lpec_5   ,lpec_6
+      integer   lpec_7   ,lpec_8   ,lpec_9
+      integer   lpec_10  ,lcrust_1 ,lcrust_2
+      integer   lcrust_3 ,lcrust_4 ,lcrust_5
+      integer   lcrust_6 ,lcrust_7 ,lcrust_8
+      integer   lcrust_9 ,lcrust_10,lph2o_1
+      integer   lph2o_2  ,lph2o_3  ,lph2o_4
+      integer   lph2o_5  ,lph2o_6  ,lph2o_7
+      integer   lph2o_8  ,lph2o_9  ,lph2o_10
+      integer   lpcl_1   ,lpcl_2   ,lpcl_3
+      integer   lpcl_4   ,lpcl_5   ,lpcl_6
+      integer   lpcl_7   ,lpcl_8   ,lpcl_9
+      integer   lpcl_10  ,lna_1    ,lna_2
+      integer   lna_3    ,lna_4    ,lna_5
+      integer   lna_6    ,lna_7    ,lna_8
+      integer   lna_9    ,lna_10   ,lpnh4_1
+      integer   lpnh4_2  ,lpnh4_3  ,lpnh4_4
+      integer   lpnh4_5  ,lpnh4_6  ,lpnh4_7
+      integer   lpnh4_8  ,lpnh4_9  ,lpnh4_10
+      integer   lpno3_1  ,lpno3_2  ,lpno3_3
+      integer   lpno3_4  ,lpno3_5  ,lpno3_6
+      integer   lpno3_7  ,lpno3_8  ,lpno3_9
+      integer   lpno3_10 ,lpso4_1  ,lpso4_2
+      integer   lpso4_3  ,lpso4_4  ,lpso4_5
+      integer   lpso4_6  ,lpso4_7  ,lpso4_8
+      integer   lpso4_9  ,lpso4_10 ,lph2o
+c
+      equivalence (lmap(1), lno  ), (lmap(2), lno2 ), (lmap(3), lo3  ),
+     &            (lmap(4), lpan ), (lmap(5), lcres), (lmap(6), lpan2),
+     &            (lmap(7), lmpan), (lmap(8), lpbzn), (lmap(9), lnphe),
+     &            (lmap(10),lrno3), (lmap(11),ldcb2), (lmap(12),ldcb3),
+     &            (lmap(13),lhno4), (lmap(14),lacet), (lmap(15),lald2),
+     &            (lmap(16),lalk1), (lmap(17),lalk2), (lmap(18),lalk3),
+     &            (lmap(19),lalk4), (lmap(20),lalk5), (lmap(21),laro1),
+     &            (lmap(22),laro2), (lmap(23),lbacl), (lmap(24),lbald),
+     &            (lmap(25),lbcl1), (lmap(26),lbcl2), (lmap(27),lbuta),
+     &            (lmap(28),lccho), (lmap(29),lccrs), (lmap(30),lcpo1),
+     &            (lmap(31),lcpo2), (lmap(32),lcpo3), (lmap(33),lcpo4),
+     &            (lmap(34),lcpo5), (lmap(35),lcpo6), (lmap(36),lcpo7),
+     &            (lmap(37),lcpo8), (lmap(38),lcpo9), (lmap(39),lcpo10),
+     &            (lmap(40),lcoo1), (lmap(41),lcoo2), (lmap(42),lcoo3),
+     &            (lmap(43),lcoo4), (lmap(44),lcoo5), (lmap(45),lcoo6),
+     &            (lmap(46),lcoo7), (lmap(47),lcoo8), (lmap(48),lcoo9),
+     &            (lmap(49),lcoo10), (lmap(50),lcbs1), (lmap(51),lcbs2),
+     &            (lmap(52),lcbs3), (lmap(53),lcbs4), (lmap(54),lcas1),
+     &            (lmap(55),lcas2), (lmap(56),lcas3), (lmap(57),lcas4),
+c
+     &           (lmap(58),lcl2 ), (lmap(59),lco  ), (lmap(60),lco2h),
+     &           (lmap(61),lco3h), (lmap(62),lcooh), (lmap(63),lcprm),
+     &           (lmap(64),ldcb1), (lmap(65),leth ), (lmap(66),lethe),
+     &           (lmap(67),letoh), (lmap(68),lfcrs), (lmap(69),lfmcl),
+     &           (lmap(70),lform), (lmap(71),lfprm), (lmap(72),lgly ),
+     &           (lmap(73),lh2o2), (lmap(74),lhc2h), (lmap(75),lhcho),
+     &           (lmap(76),lhcl ), (lmap(77),lhono), (lmap(78),lhno3),
+     &           (lmap(79),lho2h), (lmap(80),lhocl), (lmap(81),licl1),
+     &           (lmap(82),licl2), (lmap(83),lisop), (lmap(84),lispd),
+     &           (lmap(85),lmek ),(lmap(86),lmeoh),(lmap(87),lmeth),
+     &           (lmap(88),lmgly),(lmap(89),lmvk ),(lmap(90),lna  ),
+     &           (lmap(91),lnh3 ),(lmap(92),lntr ),(lmap(93),lnxoy),
+     &           (lmap(94),lole ),(lmap(95),lole1),(lmap(96),lole2),
+     &           (lmap(97),lbpin),(lmap(98),llimo),(lmap(99),lmono),
+     &           (lmap(100),lsesq),(lmap(101),lopen),(lmap(102),lpar ),
+     &           (lmap(103),lpcl ),(lmap(104),lpec ),(lmap(105),lphen),
+     &           (lmap(106),lpna ),(lmap(107),lpnh4),(lmap(108),lpno3),
+     &           (lmap(109),lpoa ),(lmap(110),lprod),(lmap(111),lpso4),
+     &           (lmap(112),lrc2h),(lmap(113),lrc3h),(lmap(114),lrcho),
+     &           (lmap(115),lrooh),(lmap(116),lso2 ),(lmap(117),lapo1),
+     &           (lmap(118),lapo2),(lmap(119),lapo3),(lmap(120),lapo4),
+     &           (lmap(121),lapo5),(lmap(122),lapo6),(lmap(123),lapo7),
+     &           (lmap(124),lapo8),(lmap(125),lapo9),(lmap(126),lapo10),
+     &           (lmap(127),laoo1),(lmap(128),laoo2),(lmap(129),laoo3),
+     &           (lmap(130),laoo4),(lmap(131),laoo5),(lmap(132),laoo6),
+     &           (lmap(133),laoo7),(lmap(134),laoo8),(lmap(135),laoo9),
+     &           (lmap(136),laoo10),(lmap(137),labs1),(lmap(138),labs2),
+     &           (lmap(139),labs3),(lmap(140),labs4),(lmap(141),laas1),
+     &           (lmap(142),laas2),(lmap(143),laas3),(lmap(144),laas4),
+     &           (lmap(145),lsulf),(lmap(146),lterp),
+     &           (lmap(147),ltol ),(lmap(148),lxn  ),(lmap(149),lxyl ), 
+c
+     &(kmap(150),kapo1_1 ),(kmap(151),kapo1_2 ),(kmap(152),kapo1_3 ),
+     &(kmap(153),kapo1_4 ),(kmap(154),kapo1_5 ),(kmap(155),kapo1_6 ),
+     &(kmap(156),kapo1_7 ),(kmap(157),kapo1_8 ),(kmap(158),kapo1_9 ),
+     &(kmap(159),kapo1_10 ),(kmap(160),kapo2_1 ),(kmap(161),kapo2_2 ),
+     &(kmap(162),kapo2_3 ),(kmap(163),kapo2_4 ),(kmap(164),kapo2_5 ),
+     &(kmap(165),kapo2_6 ),(kmap(166),kapo2_7 ),(kmap(167),kapo2_8 ),
+     &(kmap(168),kapo2_9 ),(kmap(169),kapo2_10 ),(kmap(170),kapo3_1 ),
+     &(kmap(171),kapo3_2 ),(kmap(172),kapo3_3 ),(kmap(173),kapo3_4 ),
+     &(kmap(174),kapo3_5 ),(kmap(175),kapo3_6 ),(kmap(176),kapo3_7 ),
+     &(kmap(177),kapo3_8 ),(kmap(178),kapo3_9 ),(kmap(179),kapo3_10 ),
+     &(kmap(180),kapo4_1 ),(kmap(181),kapo4_2 ),(kmap(182),kapo4_3 ),
+     &(kmap(183),kapo4_4 ),(kmap(184),kapo4_5 ),(kmap(185),kapo4_6 ),
+     &(kmap(186),kapo4_7 ),(kmap(187),kapo4_8 ),(kmap(188),kapo4_9 ),
+     &(kmap(189),kapo4_10 ),(kmap(190),kapo5_1 ),(kmap(191),kapo5_2 ),
+     &(kmap(192),kapo5_3 ),(kmap(193),kapo5_4 ),(kmap(194),kapo5_5 ),
+     &(kmap(195),kapo5_6 ),(kmap(196),kapo5_7 ),(kmap(197),kapo5_8 ),
+     &(kmap(198),kapo5_9 ),(kmap(199),kapo5_10 ),(kmap(200),kapo6_1 ),
+     &(kmap(201),kapo6_2 ),(kmap(202),kapo6_3 ),(kmap(203),kapo6_4 ),
+     &(kmap(204),kapo6_5 ),(kmap(205),kapo6_6 ),(kmap(206),kapo6_7 ),
+     &(kmap(207),kapo6_8 ),(kmap(208),kapo6_9 ),(kmap(209),kapo6_10 ),
+     &(kmap(210),kapo7_1 ),(kmap(211),kapo7_2 ),(kmap(212),kapo7_3 ),
+     &(kmap(213),kapo7_4 ),(kmap(214),kapo7_5 ),(kmap(215),kapo7_6 ),
+     &(kmap(216),kapo7_7 ),(kmap(217),kapo7_8 ),(kmap(218),kapo7_9 ),
+     &(kmap(219),kapo7_10 ),(kmap(220),kapo8_1 ),(kmap(221),kapo8_2 ),
+     &(kmap(222),kapo8_3 ),(kmap(223),kapo8_4 ),(kmap(224),kapo8_5 ),
+     &(kmap(225),kapo8_6 ),(kmap(226),kapo8_7 ),(kmap(227),kapo8_8 ),
+     &(kmap(228),kapo8_9 ),(kmap(229),kapo8_10 ),(kmap(230),kapo9_1 ),
+     &(kmap(231),kapo9_2 ),(kmap(232),kapo9_3 ),(kmap(233),kapo9_4 ),
+     &(kmap(234),kapo9_5 ),(kmap(235),kapo9_6 ),(kmap(236),kapo9_7 ),
+     &(kmap(237),kapo9_8 ),(kmap(238),kapo9_9 ),(kmap(239),kapo9_10 ),
+     &(kmap(240),kapo10_1 ),(kmap(241),kapo10_2 ),(kmap(242),kapo10_3 ),
+     &(kmap(243),kapo10_4 ),(kmap(244),kapo10_5 ),(kmap(245),kapo10_6 ),
+     &(kmap(246),kapo10_7 ),(kmap(247),kapo10_8 ),(kmap(248),kapo10_9 ),
+     &(kmap(249),kapo10_10 ),(kmap(250),kaoo1_1 ),(kmap(251),kaoo1_2 ),
+     &(kmap(252),kaoo1_3 ),(kmap(253),kaoo1_4 ),(kmap(254),kaoo1_5 ),
+     &(kmap(255),kaoo1_6 ),(kmap(256),kaoo1_7 ),(kmap(257),kaoo1_8 ),
+     &(kmap(258),kaoo1_9 ),(kmap(259),kaoo1_10 ),(kmap(260),kaoo2_1 ),
+     &(kmap(261),kaoo2_2 ),(kmap(262),kaoo2_3 ),(kmap(263),kaoo2_4 ),
+     &(kmap(264),kaoo2_5 ),(kmap(265),kaoo2_6 ),(kmap(266),kaoo2_7 ),
+     &(kmap(267),kaoo2_8 ),(kmap(268),kaoo2_9 ),(kmap(269),kaoo2_10 ),
+     &(kmap(270),kaoo3_1 ),(kmap(271),kaoo3_2 ),(kmap(272),kaoo3_3 ),
+     &(kmap(273),kaoo3_4 ),(kmap(274),kaoo3_5 ),(kmap(275),kaoo3_6 ),
+     &(kmap(276),kaoo3_7 ),(kmap(277),kaoo3_8 ),(kmap(278),kaoo3_9 ),
+     &(kmap(279),kaoo3_10 ),(kmap(280),kaoo4_1 ),(kmap(281),kaoo4_2 ),
+     &(kmap(282),kaoo4_3 ),(kmap(283),kaoo4_4 ),(kmap(284),kaoo4_5 ),
+     &(kmap(285),kaoo4_6 ),(kmap(286),kaoo4_7 ),(kmap(287),kaoo4_8 ),
+     &(kmap(288),kaoo4_9 ),(kmap(289),kaoo4_10 ),(kmap(290),kaoo5_1 ),
+     &(kmap(291),kaoo5_2 ),(kmap(292),kaoo5_3 ),(kmap(293),kaoo5_4 ),
+     &(kmap(294),kaoo5_5 ),(kmap(295),kaoo5_6 ),(kmap(296),kaoo5_7 ),
+     &(kmap(297),kaoo5_8 ),(kmap(298),kaoo5_9 ),(kmap(299),kaoo5_10 ),
+     &(kmap(300),kaoo6_1 ),(kmap(301),kaoo6_2 ),(kmap(302),kaoo6_3 ),
+     &(kmap(303),kaoo6_4 ),(kmap(304),kaoo6_5 ),(kmap(305),kaoo6_6 ),
+     &(kmap(306),kaoo6_7 ),(kmap(307),kaoo6_8 ),(kmap(308),kaoo6_9 ),
+     &(kmap(309),kaoo6_10 ),(kmap(310),kaoo7_1 ),(kmap(311),kaoo7_2 ),
+     &(kmap(312),kaoo7_3 ),(kmap(313),kaoo7_4 ),(kmap(314),kaoo7_5 ),
+     &(kmap(315),kaoo7_6 ),(kmap(316),kaoo7_7 ),(kmap(317),kaoo7_8 ),
+     &(kmap(318),kaoo7_9 ),(kmap(319),kaoo7_10 ),(kmap(320),kaoo8_1 ),
+     &(kmap(321),kaoo8_2 ),(kmap(322),kaoo8_3 ),(kmap(323),kaoo8_4 ),
+     &(kmap(324),kaoo8_5 ),(kmap(325),kaoo8_6 ),(kmap(326),kaoo8_7 ),
+     &(kmap(327),kaoo8_8 ),(kmap(328),kaoo8_9 ),(kmap(329),kaoo8_10 ),
+     &(kmap(330),kaoo9_1 ),(kmap(331),kaoo9_2 ),(kmap(332),kaoo9_3 ),
+     &(kmap(333),kaoo9_4 ),(kmap(334),kaoo9_5 ),(kmap(335),kaoo9_6 ),
+     &(kmap(336),kaoo9_7 ),(kmap(337),kaoo9_8 ),(kmap(338),kaoo9_9 ),
+     &(kmap(339),kaoo9_10 ),(kmap(340),kaoo10_1 ),(kmap(341),kaoo10_2 ),
+     &(kmap(342),kaoo10_3 ),(kmap(343),kaoo10_4 ),(kmap(344),kaoo10_5 ),
+     &(kmap(345),kaoo10_6 ),(kmap(346),kaoo10_7 ),(kmap(347),kaoo10_8 ),
+     &(kmap(348),kaoo10_9 ),(kmap(349),kaoo10_10 ),(kmap(350),kabs1_1 ),
+     &(kmap(351),kabs1_2 ),(kmap(352),kabs1_3 ),(kmap(353),kabs1_4 ),
+     &(kmap(354),kabs1_5 ),(kmap(355),kabs1_6 ),(kmap(356),kabs1_7 ),
+     &(kmap(357),kabs1_8 ),(kmap(358),kabs1_9 ),(kmap(359),kabs1_10 ),
+     &(kmap(360),kabs2_1 ),(kmap(361),kabs2_2 ),(kmap(362),kabs2_3 ),
+     &(kmap(363),kabs2_4 ),(kmap(364),kabs2_5 ),(kmap(365),kabs2_6 ),
+     &(kmap(366),kabs2_7 ),(kmap(367),kabs2_8 ),(kmap(368),kabs2_9 ),
+     &(kmap(369),kabs2_10 ),(kmap(370),kabs3_1 ),(kmap(371),kabs3_2 ),
+     &(kmap(372),kabs3_3 ),(kmap(373),kabs3_4 ),(kmap(374),kabs3_5 ),
+     &(kmap(375),kabs3_6 ),(kmap(376),kabs3_7 ),(kmap(377),kabs3_8 ),
+     &(kmap(378),kabs3_9 ),(kmap(379),kabs3_10 ),(kmap(380),kabs4_1 ),
+     &(kmap(381),kabs4_2 ),(kmap(382),kabs4_3 ),(kmap(383),kabs4_4 ),
+     &(kmap(384),kabs4_5 ),(kmap(385),kabs4_6 ),(kmap(386),kabs4_7 ),
+     &(kmap(387),kabs4_8 ),(kmap(388),kabs4_9 ),(kmap(389),kabs4_10 ),
+     &(kmap(390),kaas1_1 ),(kmap(391),kaas1_2 ),(kmap(392),kaas1_3 ),
+     &(kmap(393),kaas1_4 ),(kmap(394),kaas1_5 ),(kmap(395),kaas1_6 ),
+     &(kmap(396),kaas1_7 ),(kmap(397),kaas1_8 ),(kmap(398),kaas1_9 ),
+     &(kmap(399),kaas1_10 ),(kmap(400),kaas2_1 ),(kmap(401),kaas2_2 ),
+     &(kmap(402),kaas2_3 ),(kmap(403),kaas2_4 ),(kmap(404),kaas2_5 ),
+     &(kmap(405),kaas2_6 ),(kmap(406),kaas2_7 ),(kmap(407),kaas2_8 ),
+     &(kmap(408),kaas2_9 ),(kmap(409),kaas2_10 ),(kmap(410),kaas3_1 ),
+     &(kmap(411),kaas3_2 ),(kmap(412),kaas3_3 ),(kmap(413),kaas3_4 ),
+     &(kmap(414),kaas3_5 ),(kmap(415),kaas3_6 ),(kmap(416),kaas3_7 ),
+     &(kmap(417),kaas3_8 ),(kmap(418),kaas3_9 ),(kmap(419),kaas3_10 ),
+     &(kmap(420),kaas4_1 ),(kmap(421),kaas4_2 ),(kmap(422),kaas4_3 ),
+     &(kmap(423),kaas4_4 ),(kmap(424),kaas4_5 ),(kmap(425),kaas4_6 ),
+     &(kmap(426),kaas4_7 ),(kmap(427),kaas4_8 ),(kmap(428),kaas4_9 ),
+     &(kmap(429),kaas4_10 ),
+
+c   scf
+
+     &(kmap(430),kpoc_1  ),
+     &(kmap(431),kpoc_2  ),(kmap(432),kpoc_3  ),(kmap(433),kpoc_4  ),
+     &(kmap(434),kpoc_5  ),(kmap(435),kpoc_6  ),(kmap(436),kpoc_7  ),
+     &(kmap(437),kpoc_8  ),(kmap(438),kpoc_9  ),(kmap(439),kpoc_10 ),
+     &(kmap(440),kpec_1  ),(kmap(441),kpec_2  ),(kmap(442),kpec_3  ),
+     &(kmap(443),kpec_4  ),(kmap(444),kpec_5  ),(kmap(445),kpec_6  ),
+     &(kmap(446),kpec_7  ),(kmap(447),kpec_8  ),(kmap(448),kpec_9  ),
+     &(kmap(449),kpec_10 ),(kmap(450),kcrust_1),(kmap(451),kcrust_2),
+     &(kmap(452),kcrust_3),(kmap(453),kcrust_4),(kmap(454),kcrust_5),
+     &(kmap(455),kcrust_6),(kmap(456),kcrust_7),(kmap(457),kcrust_8),
+     &(kmap(458),kcrust_9),(kmap(459),kcrust_10),(kmap(460),kph2o_1),
+     &(kmap(461),kph2o_2 ),(kmap(462),kph2o_3 ),(kmap(463),kph2o_4 ),
+     &(kmap(464),kph2o_5 ),(kmap(465),kph2o_6 ),(kmap(466),kph2o_7 ),
+     &(kmap(467),kph2o_8 ),(kmap(468),kph2o_9 ),(kmap(469),kph2o_10),
+     &(kmap(470),kpcl_1  ),(kmap(471),kpcl_2  ),(kmap(472),kpcl_3  ),
+     &(kmap(473),kpcl_4  ),(kmap(474),kpcl_5  ),(kmap(475),kpcl_6  ),
+     &(kmap(476),kpcl_7  ),(kmap(477),kpcl_8  ),(kmap(478),kpcl_9  ),
+     &(kmap(479),kpcl_10 ),(kmap(480),kna_1   ),(kmap(481),kna_2   ),
+     &(kmap(482),kna_3   ),(kmap(483),kna_4   ),(kmap(484),kna_5   ),
+     &(kmap(485),kna_6   ),(kmap(486),kna_7   ),(kmap(487),kna_8   ),
+     &(kmap(488),kna_9   ),(kmap(489),kna_10  ),(kmap(490),kpnh4_1 ),
+     &(kmap(491),kpnh4_2 ),(kmap(492),kpnh4_3 ),(kmap(493),kpnh4_4 ),
+     &(kmap(494),kpnh4_5 ),(kmap(495),kpnh4_6 ),(kmap(496),kpnh4_7 ),
+     &(kmap(497),kpnh4_8 ),(kmap(498),kpnh4_9 ),(kmap(499),kpnh4_10),
+     &(kmap(500),kpno3_1 ),(kmap(501),kpno3_2 ),(kmap(502),kpno3_3 ),
+     &(kmap(503),kpno3_4 ),(kmap(504),kpno3_5 ),(kmap(505),kpno3_6 ),
+     &(kmap(506),kpno3_7 ),(kmap(507),kpno3_8 ),(kmap(508),kpno3_9 ),
+     &(kmap(509),kpno3_10),(kmap(510),kpso4_1 ),(kmap(511),kpso4_2 ),
+     &(kmap(512),kpso4_3 ),(kmap(513),kpso4_4 ),(kmap(514),kpso4_5 ),
+     &(kmap(515),kpso4_6 ),(kmap(516),kpso4_7 ),(kmap(517),kpso4_8 ),
+     &(kmap(518),kpso4_9 ),(kmap(519),kpso4_10),(kmap(520),kph2o   )
+c
+      integer   lo1d  ,lo    ,lclo 
+      integer   lcl   ,ln2o5 ,lno3 
+      integer   loh   ,lho2  ,lc2o3
+      integer   lxo2  ,lxo2n ,lto2 
+      integer   lror  ,lcro  ,lro2r
+      integer   lr2o2 ,lro2n ,lcco3
+      integer   lrco3 ,lmco3 ,lbzco
+      integer   lcxo2 ,lhco3 ,ltbuo
+      integer   lbzo  ,lbzno
+c
+      equivalence (lrad(1), lo1d ), (lrad(2), lo   ), (lrad(3), lclo ),
+     &            (lrad(4), lcl  ), (lrad(5), ln2o5), (lrad(6), lno3 ),
+     &            (lrad(7), loh  ), (lrad(8), lho2 ), (lrad(9), lc2o3),
+     &            (lrad(10),lxo2 ), (lrad(11),lxo2n), (lrad(12),lto2 ),
+     &            (lrad(13),lror ), (lrad(14),lcro ), (lrad(15),lro2r),
+     &            (lrad(16),lr2o2), (lrad(17),lro2n), (lrad(18),lcco3),
+     &            (lrad(19),lrco3), (lrad(20),lmco3), (lrad(21),lbzco),
+     &            (lrad(22),lcxo2), (lrad(23),lhco3), (lrad(24),ltbuo),
+     &            (lrad(25),lbzo ), (lrad(26),lbzno)

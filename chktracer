@@ -1,0 +1,19 @@
+#/bin/csh
+set inc = $1
+set exec = $2
+set tracer = `grep parameter Inc/tracer.com | sed 's/(/ /' | sed 's/)/ /' | awk '{if($2 ~/MXTRSP/ && substr($0,1,1) !~/c/) print $NF}'`
+echo ' '
+echo '----------------------------------------------------'
+echo '   You are about to compile with MXTRSP set to '$tracer
+echo ' '
+echo '        If this is not correct, hit <CNTRL>C'
+echo '                    do "make clean"'
+echo '          Modify "tracer.com" and recompile.'
+echo ' '
+echo ' The camx.prm is linked to '$1
+echo ' '
+echo ' The executable will be called: '$2
+echo ' '
+echo '----------------------------------------------------'
+echo ' '
+sleep 3

@@ -1,0 +1,74 @@
+1. IEHSOLV - modified the error tolerance for LSODE to 
+adaptively tighten in cases where LSODE fails to converge  
+and a tighter error tolerance may correct the problem.
+
+2. Added fine grid source area maps
+
+3. Fixed code that calculates the cell index of a point inside
+of a nest.
+
+4. Added IRON PiG (NOT YET!!!)
+
+5. Added Reactive Tracer (RTRAC) source apportionment type.
+
+6. Removed smolar
+
+7. Receptor file now has grid number.
+
+8. Added code to handle episode that goes over new year.
+
+9. Put error catch when PiG is on but point sources is off.
+
+10. Added y2k flag to a couple of routines in which it was needed
+
+11. Added new wet dep routine for gases and PM
+
+12. Added aqueous PM chemistry to mechanism 4
+
+13. Added ISOROPIA to mechanism 4
+
+14. Added SOA algorithm to mechanism 4
+
+15. Cloud and rain files now combined into a single file; 
+    Cloud/rain files can now be supplied for all grids.
+    Cloud/rain files revamped for resolved-only cloud water, precip water,
+    and optical depth
+
+16. Changed H2 and CH4 from mixing ratio to ppm in CHEMDRIV and IRONCHEM
+
+17. Species list modified to split OC -> (POA, SOA1-4), COC -> (CG1-4),
+    PFIN -> (FCRS, FPRM), PCRS -> (CCRS, CPRM)
+
+18. Added deposition output file.
+
+19. UTMGEO now works for SH when supplied negative zone number.
+
+20. Mech 4 gas-phase chemistry updated to Mech 3.
+
+21. All aerosol species carried internally in native ug/m3 units.
+
+22. Spurious old CB-IV heterogeneous SO2 -> Sulf reaction removed, gas-phase
+    SO2 -> Sulf reaction rate updated (Change to chemparam files, not CAMx),
+    N2O5 + H2O reaction rate reduced to SAPRC99 rate in mechanism 4.
+
+23. Better error messages in AHOPREP, increased max columns in read of
+    albedo/haze codes from from 999 to 9999, fixed bug in READAHO when 
+    rewinding and reading again from top
+ 
+24. Changed the drought stress adjustment in vd_gas to be more reallistic,
+    users can now specify a scaling factor for Rs in chemparam file (to zero
+    Rs for strong acids), Ra calculation revised to scale from layer 1 midpoint
+    rather than hard-wired 10 m.  Dry dep velocity set to zero for gas species
+    w/ H-law values < 1e-6.
+
+25. Added CPA process anlysis for mech 5, added flag lcpacum set in PASETUP
+    to allow CPA variables to be cumulative (toy for Gail)
+
+26. Removed max timestep from input control file -- it's now a parameter set
+    in timestep.f (currently 900 s).
+
+27. Removed UAM-V type cloud file inputs and photolysis adjustment.
+
+28. Timesteps for each grid are now layer-dependent for horizontal advection.
+
+
