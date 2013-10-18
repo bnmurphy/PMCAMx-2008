@@ -1,0 +1,158 @@
+UPGRADING TO v4.0x
+
+With the update in the wet deposition alogirithm, the input files 
+for cloud and rain data have changed.  The OTAG database used for
+the test problem has an outdated cloud file that can not be used
+with version 4.0x.  Therefore, the test problem distributed with 
+version 4.0x has no clouds and no wet deposition.
+
+Also, the Smolarkiewicz advection solver is no longer supported.  
+CAMx v4.0x uses the Bott advection solver in the test problem. 
+
+For these reasons the results of the test problem will differ from 
+previous versions of CAMx.
+
+PLEASE SEE THE RELEASE NOTES FOR DETAILS ABOUT THESE AND OTHER
+MODIFICATIONS AND ENHANCEMENTS.
+
+-------------------------------------------------------------------
+
+INTRODUCTION
+
+This is the README file for the CAMx model version 4.02.
+Topics covered are the license agreement, compiling CAMx,
+the test case, and multi-processor support.  
+
+Further details are in the CAMx User's Guide, available
+from http://www.camx.com, and the release notes.
+
+Send questions or comments via email to: CAMx@environ.org
+Please read the documentation first.
+
+
+LICENSE AGREEMENT
+
+Read the file LICENCE included with the source code and
+read the web page where the CAMx source code is posted 
+for download (http://www.camx.com). You agree to the CAMx
+license terms by downloading the source code and/or 
+using the CAMx model.
+
+
+USING THE CAMx MAKEFILE
+
+The syntax for building CAMx v4.02 is:
+
+make platform DOMAIN=domain_name
+
+The CAMx makefile has two arguments. The "platform" argument
+is required and the "DOMAIN=domain_name" argument is optional.
+
+"platform" specifies what type of workstation you have and must
+be one of the following:
+
+dec       -- DEC alpha workstation with digital Unix
+             (uses big_endian representation for FORTRAN unformatted 
+             files rather than the DEC default, which is little
+             endian)
+sun       -- Sun Ultra Sparcstation
+sgi       -- SGI workstation
+sgiomp    -- SGI workstation with compiler flags to enable OMP
+ibm       -- IBM workstation
+hp        -- HP/UX workstation
+linux     -- ix86 PC running Linux and using FORTRAN compiler from the 
+             The Portland Group (pgf77)
+             (uses big_endian representation for FORTRAN unformatted 
+             files rather than the DEC default, which is little
+             endian)
+linuxomp -- Linux workstation with pgf77 compiler flags to enable OMP
+
+"domain_name" is a string identifying which camx.prm include file
+to use in the compilation.  The camx.prm file, found in the Inc/ 
+subdirectory, contains the domain definition parameters for your
+simulation. (See the CAMx User's Guide for more details).  This
+makefile syntax is designed to allow you to keep several different
+CAMx configurations (camx.prm files) and selectively build 
+executables for each application.  The "DOMAIN=domain_name" argument
+is optional, and if omitted the default camx.prm.otag configuration
+will be used.
+
+For example, to build CAMx on a DEC/Alpha workstation using the 
+include file Inc/camx.prm.otag, enter the make command:
+
+make dec DOMAIN=otag
+
+The executable will be named CAMx.otag.dec
+
+If you need to rebuild CAMx using different makefile arguments
+we recommend typing "make clean" between builds.  Make clean will
+delete all existing object files forcing a complete re-build.
+
+If your workstation is not supported by the standard makefile, you will
+need to modify the Makefile for use with your system.  If so, please 
+mail the working Makefile along with a description of your computer 
+system to CAMx@environ.org so that we can share this information.
+
+
+CAMx TEST CASE
+
+A test case is provided to help new CAMx User's get started and
+permit performance benchmarking.  The test case is for the "OTAG"
+July 7-8 1995 simulation of the Eastern US.  Build a CAMx executable
+for the OTAG domain using the makefile options discussed above.
+The test case has 1 nested fine grid and requires about 175 MBytes
+of memory.
+
+The test case (2 days of simulation) including inputs and
+outputs is available at the CAMx ftp site: 
+
+        Hostname: ftp.environ.org
+        Username: camx
+        Password: pass4camx
+
+See the README file on the ftp server to determine which files
+you need to download.  You can compare your results to the test
+case benchmark by displaying the concentration outputs (using
+PAVE, for example).  You can perform a more rigorous check by
+comparing the coarse grid average concentration outputs using
+the "AVGDIF" program.  This program is on the CAMx ftp site in
+the processors area.  We expect concentrations to agree
+within the limits of single precision calculation, namely 
+relative errors of about 1 in 100,000.
+
+MULTI-PROCESSOR SUPPORT
+
+CAMx supports multiple processors by using OpenMP compiler
+directives.  This only works for shared memory systems.
+For example, you can take advantage of a dual processor 
+Linux PC, but not a Linux cluster.  The OMP option has 
+been tested for Linux and SGI workstations, and the makefile
+has options "sgiomp" and "linuxomp".  You must build a
+CAMx executable with OMP enabled before you can use
+multiple processors.
+
+When running the mulitprocessor version (OMP) on a Linux
+platform you must set some environment variables in the
+job script to take advantage of multiprocessor capability:
+ 
+NCPUS -- number of processors available to program
+MPSTKZ -- per thread stack size
+         There have been problems with some parallel programs on
+         Linux systems when the per-thread stack size is set to the
+         default (2MB). If you have unexplained failures, try
+         setting this environment variable to a larger value, such as
+         8MB or even as large as 64MB for a large application.
+ 
+You will probably also want to increase the stack size available
+to the shell executing the model by using the limit command.
+ 
+limit stacksize unlimited
+ 
+For example, the first 4 lines of a job script to execute
+a multi-processor version of CAMx should look like:
+ 
+#!/bin/csh
+setenv NCPUS 2
+setenv MPSTKZ 32M
+limit stacksize unlimited
+ 
