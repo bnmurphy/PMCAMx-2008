@@ -1,8 +1,8 @@
 CAMx Version       |VERSION4.0
 Run Message        |PMCAMx v4.0 eastern US PM Test Run July 1-31 2001
-Root output name   |/home2/tlane/Output/July.FINAL.SEMIvol.test/4rpos.baseE.209.July.FINAL.SEMIvol.test
-Start yr/mo/dy/hr  |01 07 28 0000.
-End   yr/mo/dy/hr  |01 07 28 2400.
+Root output name   |Output/PMCAMx2008_BASE/4rpos.baseE.193.PMCAMx2008_BASE
+Start yr/mo/dy/hr  |01 07 12 0000.
+End   yr/mo/dy/hr  |01 07 12 2400.
 DT:max,met,ems,out |15. 60. 60. 60.
 nx,ny,nz           |97   90   14
 sCoordinate ID     |LAMBERT
@@ -90,7 +90,7 @@ Avg output species |459
 # nested grids     |0
 SMOLAR,BOTT, PPM?  |PPM
 Chemistry solver   |CMC
-Restart            |true
+Restart            |false
 Chemistry          |true
 Dry dep            |true
 Wet dep            |true
@@ -101,19 +101,19 @@ Treat point emiss  |true
 1-day emiss inputs |true
 3-D average file   |false
 Probing tools      |false
-Chemparam          |/home2/tlane/CAMx4inputs/July/init/CAMx4.chemparam.5.FINAL_SEMIvol
-Photolysis rates   |/home2/tlane/CAMx4inputs/July/rate99/camx.rt.2001209.EastUS.updt
-Landuse            |/home2/tlane/CAMx4inputs/July/init/surf.4rpos.36.ld.bin
-Height/pressure    |/home2/tlane/CAMx4inputs/July/pres/pres.2001209.4rpos.36.14.mm5.ld.camx
-Wind               |/home2/tlane/CAMx4inputs/July/wind/wind.2001209.4rpos.36.14.mm5.ld.camx
-Temperature        |/home2/tlane/CAMx4inputs/July/temp/temp.2001209.4rpos.36.14.mm5.ld.camx
-Water vapor        |/home2/tlane/CAMx4inputs/July/wvap/wvap.2001209.4rpos.36.14.mm5.ld.camx
-Cloud/rain         |/home2/tlane/CAMx4inputs/July/clranew/clra.2001209.4rpos.36.14.mm5.ld.camx
-Vertical diffsvty  |/home2/tlane/CAMx4inputs/July/vdif/vdif.2001209.4rpos.36.14.mm5.ld.camx.PATCH
-Initial conditions |/home2/tlane/CAMx4inputs/July/init/init.2001.4rpos.36.14.m3profile.ld.camx
-Boundary conditions|/home2/tlane/CAMx4inputs/July/init/bndr.2001.4rpos.36.14.m3profile.ld.camx
-Top concentration  |/home2/tlane/CAMx4inputs/July/init/topc.2001.4rpos.36.14.m3profile.ld.camx
-Albedo/haze/ozone  |/home2/tlane/CAMx4inputs/July/ahoz99/camx.ah.2001209.updt
-Point emiss        |/home2/tlane/CAMx4inputs/July/prep99/semivol/point.camx.2001209.bin
-Area emiss         |/home2/tlane/CAMx4inputs/July/prep99/semivol/area.camx.2001209.EasternUS.bin
-Restart file name  |/home2/tlane/Output/July.FINAL.SEMIvol.test/4rpos.baseE.208.July.FINAL.SEMIvol.test.inst.2
+Chemparam          |CAMx4.chemparam.5.Base
+Photolysis rates   |/usr/people/BaseInput/July/rate99/camx.rt.2001193.EastUS.updt
+Landuse            |/usr/people/BaseInput/July/init/surf.4rpos.36.ld.bin
+Height/pressure    |/usr/people/BaseInput/July/pres/pres.2001193.4rpos.36.14.mm5.ld.camx
+Wind               |/usr/people/BaseInput/July/wind/wind.2001193.4rpos.36.14.mm5.ld.camx
+Temperature        |/usr/people/BaseInput/July/temp/temp.2001193.4rpos.36.14.mm5.ld.camx
+Water vapor        |/usr/people/BaseInput/July/wvap/wvap.2001193.4rpos.36.14.mm5.ld.camx
+Cloud/rain         |/usr/people/BaseInput/July/clranew/clra.2001193.4rpos.36.14.mm5.ld.camx
+Vertical diffsvty  |/usr/people/BaseInput/July/vdif/vdif.2001193.4rpos.36.14.mm5.ld.camx.PATCH
+Initial conditions |/usr/people/BaseInput/July/init/init.2001.4rpos.36.14.m3profile.ld.camx
+Boundary conditions|/usr/people/BaseInput/July/init/bndr.2001.4rpos.36.14.m3profile.ld.camx
+Top concentration  |/usr/people/BaseInput/July/init/topc.2001.4rpos.36.14.m3profile.ld.camx
+Albedo/haze/ozone  |/usr/people/BaseInput/July/ahoz99/camx.ah.2001193.updt
+Point emiss        |/usr/people/BaseInput/July/prep99/semivol/point.camx.2001193.bin
+Area emiss         |/usr/people/BaseInput/July/prep99/semivol/area.camx.2001193.EasternUS.bin
+Restart file name  |

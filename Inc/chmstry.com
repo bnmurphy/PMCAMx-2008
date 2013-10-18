@@ -601,3 +601,21 @@ c
 c
       common /aero_t/ grd_time,aero_dt,date_aer,dtaero,dt_aero
 
+c
+c---------------------------------------------------------------------
+cBNM
+c    Variables for printing radical concentrations
+c
+c	nrads -- number of radicals to print output for
+c       crad  -- String array of radical names
+c	radout -- Mapped variable for radical concentration pointer
+	
+      integer   nrads
+      parameter (nrads = 3)
+
+      character*4  crads(nrads)
+      real  bnmradcnc(nrads,MXCOL1,MXROW1,MXLAY1)
+
+      data crads /'OH','NO3','HO2'/  
+
+      common bnmradcnc    

@@ -58,6 +58,11 @@ C
       include 'dynamic.inc'
       INCLUDE 'equaer.inc'                  ! ISORROPIA declarations
 
+c BNM - declaring timing variable
+      dimension tarray2(2)
+c BNM
+
+
 cbk      REAL*8 DQ(NSP),FRQ(nsec,nsp),WI(5),q0(3),q(ntotal)
 cbk      real*8 qsav(ntotal), DQsav(nsp), accom(nsp)
       REAL*8 DQ(nexti),FRQ(nsec,nexti),WI(5),q0(3),q(ntotal) ! bkoo (03/09/03)
@@ -69,11 +74,29 @@ cbk      real*8 qsav(ntotal), DQsav(nsp), accom(nsp)
 c
 c     STEP 1/3: CALCULATE NUCLEATION RATE FOR THE WHOLE STEP
 c
+
+c BNM - timing
+c      tcpu = dtime(tarray2)
+c      print *,'Beginning time for Nucleation Module = ',tarray2(1)
+c BNM
+
        call nucl(q)
 c
 c     STEP 2/3: CALCULATE COAGULATION RATE FOR THE WHOLE STEP
 c
-       call coagul(q)
+
+c BNM - timing
+c      tcpu = dtime(tarray2)
+c      print *,'Finished Nucleation. On to Coagulation at time = ',tarray2(1)
+c BNM
+
+c       call coagul(q)
+
+c BNM
+c      tcpu = dtime(tarray2)
+c      print *,'Finshed coagulation at time = ',tarray2(1)
+c BNM
+
 
 cbk       call step(nsec,q) ! tmg (10/22/02)
       endif

@@ -133,6 +133,7 @@ c$omp&          istep,dtuse)
 c
 c$omp do schedule(dynamic)
 c
+
       do 20 k = 1,nlay
         dtuse = deltat/nadv(k)
         do 21 istep = 1,nadv(k)
@@ -338,6 +339,7 @@ c  --- next layer ---
 c
   21  continue
   20  continue
+
 c
 c  --- end of parallelized loop ---
 c
