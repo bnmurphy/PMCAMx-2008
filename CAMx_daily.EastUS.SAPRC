@@ -9,6 +9,8 @@ set INPUTP = "/home2/tlane/CAMx4inputs/July/prep99/semivol"
 set DATE    = $1
 set DATE2   = $2
 @ DATE3   = $DATE - 1
+@ YEAR    = 2001
+@ YY      = 01
 #
 set RUN     = "July.FINAL.SEMIvol.test"
 set OUTPUT  = "/home2/tlane/Output/$RUN"
