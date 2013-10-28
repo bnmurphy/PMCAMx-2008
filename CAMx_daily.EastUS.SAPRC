@@ -9,6 +9,7 @@ set INPUTP = "/home2/tlane/CAMx4inputs/July/prep99/semivol"
 set DATE    = $1
 set DATE2   = $2
 @ DATE3   = $DATE - 1
+# in case you're working with more than 2001:
 @ YEAR    = 2001
 @ YY      = 01
 #
@@ -31,10 +32,10 @@ date
 #
 cat << ieof > CAMx.in
 CAMx Version       |VERSION4.0
-Run Message        |PMCAMx v4.0 eastern US PM Test Run July 1-31 2001
+Run Message        |PMCAMx v4.0 eastern US PM Test Run July 1-31 $YEAR
 Root output name   |$OUTPUT/4rpos.baseE.$DATE.$RUN
-Start yr/mo/dy/hr  |01 07 $DATE2 0000.
-End   yr/mo/dy/hr  |01 07 $DATE2 2400.
+Start yr/mo/dy/hr  |$YY 07 $DATE2 0000.
+End   yr/mo/dy/hr  |$YY 07 $DATE2 2400.
 DT:max,met,ems,out |15. 60. 60. 60.
 nx,ny,nz           |97   90   14
 sCoordinate ID     |LAMBERT
@@ -134,20 +135,20 @@ Treat point emiss  |true
 3-D average file   |false
 Probing tools      |false
 Chemparam          |$INPUT/init/CAMx4.chemparam.5.FINAL_SEMIvol_Rxns
-Photolysis rates   |$INPUT/rate99/camx.rt.2001$DATE.EastUS.updt
+Photolysis rates   |$INPUT/rate99/camx.rt.$YEAR$DATE.EastUS.updt
 Landuse            |$INPUT/init/surf.4rpos.36.ld.bin
-Height/pressure    |$INPUT/pres/pres.2001$DATE.4rpos.36.14.mm5.ld.camx
-Wind               |$INPUT/wind/wind.2001$DATE.4rpos.36.14.mm5.ld.camx
-Temperature        |$INPUT/temp/temp.2001$DATE.4rpos.36.14.mm5.ld.camx
-Water vapor        |$INPUT/wvap/wvap.2001$DATE.4rpos.36.14.mm5.ld.camx
-Cloud/rain         |$INPUT/clranew/clra.2001$DATE.4rpos.36.14.mm5.ld.camx
-Vertical diffsvty  |$INPUT/vdif/vdif.2001$DATE.4rpos.36.14.mm5.ld.camx.PATCH
-Initial conditions |$INPUT/init/init.2001.4rpos.36.14.m3profile.ld.camx
-Boundary conditions|$INPUT/init/bndr.2001.4rpos.36.14.m3profile.ld.camx
-Top concentration  |$INPUT/init/topc.2001.4rpos.36.14.m3profile.ld.camx
-Albedo/haze/ozone  |$INPUT/ahoz99/camx.ah.2001$DATE.updt
-Point emiss        |$INPUTP/point.camx.2001$DATE.bin
-Area emiss         |$INPUTA/area.camx.2001$DATE.EasternUS.bin
+Height/pressure    |$INPUT/pres/pres.$YEAR$DATE.4rpos.36.14.mm5.ld.camx
+Wind               |$INPUT/wind/wind.$YEAR$DATE.4rpos.36.14.mm5.ld.camx
+Temperature        |$INPUT/temp/temp.$YEAR$DATE.4rpos.36.14.mm5.ld.camx
+Water vapor        |$INPUT/wvap/wvap.$YEAR$DATE.4rpos.36.14.mm5.ld.camx
+Cloud/rain         |$INPUT/clranew/clra.$YEAR$DATE.4rpos.36.14.mm5.ld.camx
+Vertical diffsvty  |$INPUT/vdif/vdif.$YEAR$DATE.4rpos.36.14.mm5.ld.camx.PATCH
+Initial conditions |$INPUT/init/init.$YEAR.4rpos.36.14.m3profile.ld.camx
+Boundary conditions|$INPUT/init/bndr.$YEAR.4rpos.36.14.m3profile.ld.camx
+Top concentration  |$INPUT/init/topc.$YEAR.4rpos.36.14.m3profile.ld.camx
+Albedo/haze/ozone  |$INPUT/ahoz99/camx.ah.$YEAR$DATE.updt
+Point emiss        |$INPUTP/point.camx.$YEAR$DATE.bin
+Area emiss         |$INPUTA/area.camx.$YEAR$DATE.EasternUS.bin
 Restart file name  |$RSTF
 ieof
 #
