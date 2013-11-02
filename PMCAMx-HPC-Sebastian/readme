@@ -1,0 +1,60 @@
+HADVPPM
+
+HADVPPM performs advection using the one-dimensional implementation
+of the piecewise parabolic method of Colella and Woodward (1984).
+A piecewise continuous parabola is used as the intepolation polynomial.
+The slope of the parabola at cell edges is computed from a cumulative
+function of the advected quantity.  These slopes are further modified
+so that the interpolation function is monotone.
+
+This version based on CMAQ HPPM.F, v 1.1.1.1 9/14/98, written by
+M.T. Odman (10/5/93), NCSC.  This version assumes constant grid cell
+size.
+
+The following definitions are used:  
+
+      |-----------> Positive direction  
+
+|Boundary|<-----------------Domain----------------->|Boundary| 
+
+| CON(1) | CON(2) |  ...  | CON(I) |  ...  |CON(N-1)| CON(N) |  
+
+VEL(1)-->|     VEL(I-1)-->|        |-->VEL(I)       |-->VEL(N-1)  
+
+FP(1)-->|      FP(I-1)-->|        |-->FP(I)        |-->FP(N-1)  
+
+FM(2)<--|        FM(I)<--|        |<--FM(I+1)      |<--FM(N)  
+
+                    -->|   DS   |<-- 
+
+Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
+ENVIRON International Corporation
+
+Modifications:  
+5/17/00   small modification to flux1,2 to improve mass accounting
+
+Input arguments:  
+nn                  Number of cells  
+dt                  Time step (s)  
+dx                  Length of cell (m)  
+con                 Concentration*area vector (umol/m) 
+vel                 Wind speed vector (m/s)  
+mscl                Map-scale factor (squared) at cell centroid
+
+Output arguments:  
+con                 Concentration*area vector (umol/m)  
+flxarr              Interfacial mass flux (umol/s)
+flux1-2             Boundary fluxes (umol/s)  
+                    (1=west/south, 2=east/north)
+saflux              Interfacial mass flux times area
+                    (used for tracer transport)
+fc1-2               Conc*area vector change from flux (umol/m)
+                    (1=west/south, 2=east/north)
+                    (used for Process Analysis)
+
+Routines called:  
+none  
+
+Called by:  
+XYADVEC  
+ZRATES
