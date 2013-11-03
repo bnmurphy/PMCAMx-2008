@@ -14,7 +14,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>hadvppm.f03</itemPath>
-      <itemPath>xyadvec.f03</itemPath>
+      <itemPath>unit-test-hadvppm.f03</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -45,7 +45,7 @@
       </item>
       <item path="readme.md" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="xyadvec.f03" ex="false" tool="2" flavor2="0">
+      <item path="unit-test-hadvppm.f03" ex="false" tool="2" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -72,7 +72,7 @@
       </item>
       <item path="readme.md" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="xyadvec.f03" ex="false" tool="2" flavor2="0">
+      <item path="unit-test-hadvppm.f03" ex="false" tool="2" flavor2="0">
       </item>
     </conf>
   </confs>

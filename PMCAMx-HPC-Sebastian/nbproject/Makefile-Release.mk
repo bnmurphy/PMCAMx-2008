@@ -36,7 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/hadvppm.o \
-	${OBJECTDIR}/xyadvec.o
+	${OBJECTDIR}/unit-test-hadvppm.o
 
 
 # C Compiler Flags
@@ -67,9 +67,9 @@ ${OBJECTDIR}/hadvppm.o: hadvppm.f03
 	${MKDIR} -p ${OBJECTDIR}
 	$(COMPILE.f) -O2 -o ${OBJECTDIR}/hadvppm.o hadvppm.f03
 
-${OBJECTDIR}/xyadvec.o: xyadvec.f03 
+${OBJECTDIR}/unit-test-hadvppm.o: unit-test-hadvppm.f03 
 	${MKDIR} -p ${OBJECTDIR}
-	$(COMPILE.f) -O2 -o ${OBJECTDIR}/xyadvec.o xyadvec.f03
+	$(COMPILE.f) -O2 -o ${OBJECTDIR}/unit-test-hadvppm.o unit-test-hadvppm.f03
 
 # Subprojects
 .build-subprojects:
