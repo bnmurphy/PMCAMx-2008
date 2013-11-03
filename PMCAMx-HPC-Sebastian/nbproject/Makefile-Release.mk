@@ -35,7 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/hadvppm.o
+	${OBJECTDIR}/hadvppm.o \
+	${OBJECTDIR}/xyadvec.o
 
 
 # C Compiler Flags
@@ -65,6 +66,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pmcamx-hpc-sebastian: ${OBJECTFILES}
 ${OBJECTDIR}/hadvppm.o: hadvppm.f03 
 	${MKDIR} -p ${OBJECTDIR}
 	$(COMPILE.f) -O2 -o ${OBJECTDIR}/hadvppm.o hadvppm.f03
+
+${OBJECTDIR}/xyadvec.o: xyadvec.f03 
+	${MKDIR} -p ${OBJECTDIR}
+	$(COMPILE.f) -O2 -o ${OBJECTDIR}/xyadvec.o xyadvec.f03
 
 # Subprojects
 .build-subprojects:

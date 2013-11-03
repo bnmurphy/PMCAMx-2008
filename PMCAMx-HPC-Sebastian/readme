@@ -1,6 +1,9 @@
-HADVPPM
 
-HADVPPM performs advection using the one-dimensional implementation
+**CAMx v4.02 030709**
+
+--------------------------------------------------------------------------------
+
+**HADVPPM** performs advection using the one-dimensional implementation
 of the piecewise parabolic method of Colella and Woodward (1984).
 A piecewise continuous parabola is used as the intepolation polynomial.
 The slope of the parabola at cell edges is computed from a cumulative
@@ -58,3 +61,59 @@ none
 Called by:  
 XYADVEC  
 ZRATES
+
+--------------------------------------------------------------------------------
+
+**XYADVEC** drives 2-D advection of concentrations.  This version also
+performs the 2-D advection on DDM sensitivies, if DDM is implemented
+
+Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
+ENVIRON International Corporation
+
+Modifications:
+4/23/99   Coarse grid outflow BC's set equal to concentration in
+      the first inner computational cells
+4/26/99   Added Piecewise Parabolic Method for horizontal advection
+10/30/01   Revised map scale factor application to OSAT fluxes to be
+      more consistent with how the fluxes are used.
+12/07/01   added instructions for OMP and rearranged some loops
+      to facilitate parallel processing
+01/22/02   now only calls OSAT routines if not doing RTRAC
+01/30/02   Added code for RTRAC probing tool
+4/10/03   X/Y advection now uses layer-dependent timestep
+
+Input arguments:
+igrd              grid index
+xyordr            order of x & y advection
+ncol              number of columns
+nrow              number of rows
+nlay              number of layers
+nspc              number of species
+nsen              number of species times number of DDM parameters
+nadv              number of sub-steps per timestep
+deltat            time step (s)
+dx                cell size in x-direction (m)
+dy                cell size in y-direction (m)
+windu             wind speed in x-direction (m/s)
+windv             wind speed in y-direction (m/s)
+depth             layer depth (m)
+mapscl            map-scale factor at cell centroids
+conc              species concentrations (umol/m3)
+sens              sensitivity coefficient (umol/m3/parameter unit)
+tarray2           CPU timing arguments (s)
+isaptr            pointer into tracer conc array for this grid
+ipa_cel           gridded array to identify if cell is
+              in a IPRM sub-domain
+
+Output arguments:
+conc              species concentrations (umol/m3)
+fluxes            fluxes across the boundaries (umol)
+sens              sensitivity coefficient (umol/m3/parameter unit)
+
+Routines Called:
+HADVBOT
+HADVPPM
+BOTTDDM
+
+Called by:
+EMISTRNS
