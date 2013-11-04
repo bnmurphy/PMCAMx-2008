@@ -113,14 +113,13 @@ c-----------------------------------------------------------------
       do 10 l = 1,narspc
         do j = 1,nrow
           do i = 1,ncol
-c-----Added if statements to set POC and PEC emissions zero--------
-c            if (l.ge.23.and.l.le.28) then   ! PEC
-c              aremis(i,j,l) = 0.0
+
+c-----Added if statements to raise biogenic emmissions 25% (MD)------
+c            if (l.eq.24 .or. l.eq.30 .or. l.eq.63) then   ! ISOP,TERP,SESQ
+c              aremis(i,j,l) = aremis(i,j,l)*1.25
 c            endif
-c            if (l.ge.35.and.l.le.40) then   ! POC
-c              aremis(i,j,l) = 0.0
-c            endif
-c-------------------------------------------------------------------
+c----------------------------------but didn't work?-------------------
+
             if (aremis(i,j,l).lt.0.) then
               write(iout,'(//,a)') 'ERROR in READAR:'
               write(iout,'(a,i3)') 'Negative emissions for grid:',igrd

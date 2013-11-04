@@ -60,14 +60,18 @@ c
       if (.not.ly2k .and. id2.gt.100000) call juldate(id2)
 c
 c-----Check title against specified name
-c
+C
       if (title.eq.name) then
+c        print *, 'title: ',title,'name: ',name
         do j = nrow,1,-1
           read(iaho,'(999i1)') (indx(i,j),i=1,ncol)
+c          print *,'indx(',i,',',j,') ',(indx(i,j),i=1,ncol)
         enddo
       else
+c        print *, 'title: ',title,'name: ',name
         do j = nrow,1,-1
           read(iaho,'(999i1)') idum
+c          print *, 'idum',i,',',j,idum
         enddo
         goto 100
       endif
@@ -92,8 +96,10 @@ c
             endif
          endif
         endif
+c        print *,'---999---'
         goto 999
       else
+c        print *, '---100---'
         goto 100
       endif
 c

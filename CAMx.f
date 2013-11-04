@@ -200,7 +200,29 @@ c-----Initialize concentrations from an AIRQUALITY file or RESTART files
 c
         if (nsteps.eq.1) then
           write(*,'(a20,$)') 'readcnc ......'
+
+cMCD Debug weird zero thing
+      print *,'Before readcnc.'
+      do i = 22,23
+        do j = 2,5
+          do k = 2,8
+            print *,' i,j,k,l=',i,j,k,'  1)  NO=',conc(i+ (j-1)*97+ (k-1)*97*90+ (1-1)*97*90*14)
+          enddo
+        enddo
+      enddo
+
           call readcnc
+
+cMCD Debug weird zero thing
+      print *,'After readcnc.'
+      do i = 22,23
+        do j = 2,5
+          do k = 2,8
+            print *,' i,j,k,l=',i,j,k,'  1)  NO=',conc(i+ (j-1)*97+ (k-1)*97*90+ (1-1)*97*90*14)
+          enddo
+        enddo
+      enddo
+
           do igrd = 1,ngrid
             call wrtmass(igrd,date,time,0)
             call massum(igrd,nspec,ncol(igrd),nrow(igrd),nlay(igrd),
@@ -691,6 +713,17 @@ c
 c
 c-----Coarse grid emission and transport
 c
+
+cMCD Debug weird zero thing
+c      print *,'Before emistrns.'
+c      do i = 22,23
+c        do j = 2,5
+c          do k = 2,8
+c            print *,' i,j,k,l=',i,j,k,'  1)  NO=',conc(i+ (j-1)*97+ (k-1)*97*90+ (1-1)*97*90*14)
+c          enddo
+c        enddo
+c      enddo
+
       call emistrns(1)
 c
 c-----Computation for nested grids

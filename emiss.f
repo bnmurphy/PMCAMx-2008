@@ -109,7 +109,12 @@ c
             endif 
             do j = j1,j2
               vol = dx(j)*dy*depth(i,j,1)/(mapscl(i,j)**2)
-              dmass = aremis(i,j,lar)*deltat*1e6
+c              dmass = aremis(i,j,lar)*deltat*1e6
+c              if (l.eq.24 .or. l.eq.30 .or. l.eq.63) then   ! ISOP,TERP,SESQ
+c                dmass = aremis(i,j,lar)*deltat*1e6*1.50
+c	      else
+                dmass = aremis(i,j,lar)*deltat*1e6	
+c              endif
               dconc = REAL(dmass)/vol
               armass(l) = armass(l) + dmass
               conc(i,j,1,l) = conc(i,j,1,l) + dconc

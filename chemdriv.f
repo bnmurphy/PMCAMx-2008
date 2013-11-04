@@ -95,6 +95,7 @@ c
       real      delo3, delno, delno2, delvoc, delh22, delhn3
       real      modo3, modnox, modvoc, o3old, o3new
       real      cold(MXTRSP), cnew(MXTRSP)
+
 c
 c========================= Source Apportion End ========================
 c
@@ -180,6 +181,7 @@ c$omp&  copyin(/ijkgrd/)
 c
 c$omp do schedule(dynamic)
 c
+
         do 90 j = 2,nrow-1
           i1 = 2
           i2 = ncol-1
@@ -403,6 +405,7 @@ c
      &             avgrad,tcell,
      &             sddm,nddmsp,ngas,ddmjac5,lddm,nirrrxn,titrt,rrxn_irr,
      &             lirr)
+
                  if ( laero_upd )
      &           call fullaero(water(i,j,k),tcell,pcell,cwc(i,j,k),
      &                         MXSPEC,MXRADCL,NSPEC,NGAS,
@@ -465,6 +468,7 @@ c
             do l=1,nrad
               cncrad(i,j,k,l) = amax1(crad(l),bdlrad)
             enddo
+
 c
 c======================== Source Apportion Begin =======================
 c
@@ -600,13 +604,51 @@ cbk            endif
                 conc(i,j,k,is) = amax1(con(is),bdnl(is))
               enddo
             endif
-c
-  89      continue
-  90    continue
+
+  89      continue  !col
+  90    continue    !row
+
+c BNM
+	print *,'Layer: ',k
+c BNM
+
 c
 c$omp end parallel
 c
-  91  continue
+  91  continue  !Layer
+c
+
+c BNM cccc ------------- Write Radicals Murphy -------------- cccc
+c Write these radicals once every time step instead of within the
+c  Trap.f subroutine (1 write statement vs 90*97*14 write statements
+
+c-----------------write OH Tsimpidi------------------------
+c      call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
+       do irads = 1,nrads
+	do k = 1,MXLAY1
+          if (l3davg.or.k.eq.1) then
+c            print *, 'l3davg = ',l3davg
+c            print *,'Trap Time: ',dtchem
+c	    print *,'Time Time: ',time
+c            print *,'Grid cell: i=',ichm,' j=',jchm,' k=',kchm
+c            print *,'iavg = ',iavg
+            write(iavg+(k-1)*(1+nrads)+irads) time,((bnmradcnc(irads,i,j,k),i=1,MXCOL1),j=1,MXROW1)
+	     print *,'bnmradcnc(OH,Pit) = ', bnmradcnc(1,55,61,k)
+	     print *,'bnmradcnc(NO3,Pit) = ', bnmradcnc(2,55,61,k)
+	     print *,'bnmradcnc(HO2,Pit) = ', bnmradcnc(3,55,61,k)
+
+
+c            print *, 'Writing to file unit: ',iavg+(k-1)*(1+nrads)+irads, '  for radical ',crads(irads)
+          endif
+        enddo
+       enddo
+c----------------------------------------------------------
+
+
+
+
+c BNM cccc -------------------------------------------------
+
 c
 c     if fullaero was called
 c     - reset aero_dt 

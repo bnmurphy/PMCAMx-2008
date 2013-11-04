@@ -115,7 +115,7 @@ c
       parameter ( TEMPLO  = 100.0 ) ! 220 for July
       parameter ( TEMPHI  = 320.0 )
       parameter ( NPRESR  =    10 )
-      parameter ( PRESLO  = 100.0 ) ! 326 for July
+      parameter ( PRESLO  =  50.0 ) ! 326 for July
       parameter ( PRESHI  = 1100. )
       parameter ( MXRXN   =   237 )
       parameter ( NSPNAM  =   520 )
@@ -256,3 +256,4 @@ c
       parameter ( LVISPIG = .TRUE. )
       parameter ( PGROFAC = 1.0 )
       parameter ( DXYMAX = 0.0 )
+

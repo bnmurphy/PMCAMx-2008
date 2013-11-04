@@ -62,11 +62,10 @@ c
         do n = 1,4
           nc = nrow(1)
           if (n.gt.2) nc = ncol(1)
-          read(ibc) idum,(bcspec(j),j=1,10),iedge,
+         read(ibc) idum,(bcspec(j),j=1,10),iedge,
      &              ((bctmp(i,k,n,l),k=1,nz),i=1,nc)
-        enddo
+	enddo
       enddo
-c
 
       write(iout,'(a40,2(f7.0,i8.5))')
      &  'Read boundary condition file at ',tim1,idat1,tim2,idat2
@@ -202,7 +201,7 @@ c
       write(iout,*)'Premature End of BC file reached.'
       write(iout,*)'Make sure boundary file contains simulation ',
      &                                               'time period.'
-      call camxerr()
+c      call camxerr()
 c
  999  return
       end

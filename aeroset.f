@@ -123,13 +123,21 @@ c     set moving diameters to logarithmic mean of fixed section diameters (tmg,0
         dsec_c(i)=sqrt(dsecf_c(i)*dsecf_c(i+1))
       enddo
 c
-      kso2_c   = kso2
-      kh2o2_c  = kh2o2
+      kso2_c = kso2
       if (idmech.eq.6) then
-      kform_c  = kform
+        kh2o2_c = kh2o2
+        kform_c = kform
       elseif (idmech.eq.5) then
-        kform_c  = khcho
-      endif
+        kform_c = khcho
+        kh2o2_c = kho2h
+      endif  !edited from below by bnm, 3/2011
+c      kso2_c   = kso2
+c      kh2o2_c  = kh2o2
+c      if (idmech.eq.6) then
+c      kform_c  = kform
+c      elseif (idmech.eq.5) then
+c        kform_c  = khcho
+c      endif
       khono_c  = khono
       ko3_c    = ko3
       koh_c    = koh

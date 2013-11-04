@@ -241,6 +241,15 @@ c
  40       continue 
  50     continue
  60   continue 
+
+c        do i = 22,24
+c         do j = 1,3
+c          do k = 1,14
+c           print *,'i = ',i,' j = ',j,' k = ',k
+c           print *,' dilut = ', dilut(i,j,k),' entrn = ',entrn(i,j,k)
+c          end do
+c         end do
+c        end do
 c
       return
       end

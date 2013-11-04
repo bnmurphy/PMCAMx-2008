@@ -110,6 +110,18 @@ c$omp&          drodz,ldoipts,ipa_idx,fc1,fc2,fc3)
 c
 c$omp do schedule(dynamic)
 c
+
+Cmoredebugging
+c        do i = 22,24
+c         do j = 1,3         
+c          do k = 1,14
+c           print *,'i = ',i,' j = ',j,' k = ',k
+c           print *,'NO conc = ',conc(i,j,k,1)
+c          end do
+c         end do
+c        end do
+
+
       do 61 ispc = 1,nspc
         do 60 j = 2,nrow-1
           i1 = 2

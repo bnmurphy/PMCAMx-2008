@@ -142,6 +142,17 @@ c
 c
 c-----Perform 2-D transport
 c
+
+cMCD Debug weird zero thing
+c      print *,'Before xyadvec.'
+c      do i = 22,23
+c        do j = 2,2
+c          do k = 2,8
+c            print *,' i,j,k,l=',i,j,k,'  1)  NO=',conc(i+ (j-1)*97+ (k-1)*97*90+ (1-1)*97*90*14)
+c          enddo
+c        enddo
+c      enddo
+
       call xyadvec(igrd,xyordr,ncol(igrd),nrow(igrd),nlay(igrd),nspec,
      &             MAX(1,ntotsp),nadv(1,igrd),
      &             deltat(igrd),deltax(1,igrd),deltay(igrd),
@@ -152,6 +163,17 @@ c
      &             tarray2,ipsa3d(igrd),ipacl_3d(iptr3d(igrd)) )
       call flush(6)
       call flush(iout)
+
+cMCD Debug weird zero thing
+c      print *,'After xyadvec.'
+cx      do i = 22,23
+cx        do j = 2,2
+c          do k = 2,8
+c            print *,' i,j,k,l=',i,j,k,'  1)  NO=',conc(i+ (j-1)*97+ (k-1)*97*90+ (1-1)*97*90*14)
+c          enddo
+c        enddo
+c      enddo
+
 c
 c-----Perform vertical transport
 c

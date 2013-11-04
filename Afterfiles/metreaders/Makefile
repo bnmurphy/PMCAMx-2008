@@ -1,0 +1,103 @@
+#  Makefile for After post-processing programs
+#
+#  Modified by Ben Murphy - 3/11/08
+#
+#################################################################
+#
+#  Portland Group Compiler Flags (pgf77)
+#
+#    -tp p6		specify the target processor 
+#			  (p6=pentium pro/pentium II)
+#    -pc 64		precision option (64=double precision)
+#    -Kieee		Perform floating-point operations 
+#			  in strict conformance with the IEEE 
+#			  754 standard
+#    -Mdalign		Align doubles in structures on 8-byte
+#			  boundaries
+#    -Mextend		Allow 132 column source lines
+#    -Mnoframe		Do not set up a true stack frame pointer 
+#			  for fxns
+#    -byteswapio	Swap from big-endian to little-endian
+#			  or vice-versa on input/output of
+#			  unformatted FORTRAN data
+#    -W1,		Pass each comma-delimeted option to 
+#			  the linker
+#       -Bstatic	Static linking
+#    -Minfo		Emit useful info to stderr
+#
+#    -c			skip the link step; compile and assemble 
+#			  only
+#    -o			output file
+#
+#  Debugging Options
+#
+#    -g			generate symbolic debug info.
+#			sets optimizations level to zero.
+#
+################################################################
+FC = pgf77
+
+FLGS = -tp p6 -pc 64 -Kieee -Mdalign -Mextend -Mnoframe -byteswapio -Wl,-Bstatic -Minfo
+
+findreplace: findreplace.f
+	$(FC) $(FLGS) -c findreplace.f
+	$(FC) $(FLGS) -o findreplace findreplace.o
+	rm findreplace.o
+
+temprd: temprd.f
+	$(FC) $(FLGS) -c temprd.f
+	$(FC) $(FLGS) -o temprd temprd.o
+	rm temprd.o
+
+temprd07: temprd07.f
+	$(FC) $(FLGS) -c temprd07.f
+	$(FC) $(FLGS) -o temprd07 temprd07.o
+	rm temprd07.o
+
+vdifrd: vdifrd.f
+	$(FC) $(FLGS) -c vdifrd.f
+	$(FC) $(FLGS) -o vdifrd vdifrd.o
+	rm vdifrd.o
+
+temprd_plus5: temprd_plus5.f
+	$(FC) $(FLGS) -c temprd_plus5.f
+	$(FC) $(FLGS) -o temprd_plus5 temprd_plus5.o
+	rm temprd_plus5.o
+
+temprd_plus25: temprd_plus25.f
+	$(FC) $(FLGS) -c temprd_plus25.f
+	$(FC) $(FLGS) -o temprd_plus25 temprd_plus25.o
+	rm temprd_plus25.o
+
+temprd_neg5: temprd_neg5.f
+	$(FC) $(FLGS) -c temprd_neg5.f
+	$(FC) $(FLGS) -o temprd_neg5 temprd_neg5.o
+	rm temprd_neg5.o
+
+pressrd: pressrd.f
+	$(FC) $(FLGS) -c pressrd.f
+	$(FC) $(FLGS) -o pressrd pressrd.o
+	rm pressrd.o
+
+rainrd: rainrd.f
+	$(FC) $(FLGS) -c rainrd.f
+	$(FC) $(FLGS) -o rainrd rainrd.o
+	rm rainrd.o
+
+wvaprd: wvaprd.f
+	$(FC) $(FLGS) -c wvaprd.f
+	$(FC) $(FLGS) -o wvaprd wvaprd.o
+	rm wvaprd.o
+
+windrd: windrd.f
+	$(FC) $(FLGS) -c windrd.f
+	$(FC) $(FLGS) -o windrd windrd.o
+	rm windrd.o
+
+readmet: readmet.f
+	$(FC) $(FLGS) -c readmet.f
+	$(FC) $(FLGS) -o readmet readmet.o
+	rm readmet.o
+
+clean: after
+	rm *.o after

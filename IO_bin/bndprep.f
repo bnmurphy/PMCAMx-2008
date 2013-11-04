@@ -84,23 +84,23 @@ c
         write(iout,*)'BC start date > simulation start date'
         write(iout,'(a,i10.5,a,i10.5)')
      &        'BC file: ',idat1,' Sim start: ',begdate
-        call camxerr()
+c        call camxerr()
       elseif (idat1.eq.begdate .and. tim1.gt.begtim) then
         write(iout,'(//,a)') 'ERROR in BNDPREP:'
         write(iout,*)'BC start time > simulation start time'
         write(iout,*)'BC file: ',tim1,' Sim start: ',begtim
-        call camxerr()
+c        call camxerr()
       elseif (idat2.lt.enddate) then
         write(iout,'(//,a)') 'ERROR in BNDPREP:'
         write(iout,*)'BC end date < simulation end date'
         write(iout,'(a,i10.5,a,i10.5)')
      &        'BC file: ',idat2,' Sim end: ',enddate
-        call camxerr()
+c        call camxerr()
       elseif (idat2.eq.enddate .and. tim2.lt.endtim) then
         write(iout,'(//,a)') 'ERROR in BNDPREP:'
         write(iout,*)'BC end time < simulation end time'
         write(iout,*)'BC file: ',tim2,' Sim end: ',endtim
-        call camxerr()
+c        call camxerr()
       endif
 c
 c-----Read 2nd BC header record and check inputs

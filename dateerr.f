@@ -42,9 +42,9 @@ c
      &               ' are in Julian format (YYJJJ)'
       endif
       write(iout,*) 
-c
+
       call camxerr()
-c
+
       stop
-c
+
       end

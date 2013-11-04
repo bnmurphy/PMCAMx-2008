@@ -113,11 +113,24 @@ c
         enddo
       enddo
 c
+
       if( xyordr .eq. 0 ) goto 200
 c
 c-----Advection in x-direction
 c
  100  continue
+
+c    debugging for NO => print here and then after
+c        print *, 'x direction'
+c        do i = 22,23
+c         do j = 2,2
+c          do k = 2,8
+c          print *,'i = ',i,' j = ',j,' k = ',k
+c          print *,'NO conc = ',conc(i,j,k,1)
+c          end do
+c         end do
+c        end do
+
 c
 c$omp master
       write(*,'(a20,$)') 'x advection ......'
@@ -133,6 +146,7 @@ c$omp&          istep,dtuse)
 c
 c$omp do schedule(dynamic)
 c
+
       do 20 k = 1,nlay
         dtuse = deltat/nadv(k)
         do 21 istep = 1,nadv(k)
@@ -338,6 +352,7 @@ c  --- next layer ---
 c
   21  continue
   20  continue
+
 c
 c  --- end of parallelized loop ---
 c
@@ -354,6 +369,18 @@ c
 c-----Advection in y-direction
 c
  200  continue
+
+c debugging MCD
+c        print *, 'y direction'
+c        do i = 22,23
+c         do j = 2,2
+c          do k = 2,8
+c           print *,'i = ',i,' j = ',j,' k = ',k
+c           print *,'NO conc = ',conc(i,j,k,1)
+c          end do
+c         end do
+c        end do
+
 c
 c$omp master
       write(*,'(a20,$)') 'y advection ......'
@@ -587,6 +614,18 @@ c
         enddo
       enddo
 c
+c debugging MCD
+c        print *, 'end of xyadvec'
+c        do i = 22,23
+c         do j = 2,2
+c          do k = 2,8
+c           print *,'i = ',i,' j = ',j,' k = ',k
+c           print *,'NO conc = ',conc(i,j,k,1)
+c          end do
+c         end do
+c        end do
+
+
       call flush(6)
       call flush(iout)
       return

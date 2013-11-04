@@ -64,14 +64,16 @@ c
       tim2 = 100.*tim2
       write(iout,'(a40,2(f7.0,i8.5))') 
      &      'Read initial condition file at ',tim1,idat1,tim2,idat2
+
       do lread = 1,nicspc
         do k = 1,nz
           read(iunit) idum,(icspec(n),n=1,10), 
      &                ((cinit(i,j),i=1,nx),j=1,ny) 
+
           if ((idat1.lt.date .or. (idat1.eq.date .and. tim1.le.time)) 
      &                 .and. (idat2.gt.date .or. (idat2.eq.date .and. 
      &                                            tim2.gt.time))) then
-c
+
              do 90 lmod = 1,nspec
                 lic = licmap(lmod,1)
                 if( lic .NE. lread ) goto 90
@@ -92,6 +94,11 @@ c                    endif
 c                    if (lread.ge.18.and.lread.le.23) then
 c                      conc(n4d) = 0.001
 c                    endif
+
+cMCD Debug weird zero thing
+c      if (lmod.eq.1.and.j.eq.2.and.i.ge.22.and.i.le.23.and.k.ge.2.and.k.le.8) then
+c            print *,' i,j,k,l=',i,j,k,'  1)  NO=',conc(n4d)
+c      end if
 c------------------------------------------------------------
 
 c                    if (i.eq.5.and.j.eq.5.and.k.eq.1) then
@@ -103,6 +110,7 @@ c                    endif
           endif
         enddo
       enddo
+
 c
 c-----If this is not a restart, interpolate coarse grid concentrations
 c     to all fine grids

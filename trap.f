@@ -8,18 +8,18 @@ c
 c     TRAP solves the chemical reaction ODEs for a given time step
 c     using the Crank-Nicolson method and Euler's method
 c     ctmp(nspec+1) is used to store unused species
-c                          
+c
 c     Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
 c     ENVIRON International Corporation
 c
 c     Modifications:
-c        01/22/02    Now has array for to save average of radicals 
+c        01/22/02    Now has array for to save average of radicals
 c                    over time step
 c
 c     Input arguments:
 c        rxnrate           name of the routine which computes reaction
 c                          rates
-c        radslvr           name of the routine which computes radical 
+c        radslvr           name of the routine which computes radical
 c                          concentrations
 c        ratejac           name of the routine which computes the
 c                          reaction rate and the Jacobian matrix of fast
@@ -65,6 +65,7 @@ c
       include "camx.prm"
       include "chmstry.com"
       include "filunit.com"
+      include "flags.com"
 c
       parameter (MXDDM = MXSPEC + MXRADCL)
       parameter (WT = 0.5)
@@ -83,9 +84,9 @@ c=========================== Process Analysis End ==============================
 c
       dimension conc(MXSPEC+1),rate(MXSPEC+1),res(MXSPEC),rrxn(MXRXN),
      &          rloss(MXSPEC+1),xjac(MXSPEC,MXSPEC),cncrad(MXRADCL),
-     &          cncold(MXSPEC),ctmp(MXSPEC+1),avgrad(MXRADCL)
+     &          crold(MXRADCL),cncold(MXSPEC),ctmp(MXSPEC+1),avgrad(MXRADCL)
       dimension y(MXDDM+1), prod(MXDDM), stmp(MXDDM), ipvt(MXDDM),
-     &          djac(MXDDM+1,MXDDM+1), amx(MXDDM,MXDDM), 
+     &          djac(MXDDM+1,MXDDM+1), amx(MXDDM,MXDDM),
      &          bmx(MXDDM,MXDDM), cmx(MXDDM,MXDDM),
      &          sddm(nfam,nsen)
       external  rxnrate,radslvr,ratejac,rateslow,ddmjac
@@ -120,8 +121,8 @@ c
 c
 c=========================== Process Analysis End ==============================
 c
-c-----Mass of NO3 and N2O5 goes in NO2 because steady state used 
-c 
+c-----Mass of NO3 and N2O5 goes in NO2 because steady state used
+c
       conc(kno2) = conc(kno2) + conc(knxoy)
       conc(knxoy) = bdnl(knxoy)
 c
@@ -217,17 +218,18 @@ c-----Initialize time-averaging of radical concentrations
 c
       do l=1,nrad
         avgrad(l) = 0.0
+        crold(l) = cncrad(l) !VAK
       enddo
 c
 c-----Start iteration loop for the solution of the fast state species
 c
       ktotal = 0
       kount = 0
-  10  kount = kount + 1
+ 10   kount = kount + 1
 c
 c-----Test for non-convergence
 c
-      if (dt.lt.1e-5) then 
+      if (dt.lt.1e-5) then
         write(*,*) ' No Convergence in TRAP'
         goto 900
       endif
@@ -252,10 +254,20 @@ c
 c-----Compute reaction rate
 c
       call rxnrate(H2O,atm,O2,CH4,H2,cncrad,ctmp,rrxn)
+
+c     ADDED BY MCD FOR DEBUGGING
+      do irxn = 1,MXRXN
+        if (rrxn(irxn) .lt. 0) then
+        call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
+          print *, '1) RRXN < 0 at rxn ',irxn,'i= ',ichm,'j= ',jchm,'k= ',kchm
+        end if
+      end do
 c
 c-----Solve for radical species concentrations
 c
-      call radslvr(ldark,H2O,atm,O2,CH4,H2,cncrad,ctmp,rrxn)
+      call radslvr(ldark,H2O,atm,O2,CH4,H2,cncrad,ctmp,rrxn,crold,dt) !VAK
+
+
 c
 c-----Get rate and Jacobian for fast state species
 c
@@ -321,18 +333,58 @@ c
       enddo
       do l=1,nrad
         avgrad(l) = avgrad(l) + (dt/dtin)*cncrad(l)
+        crold(l) = cncrad(l) !VAK
       enddo
 c
 c-----Compute reaction rate
 c
       call rxnrate(H2O,atm,O2,CH4,H2,cncrad,ctmp,rrxn)
+
+c     ADDED BY MCD FOR DEBUGGING
+      do irxn = 1,MXRXN
+        if (rrxn(irxn) .lt. 0) then
+        call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
+          print *, '2) RRXN < 0 at rxn ',irxn,'i= ',ichm,'j= ',jchm,'k= ',kchm
+        end if
+      end do
+
+
+c-----------------write OH Tsimpidi------------------------
+      call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
+c      do irads = 1,nrads
+c	if (l3davg.or.kchm.eq.1) then
+c	  print *, 'l3davg = ',l3davg
+c	  print *,'Time: ',dtin
+c	  print *,'Grid cell: i=',ichm,' j=',jchm,' k=',kchm
+c	  print *,'iavg = ',iavg
+c	  write(iavg+(kchm-1)*(1+nrads)+1) dtin,ichm,jchm,cncrad(kOH)
+c	  print *, 'Writing to file unit: ',iavg+(kchm-1)*(1+nrads)+1-1
+c	  write(iavg+(kchm-1)*(1+nrads)+2) dtin,ichm,jchm,cncrad(kNO3)
+c	  print *, 'Writing to file unit: ',iavg+(kchm-1)*(1+nrads)+2-1
+c	endif  
+c      enddo
+
+	if (ichm.eq.55.and.jchm.eq.61) then
+	print *,'time = ',time, 'cncrad(OH) = ',cncrad(kOH)
+	print *,'time = ',time, 'cncrad(NO3) = ',cncrad(kNO3)
+	print *,'time = ',time, 'cncrad(HO2) = ',cncrad(kHO2)
+	endif
+
+	bnmradcnc(1,ichm,jchm,kchm) = cncrad(kOH)
+	bnmradcnc(2,ichm,jchm,kchm) = cncrad(kNO3)
+c	bnmradcnc(3,ichm,jchm,kchm) = cncrad(kN2O5)
+	bnmradcnc(3,ichm,jchm,kchm) = cncrad(kHO2)
+
+c----------------------------------------------------------
+
+
 c
 c-----Get rates for slow species
 c
       call rateslow(neq1,rrxn,rate)
 c
 c----------------------------------------------------------------------
-c-----Added VOC/NOx dependence for biogenic VOC with O3 
+c-----Added VOC/NOx dependence for biogenic VOC with O3
 c-----T.Lane (3/22/05)
 c     I think nflag is zero at night
 c
@@ -424,7 +476,7 @@ c
       time = time + dt
       if (time .lt. 0.99*dtin) then
         dt = amin1(dt*1.5, dtmx, dtin-time)
-        ktotal = ktotal + kount  
+        ktotal = ktotal + kount
         do l=nstrt,ngas
           cncold(l) = conc(l)
         enddo
@@ -433,10 +485,10 @@ c
       endif
 c
 c-----Done time step
-c 
+c
 c-----Remove mass of NXOY from NO2
 c
-      conc(kno2) = amax1( 
+      conc(kno2) = amax1(
      &             bdnl(kno2), (conc(kno2) - conc(knxoy)))
 c
 c======================== DDM Begin =======================
@@ -449,7 +501,7 @@ c
         do k=1,nfam
           if (ltest) sddm(k,knxoy) = 0.
           if (conc(kno2).le.FUZZ*bdnl(kno2)) then
-            sddm(k,kno2) = 0. 
+            sddm(k,kno2) = 0.
           else
             sddm(k,kno2) = sddm(k,kno2) - sddm(k,knxoy)
           endif
@@ -462,17 +514,17 @@ c
 c
 c-----Error reporting on failure to converge
 c
- 900  write(iout,'(//,a)') 'ERROR in TRAP:'
-      write(iout,'(/,a,i4,1p2e11.3)')
+ 900   write(iout,'(//,a)') 'ERROR in TRAP:'
+       write(iout,'(/,a,i4,1p2e11.3)')
      &    ' No Convergence in TRAP: kount, dt, time = ',kount,dt,time
       write(iout,'(a,1p2e10.3)') ' errbig, rerr = ', errbig,rerr
       write(iout,*) 'ldark, temp(K), water = ',
      &     ldark, tcell, H2O
       write(iout,*) 'M, O2, CH4, H2 = ',
      &     atm, O2, CH4, H2
-      write(iout,'(a,4i4)') ' igrd, i, j, k = ', igrdchm,ichm,jchm,kchm 
+      write(iout,'(a,4i4)') ' igrd, i, j, k = ', igrdchm,ichm,jchm,kchm
       write(iout,*) 'No  Name     New Conc  Old Conc   Rerr'
-      if (nstrt.ne.1) 
+      if (nstrt.ne.1)
      &  write(iout,800) 1,spname(1),conc(1),cncold(1)
       do l=nstrt,neq1
         write(iout,800) l,spname(l),conc(l),cncold(l),
@@ -492,5 +544,3 @@ c
  800  format(i3,2x,a7,1p3e10.3)
  810  format(i3,2x,1p3e10.3)
       end
-
-

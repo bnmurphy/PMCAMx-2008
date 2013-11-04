@@ -40,6 +40,8 @@ c
       include 'ahomap.com'
       include 'grid.com'
       include 'flags.com'
+
+      character*2 clay(14)     !Added by BNM to carry naming for avrg layer output files
 c
 c======================== Source Apportion Begin =======================
 c
@@ -118,18 +120,55 @@ c
         nfils = nfils + 1
       endif
 c
+
+cBNM  -  add new more .avrg output files to take output from higher layers
+
+      if (l3davg) then
+        nlayer = nlay(1)
+      else
+        nlayer = 1
+      endif
       if (navspc.gt.0) then
-        write(filroot(ii+1:),'(A)') '.avrg'
-        filtmp = filroot
-        iavg = nfils
-        nopen = nopen + 1
-        action = 'Opening output AVERAGE file for coarse grid.'
-        open(unit=iavg,file=filroot(1:ii+5),form='UNFORMATTED',
+	iavg = nfils
+	data clay /'01','02','03','04','05','06','07','08','09',
+     &		   '10','11','12','13','14'/
+
+	do ilayer = 1,nlayer
+c          if (l3davg) then
+		write(filroot(ii+1:),'(A)') '.avrg'//clay(ilayer)
+		iifil = 8
+c	  else
+c		write(filroot(ii+1:),'(A)') '.avrg'
+c		iifil = 6
+c	  endif
+          filtmp = filroot
+          nopen = nopen + 1
+          action = 'Opening output AVERAGE file for coarse grid.'
+          open(unit=(iavg),file=filroot(1:ii+iifil),form='UNFORMATTED',
      &                                       status= 'UNKNOWN',ERR=7005)
-        write(iout,9000)'Output AVERAGE file coarse grid      (unit):',
+          write(iout,9000)'Output AVERAGE file coarse grid      (unit):',
      &                                                          iavg
-        write(iout,9002) '   File: ',filroot(1:ii+5)
-        nfils = nfils + 1
+          write(iout,9002) '   File: ',filroot(1:)
+	  iavg = iavg + 1
+
+c ccc BNM --- Opening Radical Concentration Output Files ---- ccc
+	  do irads = 1,nrads  
+	    write(filroot(ii+iifil:),'(A)') '.'//crads(irads)
+	    open(unit=(iavg),file=filroot(1:ii+11),form='UNFORMATTED',
+     &					    status= 'UNKNOWN',ERR=7005)
+	    write(iout,9000)'Output AVERAGE file coarse grid   (unit):',
+     &								iavg
+	    write(iout,9002) ' File: ',filroot(1:)
+	    iavg = iavg + 1
+	  enddo
+	  
+c ccc BNM --- End opening Radical species output files --- ccc
+
+	end do
+	iavg = nfils
+        nfils = nfils + nlayer*(1+nrads)
+cBNM -- End Opening Multiple Layer output files.
+
         if (ngrid.gt.1) then
           write(filroot(ii+1:),'(A)') '.favrg'
           filtmp = filroot

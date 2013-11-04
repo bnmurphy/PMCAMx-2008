@@ -69,6 +69,9 @@ c
         tmp1 = w1*rk11 + (1.-w1)*rk21
         tmp2 = w1*rk12 + (1.-w1)*rk22
         rk(i) = w2*tmp1 + (1.-w2)*tmp2
+c         if (rk(i) .lt. 0) then
+c         print *,i, rk(i) ,' less than zero!'
+c         end if
       enddo
 c
       end

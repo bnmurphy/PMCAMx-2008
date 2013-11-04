@@ -238,9 +238,14 @@ c
         else
           call trdiag(aa,bb,cc,rr,nlay+1,1)
         endif
-c             
-        do k = 1,nlay
-          if (rr(k).le.0.) then 
+             
+c        do k = 1,nlay
+c          if (rr(k).le.0.) then 
+        do k = 1,nlay+1
+          if (rr(k).le.0.and.k.ge.10) then !BNM added as a workaround
+            rr(k) = 0.1E-13                !for high-altitude, low concentrations
+          endif
+          if (rr(k).le.0.and.k.lt.10) then
             write(iout,'(//,a)') 'ERROR in VRTSLV:'
             write(iout,*) 'Negative concentration ',
      &                    'when doing advection in z-direction'
