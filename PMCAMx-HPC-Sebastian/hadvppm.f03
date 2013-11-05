@@ -1,7 +1,7 @@
 SUBROUTINE hadvppm(nn,dt,dx,con,vel,area,areav,flxarr,mynn)
     !this version is without STEEPEN
     INCLUDE "camx.prm"
-    !INTEGER :: mynn !is this actually necessary?
+    INTEGER :: mynn !is this actually necessary?
     REAL, DIMENSION(mynn) :: con,vel,area,areav,flxarr
     REAL, PARAMETER :: TWO3RDS=2./3.
     REAL, DIMENSION(MXCELLS) :: fm, fp, cm, cl, cr, dc, c6
