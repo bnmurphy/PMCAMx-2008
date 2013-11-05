@@ -1,0 +1,263 @@
+!----CAMx v6.00 130506
+!
+!     CAMx.PRM defines model parameters
+!
+!     Copyright 1996 - 2013
+!     ENVIRON International Corporation
+!
+!     Modifications:
+!        7/5/02      Added parameters for IRON-PIG
+!        9/3/02      removed MXVECCL
+!        1/10/03     Added MXVECDP
+!        9/12/03     Revised parameters for IRON-PiG
+!        7/20/05     Moved sampling grid parameters from TRACER.COM
+!       10/20/05     Standardized the temperature/pressure ranges for
+!                    chemistry rates
+!        7/1/08      Reconfigured for CAMx/MPI dynamic memory allocation
+!
+!-----------------------------------------------------------------------
+!      MXCELLS -- maximum number of cells (used for local arrays)
+!      MXLAYER -- maximum number of layers (used for local arrays)
+!      MXSPEC  -- maximum number of species (used for local arrays)
+!      MXREACT -- maximum number of reactions (used for local arrays)
+!      MXGRID  -- maximum number of grids (used for local arrays)
+!      MXPTSRC -- maximum number of point sources (used for local arrays)
+!      MXCHDRN -- maximum number of children grids for any parent grid
+!      NOVERLP -- number of overlap rows/columns for each slice
+!-----------------------------------------------------------------------
+!
+      integer   MXCELLS
+      integer   MXLAYER
+      integer   MXSPEC
+      integer   MXREACT
+      integer   MXGRID
+      integer   MXPTSRC
+      integer   MXCHDRN
+      integer   NOVERLP
+!
+      parameter ( MXCELLS =      200 )
+      parameter ( MXLAYER =       30 )
+      parameter ( MXSPEC  =      138 )
+      parameter ( MXREACT =      288 )
+      parameter ( MXGRID  =       10 )
+      parameter ( MXPTSRC =   100000 )
+      parameter ( MXCHDRN =        3 )
+      parameter ( NOVERLP =        5 )
+!
+!***********************************************************************
+!    >>>>>>>>> MXTRSP Parameter for number of tracer species.
+!              The value of this parameter greatly affects the
+!              amount of memory required by the model.
+!
+!    OSAT>>>>> For OSAT, use the following formula to determine the
+!              appropriate value:
+!
+!       MXTRSP = 2*ntime*nreg*(ndays+1) + 4*(1+nbound+ngroup*nreg)
+!
+!             where:
+!
+!        ntime  = number of timing releases per day (usually 0)
+!        nreg   = number of source regions
+!        ndays  = number of days in complete simulation
+!        nbound = 1 if "stratify boundary" is off, 5 otherwise
+!        ngroup = number of source groupings
+!
+!     For a simulation without source apportionment, set MXTRSP = 1.
+!     
+!   DDM>>>>>>> In the DDM, MXTRSP represents the number of species
+!              times the number of parameters (MXFDDM) for which
+!              sensitivities are calculated.  Use the following formula
+!              for calculating MXFDDM and MXTRSP:
+!
+!       MXFDDM = nicddm + (nbcddm * nbound) + (nemddm * ngroup * nreg)
+!                                           + nrateddm + nhddm
+!
+!       MXTRSP = nspec * MXFDDM
+!
+!             where:
+!
+!       nspec  = total number of modeled species
+!       nicddm = number of IC DDM species groups
+!       nbcddm = number of BC DDM species groups
+!       nbound = 1 if "stratify boundary" is off, 5 otherwise
+!       nemddm = number of emission DDM species groups
+!       nreg   = number of source regions
+!       ngroup = number of source groupings
+!       nrateddm = number of rate constant groups
+!       nhddm  = number of HDDM sensitivity groups
+!
+!   PA>>>>>>>> For Process Analysis, MXTRSP must be greater than or
+!              equal to the parameter MXCPA which is set in procan.com
+!              The current value for MXCPA in CAMx is 99
+!
+!***********************************************************************
+!
+!   MXTRSP   I   maximum number of total tracer species in simulation
+!
+      integer   MXTRSP
+!
+      parameter( MXTRSP =    1 )
+!
+!-----------------------------------------------------------------------
+!      Parameters for input met files:
+!
+!      MXVAR     -- max number of variables on file
+!      NUM3DMET  -- number of 3D met variables
+!      NUM2DMET  -- number of 2D met variables
+!      NUMKVMET  -- number of 3d Kv variables
+!      NUMCLDMET -- number of 3D cloud variables
+!
+!-----------------------------------------------------------------------
+!
+      integer MXVAR
+      integer NUM3DMET
+      integer NUM2DMET
+      integer NUMKVMET
+      integer NUMCLDMET
+!
+      parameter ( MXVAR     = 100 )
+      parameter ( NUM3DMET  = 6 )
+      parameter ( NUM2DMET  = 1 )
+      parameter ( NUMKVMET  = 1 )
+      parameter ( NUMCLDMET = 5 )
+!
+!-----------------------------------------------------------------------
+!      Parameters for Chemistry:
+!
+!      MXPHT1  -- number of primary photolysis reactions
+!      MXPHT2  -- number of secondary photolysis reactions
+!      NTEMPR  -- number of temperature bins for chemical reactions
+!      TEMPLO  -- minimum temperature for chemical reactions
+!      TEMPHI  -- maximum temperature for chemical reactions
+!      NPRESR  -- number of pressure bins for chemical reactions
+!      PRESLO  -- minimum pressure for chemical reactions
+!      PRESHI  -- maximum pressure for chemical reactions
+!      MXBIN   -- number of aerosol size bins (CF)
+!      MXSECT  -- maximum number of particle sections (CMU)
+!
+!-----------------------------------------------------------------------
+!    
+      integer   MXPHT1
+      integer   MXPHT2
+      integer   NTEMPR
+      real      TEMPLO
+      real      TEMPHI
+      integer   NPRESR
+      real      PRESLO
+      real      PRESHI
+      integer   MXBIN
+      integer   MXSECT
+!
+      parameter ( MXPHT1  =    27 )
+      parameter ( MXPHT2  =    31 )
+      parameter ( NTEMPR  =   141 )
+      parameter ( TEMPLO  = 180.0 )
+      parameter ( TEMPHI  = 330.0 )
+      parameter ( NPRESR  =    11 )
+      parameter ( PRESLO  =  60.0 )
+      parameter ( PRESHI  = 1100. )
+      parameter ( MXBIN   =     1 )
+      parameter ( MXSECT  =    10 )
+!
+!-----------------------------------------------------------------------
+!     Parameters for various lookup tables:
+!
+!     NOZN   -- number of ozone column values
+!     NALB   -- number of albedo values
+!     NTRN   -- number of terrain height values
+!     NLUW89 -- number of land use categories for Wesely 89 scheme
+!     NLUZ03 -- number of land use categories for Zhang 03 schem
+!     NHGHT  -- number of height values
+!     NZEN   -- number of zenith values
+!
+!-----------------------------------------------------------------------
+!
+      integer   NOZN
+      integer   NALB
+      integer   NTRN
+      integer   NLUW89
+      integer   NLUZ03
+      integer   NHGHT
+      integer   NZEN
+!
+      parameter ( NOZN  =  5 )
+      parameter ( NALB  =  5 )
+      parameter ( NTRN  =  3 )
+      parameter ( NLUW89   = 11 )
+      parameter ( NLUZ03   = 26 )
+      parameter ( NHGHT = 11 )
+      parameter ( NZEN  = 10 )
+!
+!-----------------------------------------------------------------------
+!     Parameters for PiG
+!
+!     GRESPIG  -- flag for determining if GREASD-PiG is used
+!     IRONPIG  -- flag for determining if IRON-PiG is used
+!     MXPIG    -- maximum number of PiG puffs allowed in the model
+!     MXRECTR  -- maximum number of IRON puff reactors
+!     FLEAK    -- fraction of horizontal scale to start IRON puff leakage
+!     LEAKON   -- toggle to enable/disable IRON puff leakage
+!     LVISPIG  -- toggle for IRON PiG visualization in average file
+!     OVERLAP  -- toggle to enable/disable puff overlap chemistry
+!     DXYMAX   -- maximum allowed IRON puff size (m) before dumping
+!                 If zero, the grid scale is used
+!     PIGMXDT  -- maximum allowed duration of release (s)
+!     SHRFLG   -- flag indicating if/how to apply shear to puff growth
+!                             0 = shear not applied;
+!                             1 = shear applied during neutral/unstable;
+!                             2 = shear applied always 
+!     AGEMAX   -- maximum puff age (s), after which puff will be slaughtered
+!     MXSAMPLE -- maximum number of PiG sampling grids
+!     MXCOLSMP -- maximum number of PiG sampling grid columns
+!     MXROWSMP -- maximum number of PiG sampling grid rows
+!----------------------------------------------------------------------
+!    
+      integer   GRESPIG
+      integer   IRONPIG
+      integer   MXPIG
+      integer   MXRECTR
+      integer   MXSAMPLE
+      integer   MXCOLSMP
+      integer   MXROWSMP
+      integer   SHRFLG
+      logical   LEAKON
+      logical   LVISPIG
+      logical   OVERLAP
+      real      FLEAK
+      real      DXYMAX
+      real      AGEMAX
+      real      PIGMXDT
+!     
+      parameter ( GRESPIG  = 1 )
+      parameter ( IRONPIG  = 2 )
+      parameter ( MXPIG    = 50000 )
+      parameter ( MXRECTR  = 1 )
+      parameter ( FLEAK    = .25 )
+      parameter ( LEAKON   = .FALSE. )
+      parameter ( LVISPIG  = .FALSE. )
+      parameter ( OVERLAP  = .FALSE. )
+      parameter ( DXYMAX   = 0. )
+      parameter ( AGEMAX   = 18.*3600. )
+      parameter ( PIGMXDT  = 300. )
+      parameter ( SHRFLG   = 1 )
+      parameter ( MXSAMPLE = 1 )
+      parameter ( MXCOLSMP = 1 )
+      parameter ( MXROWSMP = 1 )
+!
+!-----------------------------------------------------------------------
+!     Parameters for Edge cell definition:
+!
+!   IDNORTH  -- index of the North edge in boundary condition array
+!   IDSOUTH  -- index of the South edge in boundary condition array
+!   IDWEST   -- index of the West edge in boundary condition array
+!   IDEAST   -- index of the East edge in boundary condition array
+!
+      integer IDNORTH
+      integer IDSOUTH
+      integer IDWEST
+      integer IDEAST
+!
+      parameter( IDNORTH = 1 )
+      parameter( IDSOUTH = 2 )
+      parameter( IDWEST  = 3 )
+      parameter( IDEAST  = 4 )

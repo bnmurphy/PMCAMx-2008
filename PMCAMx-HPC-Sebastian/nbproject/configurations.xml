@@ -8,6 +8,7 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>camx.prm</itemPath>
       <itemPath>readme.md</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
@@ -41,6 +42,8 @@
           <commandLine>-std=f2003</commandLine>
         </fortranCompilerTool>
       </compileType>
+      <item path="camx.prm" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="hadvppm.f03" ex="false" tool="2" flavor2="0">
       </item>
       <item path="readme.md" ex="false" tool="3" flavor2="0">
@@ -68,6 +71,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="camx.prm" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="hadvppm.f03" ex="false" tool="2" flavor2="0">
       </item>
       <item path="readme.md" ex="false" tool="3" flavor2="0">

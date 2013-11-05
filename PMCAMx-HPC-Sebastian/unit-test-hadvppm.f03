@@ -22,6 +22,7 @@ PROGRAM unit_test_hadvppm
     !CALL 1-D ADVECTION SUBROUTINE!
     PRINT *,'Calling hadvppm...'
     CALL hadvppm(NN,dt,dx,c1d,v1d,m1d,flxarr,flux1, flux2)
+    !call hadvppm(m2,dtuse,dy,c1d,v1d,a1d,av1d,flxarr,num1d)
     flxarr(NN) = 0.0 !The flux is BETWEEN grid cells, so for the lastcell it equals 0.
 
 !    !Output all for the data to a text file

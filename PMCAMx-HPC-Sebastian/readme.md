@@ -1,7 +1,6 @@
 
-**CAMx v4.02 030709**
 
---------------------------------------------------------------------------------
+----CAMx v6.00 130506
 
 **HADVPPM** performs advection using the one-dimensional implementation
 of the piecewise parabolic method of Colella and Woodward (1984).
@@ -28,32 +27,30 @@ FP(1)-->|      FP(I-1)-->|        |-->FP(I)        |-->FP(N-1)
 
 FM(2)<--|        FM(I)<--|        |<--FM(I+1)      |<--FM(N)  
 
-                    -->|   DS   |<-- 
+                    -->|   DX   |<-- 
 
-Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
+Copyright 1996 - 2013
 ENVIRON International Corporation
 
 Modifications:  
 5/17/00   small modification to flux1,2 to improve mass accounting
+10/13/03   area weighting applied to winds rather than conc
+11/04/03   only single FLXARR vector passed back for use in
+          ZRATES and probling tools
+ 9/1/09   Revised area weighting, removed from wind vector
 
 Input arguments:  
 nn                  Number of cells  
 dt                  Time step (s)  
-dx                  Length of cell (m)  
-con                 Concentration*area vector (umol/m) 
+dx                  Length of cell (m)
+con                 Concentration vector (umol/m3) 
 vel                 Wind speed vector (m/s)  
-mscl                Map-scale factor (squared) at cell centroid
+area                Cell area adjustment vector (1/m2) 
+areav               Interfacial area adjustment vector (m2) 
 
 Output arguments:  
-con                 Concentration*area vector (umol/m)  
-flxarr              Interfacial mass flux (umol/s)
-flux1-2             Boundary fluxes (umol/s)  
-                    (1=west/south, 2=east/north)
-saflux              Interfacial mass flux times area
-                    (used for tracer transport)
-fc1-2               Conc*area vector change from flux (umol/m)
-                    (1=west/south, 2=east/north)
-                    (used for Process Analysis)
+con                 Concentration vector (umol/m3)  
+flxarr              Conc change from interfacial mass flux (umol/m3)
 
 Routines called:  
 none  
