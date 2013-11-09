@@ -1,0 +1,3 @@
+CAMx.HNO3.daytime.102708 - turns off Nitrate radical chemistry at night for the NOy species. Reaction rates for nitrate radical and VOC species are still computed and used.
+
+CAMx.NO3.nonightSOA.120908 - turns off night-time Nitrate radical chemistry with the VOC SOA precursors. This way the total contribution of NO3 reactions to SOA can be found for the model.

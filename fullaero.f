@@ -526,7 +526,10 @@ c
           call newdist(t1,q) ! size distribution mapping
           call step(nsec,q) ! calculate water in each section
         else                        ! call SOAP + AER
-          call aerchem(chaero,q,t0,t1,lfrst,ierr)
+
+c          print *, 'Executing aerchem: modeaero = ',modeaero  !BNM
+	  call aerchem(chaero,q,t0,t1,lfrst,ierr)
+	  
         endif
 c
 c     map q back to con 

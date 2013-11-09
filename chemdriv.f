@@ -422,8 +422,8 @@ c
                  call aerochem(water(i,j,k),tcell,pcell,cwc(i,j,k),con,
      &                                  convfac,dtchem,ldoipr,ipa_idx)
                elseif (idmech.eq.5) then
-                 if (ldark(i,j)) then
-                   nflag=1.0d0
+                 if (ldark(i,j)) then    !Flag to turn off nitrate chemistry
+                   nflag=0.0d0
                  else
                    nflag=1.0d0
                  endif
