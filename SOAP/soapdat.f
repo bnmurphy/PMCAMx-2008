@@ -7,13 +7,28 @@ c     mwsoap   - molecular weights of CG/SOA species (g/mol)
 c     csat     - saturation concentrations of SOA species (ug/m3)
 c     cstemp   - temperatures corresponding to saturation concentrations
 c                of CG/SOA species (K)
-c     deltah   - enthalpy of vaporization of CG/SOA species (kJ/mol)
+c     deltah   - enthalpy of vaporization of CG/SOA species (J/mol)
 c     flagsoap - 1 if SOA species forms solutions; 0 if not
 c     lae3     - flag to set emulation of the CMAQ AE3 algorithm
 c                which allows no evaporation of SOA (recommend false)
 c-----------------------------------------------------------------------
 c
       include 'soap.com'
+
+
+c--------------------------------------
+c BNM
+c   Aerosol Map Table
+c
+c     / APO1,  APO2,  APO3,  APO4,
+c       APO5,  APO6,  APO7,  APO8,
+c       APO9,  APO10, AOO1,  AOO2,
+c       AOO3,  AOO4,  AOO5,  AOO6,
+c       AOO7,  AOO8,  AOO9,  AOO10,
+c       ABS1,  ABS2,  ABS3,  ABS4,
+c       AAS1,  AAS2,  AAS3,  AAS4   /
+c
+c--------------------------------------
 
 c
       data mwsoap   /250.0, 250.0, 250.0, 250.0,

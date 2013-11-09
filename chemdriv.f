@@ -95,6 +95,14 @@ c
       real      delo3, delno, delno2, delvoc, delh22, delhn3
       real      modo3, modnox, modvoc, o3old, o3new
       real      cold(MXTRSP), cnew(MXTRSP)
+
+c BNM variables-------------------------------------
+
+      character*4 cdate, crxn
+      character*4 ctime
+      real      rrxn(MXRXN)
+c---------------------------------------------------
+
 c
 c========================= Source Apportion End ========================
 c
@@ -180,6 +188,27 @@ c$omp&  copyin(/ijkgrd/)
 c
 c$omp do schedule(dynamic)
 c
+
+c BNM --------Open files for radical and rxn rate diagnostic
+
+      print *,'\n date: ',date,'\n'
+      print *,'time: ',time,'\n'
+
+      write (cdate, 'I8'), date
+      write (ctime, 'F8.2'), time
+
+      print *,'\n date: ',cdate,'\n'
+      print *,'time: ',ctime,'\n'
+      
+      open (unit=93, file='/home/bnmurphy/Research/Output/SAPRC.July/Rads/OH.'//cdate, status='unknown')
+
+      do nrxn = 212,237
+	write (crxn, 'I3'), nrxn
+	open (unit=(93-211+nrxn), file='/home/bnmurphy/Research/Output/SAPRC.July/rxns/r'//crxn//cdate, status='unknown')
+      end do
+
+c end BNM ---------------------------------------------------------
+
         do 90 j = 2,nrow-1
           i1 = 2
           i2 = ncol-1
@@ -402,7 +431,12 @@ c
      &             ldark(i,j),water(i,j,k),atm,O2,CH4,H2,con,crad,
      &             avgrad,tcell,
      &             sddm,nddmsp,ngas,ddmjac5,lddm,nirrrxn,titrt,rrxn_irr,
-     &             lirr)
+     &             lirr,rrxn)
+
+c BNM --------------------------------------
+c  Added rrxn to the trap function call for diagnostic
+c---------------------------------------------
+
                  if ( laero_upd )
      &           call fullaero(water(i,j,k),tcell,pcell,cwc(i,j,k),
      &                         MXSPEC,MXRADCL,NSPEC,NGAS,
@@ -465,6 +499,7 @@ c
             do l=1,nrad
               cncrad(i,j,k,l) = amax1(crad(l),bdlrad)
             enddo
+
 c
 c======================== Source Apportion Begin =======================
 c
@@ -601,12 +636,37 @@ cbk            endif
               enddo
             endif
 c
-  89      continue
-  90    continue
+
+c BNM  cccccc Print radical concentrations and reaction rates
+c
+      
+c      write (93, fmt=(A3,2x,A6,2x,I2,2x,I2,2x,I2,2x,e10.5) ),cdate, ctime, i, j, k, cncrad(i,j,k,kOH) 
+      write (93, * ),cdate, ctime, i, j, k, cncrad(i,j,k,l) 
+
+      do nrxn = 212,237
+c        write ((93-211+nrxn), fmt=(I3,2x,I4,2x,I2,2x,I2,2x,I2,2x,e12.5) ),date, time, i, j, k, (rrxn(nrxn)) 
+        write ((93-211+nrxn), * ),date, time, i, j, k, rrxn(nrxn)
+
+      end do
+
+ccc BNM cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+  89      continue  !col
+  90    continue    !row
 c
 c$omp end parallel
 c
-  91  continue
+  91  continue  !Layer
+c
+
+c BNM -------Close diagnostic files
+	close (93)
+	do nrxn = 212,237
+	  close(93-211+nrxn)
+	enddo
+c End BNM ---------------------------------
+
 c
 c     if fullaero was called
 c     - reset aero_dt 

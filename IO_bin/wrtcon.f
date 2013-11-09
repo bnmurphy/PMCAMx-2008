@@ -105,29 +105,40 @@ c
           read(spname(l),'(10a1)') (ispec(n,l),n=1,10) 
         enddo
 c
-        rewind(iunit)
-        write(iunit) ifile,note,nseg,nsptmp,idat2,etim,idat3,etim3
-        write(iunit) zero,zero,izone,orgx,orgy,dx,dy,
+          rewind(iunit)
+          write(iunit) ifile,note,nseg,nsptmp,idat2,etim,idat3,etim3
+          write(iunit) zero,zero,izone,orgx,orgy,dx,dy,
      &               nox,noy,noz,izero,izero,zero,zero,zero
-        write(iunit) izero,izero,nox,noy
-        write(iunit) ((ispec(n,l),n=1,10),l=1,nsptmp)
-        write(iunit) idat2,etim,idat3,etim3
+          write(iunit) izero,izero,nox,noy
+          write(iunit) ((ispec(n,l),n=1,10),l=1,nsptmp)
+          write(iunit) idat2,etim,idat3,etim3
       else
-        do l = 1,nsptmp
-          read(spname(lavmap(l)),'(10a1)') (ispec(n,l),n=1,10)
-        enddo
-        if (.not.l3davg) nlayer = 1 
-        write(iunit) idat1,btim,idat2,etim
+c
+cBNM  -  add ability to print one layer to its own avrg file
+
+	do k = 1,nlayer
+          do l = 1,nsptmp
+            read(spname(lavmap(l)),'(10a1)') (ispec(n,l),n=1,10)
+          enddo
+          if (.not.l3davg) nlayer = 1 
+          write(iunit+k-1) idat1,btim,idat2,etim
+	enddo
       endif
 c
 c-----Write gridded concentration field
 c
       do l = 1,nsptmp
         do k = 1,nlayer
-          write(iunit) nseg,(ispec(n,l),n=1,10),
+	  if (iflag.eq.1) then !write to instantaneous file
+            write(iunit) nseg,(ispec(n,l),n=1,10),
      &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
+	  else    !write to layered .avrg file
+            write(iunit+k-1) nseg,(ispec(n,l),n=1,10),
+     &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
+	  endif
         enddo
       enddo
-c
+cBNM  - adding does not affect this point on
+
       return
       end

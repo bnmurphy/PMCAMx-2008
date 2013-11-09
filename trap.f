@@ -1,7 +1,12 @@
       subroutine trap(rxnrate,radslvr,ratejac,rateslow,dtin,ldark,
      &                H2O,atm,O2,CH4,H2,conc,cncrad,avgrad,tcell,
      &                sddm,nfam,nsen,ddmjac,lddm,nirrrxn,titrt,rrxn_irr,
-     &                ldoirr)
+     &                ldoirr,rrxn)
+
+c BNM -----------------------
+c  Added rrxn to the subroutine fucntion call for diagnostic
+c -------------------------------------
+
 c
 c-----CAMx v4.02 030709
 c
