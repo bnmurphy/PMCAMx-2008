@@ -116,11 +116,11 @@ c
 c
 cBNM  -  add ability to print one layer to its own avrg file
 
+        if (.not.l3davg) nlayer = 1 
 	do k = 1,nlayer
           do l = 1,nsptmp
             read(spname(lavmap(l)),'(10a1)') (ispec(n,l),n=1,10)
           enddo
-          if (.not.l3davg) nlayer = 1 
           write(iunit+k-1) idat1,btim,idat2,etim
 	enddo
       endif

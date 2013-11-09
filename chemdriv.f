@@ -98,8 +98,8 @@ c
 
 c BNM variables-------------------------------------
 
-      character*4 cdate, crxn
-      character*4 ctime
+      character*4 cdate, ctime
+      character*3 crxn
       real      rrxn(MXRXN)
 c---------------------------------------------------
 
@@ -174,6 +174,38 @@ c     aero_dt  : actual time interval for each grid (hr) (accumulated dtchem)
       endif
       endif                 ! bkoo_dbg
 c
+
+c BNM --------Open files for radical and rxn rate diagnostic
+
+      print *,'\n date: ',date,'\n'
+      print *,'time: ',time,'\n'
+
+      write (cdate, 'I4'), date
+      write (ctime, 'F9.4'), time
+
+      print *,'\n cdate: ',cdate,'\n'
+      print *,'ctime: ',ctime,'\n'
+
+      if (ctime(2:2).eq.' ') then
+        ctime = '00'//ctime(3:4)
+      elseif (ctime(1:1).eq.' ') then
+        ctime = '0'//ctime(2:4)
+      endif
+
+      if (ctime(3:4).eq.'00') then
+      	open (unit=92, file='/home/bnmurphy/Research/Output/SAPRC.July/Hgt/HGT.'//cdate//'.'//ctime, status='unknown')
+      	open (unit=93, file='/home/bnmurphy/Research/Output/SAPRC.July/Rads/OH.'//cdate//'.'//ctime, status='unknown')
+
+      	do nrxn = 212,237
+	    write (crxn, 'I3'), nrxn
+	    open (unit=(93-211+nrxn), file='/home/bnmurphy/Research/Output/SAPRC.July/rxns/r'//crxn//
+     &				       '.'//cdate//'.'//ctime, status='unknown')
+      	end do
+      endif
+
+c end BNM ---------------------------------------------------------
+
+c
       igrdchm = igrd
       do 91 k = 1,nlay
 c
@@ -188,26 +220,6 @@ c$omp&  copyin(/ijkgrd/)
 c
 c$omp do schedule(dynamic)
 c
-
-c BNM --------Open files for radical and rxn rate diagnostic
-
-      print *,'\n date: ',date,'\n'
-      print *,'time: ',time,'\n'
-
-      write (cdate, 'I8'), date
-      write (ctime, 'F8.2'), time
-
-      print *,'\n date: ',cdate,'\n'
-      print *,'time: ',ctime,'\n'
-      
-      open (unit=93, file='/home/bnmurphy/Research/Output/SAPRC.July/Rads/OH.'//cdate, status='unknown')
-
-      do nrxn = 212,237
-	write (crxn, 'I3'), nrxn
-	open (unit=(93-211+nrxn), file='/home/bnmurphy/Research/Output/SAPRC.July/rxns/r'//crxn//cdate, status='unknown')
-      end do
-
-c end BNM ---------------------------------------------------------
 
         do 90 j = 2,nrow-1
           i1 = 2
@@ -639,15 +651,21 @@ c
 
 c BNM  cccccc Print radical concentrations and reaction rates
 c
+      if (ctime(3:4).eq.'00') then
       
 c      write (93, fmt=(A3,2x,A6,2x,I2,2x,I2,2x,I2,2x,e10.5) ),cdate, ctime, i, j, k, cncrad(i,j,k,kOH) 
-      write (93, * ),cdate, ctime, i, j, k, cncrad(i,j,k,l) 
+      	hgt = height(i,j,k)/2000
+      	if (k.gt.1) hgt = (height(i,j,k)+height(i,j,k-1))/2000
 
-      do nrxn = 212,237
-c        write ((93-211+nrxn), fmt=(I3,2x,I4,2x,I2,2x,I2,2x,I2,2x,e12.5) ),date, time, i, j, k, (rrxn(nrxn)) 
-        write ((93-211+nrxn), * ),date, time, i, j, k, rrxn(nrxn)
+      	write (92, * ),cdate, ctime, i, j, k, hgt 
+      	write (93, * ),cdate, ctime, i, j, k, cncrad(i,j,k,koh) 
 
-      end do
+      	do nrxn = 212,237
+c           write ((93-211+nrxn), fmt=(I3,2x,I4,2x,I2,2x,I2,2x,I2,2x,e12.5) ),date, time, i, j, k, (rrxn(nrxn)) 
+            write ((93-211+nrxn), * ),date, time, i, j, k, rrxn(nrxn)
+
+      	end do
+      endif
 
 ccc BNM cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
@@ -661,10 +679,16 @@ c
 c
 
 c BNM -------Close diagnostic files
+      if (ctime(3:4).eq.'00') then
+	close (92)
 	close (93)
 	do nrxn = 212,237
 	  close(93-211+nrxn)
 	enddo
+
+	a = a + 1
+	print *, 'Closing files for time #: ',a
+      endif
 c End BNM ---------------------------------
 
 c

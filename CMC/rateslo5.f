@@ -395,14 +395,14 @@ c
 
 c-------SAPRC SOA aging reactions
 c
-c        Loss(kCBS1 )= +( 0.000)*r(230)
+c BNM        Loss(kCBS1 )= +( 0.000)*r(230)
 c        Loss(kCBS2 )= +( 1.000)*r(231)
 c        Loss(kCBS3 )= +( 1.000)*r(232)
 c        Loss(kCBS4 )= +( 1.000)*r(233)
-        Loss(kCAS1 )= +( 0.000)*r(234)
-        Loss(kCAS2 )= +( 1.000)*r(235)
-        Loss(kCAS3 )= +( 1.000)*r(236)
-        Loss(kCAS4 )= +( 1.000)*r(237)
+c        Loss(kCAS1 )= +( 0.000)*r(234)
+c        Loss(kCAS2 )= +( 1.000)*r(235)
+c        Loss(kCAS3 )= +( 1.000)*r(236)
+c        Loss(kCAS4 )= +( 1.000)*r(237)
 
 c BNM corrected following 6 lines 4-21-08.  All read Gain(kCBS1) before
 c Oxidation causes one-bin volatility shift
@@ -410,9 +410,9 @@ c Oxidation causes one-bin volatility shift
 c        Gain(kCBS1 )= Gain(kCBS1 )+( 1.075)*r(231)+( 0.0  )*r(232)+( 0.0  )*r(233)
 c        Gain(kCBS2 )= Gain(kCBS2 )+( 0.0  )*r(231)+( 1.075)*r(232)+( 0.0  )*r(233)
 c        Gain(kCBS3 )= Gain(kCBS3 )+( 0.0  )*r(231)+( 0.0  )*r(232)+( 1.075)*r(233)
-        Gain(kCAS1 )= Gain(kCAS1 )+( 1.075)*r(235)+( 0.0  )*r(236)+( 0.0  )*r(237)
-        Gain(kCAS2 )= Gain(kCAS2 )+( 0.0  )*r(235)+( 1.075)*r(236)+( 0.0  )*r(237)
-        Gain(kCAS3 )= Gain(kCAS3 )+( 0.0  )*r(235)+( 0.0  )*r(236)+( 1.075)*r(237)
+c        Gain(kCAS1 )= Gain(kCAS1 )+( 1.075)*r(235)+( 0.0  )*r(236)+( 0.0  )*r(237)
+c        Gain(kCAS2 )= Gain(kCAS2 )+( 0.0  )*r(235)+( 1.075)*r(236)+( 0.0  )*r(237)
+c        Gain(kCAS3 )= Gain(kCAS3 )+( 0.0  )*r(235)+( 0.0  )*r(236)+( 1.075)*r(237)
 
 c
       do l=neq1+1,ngas
