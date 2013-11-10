@@ -91,7 +91,7 @@ c
       real cnco3(MX1D), cncvoc(MX1D), cncnox(MX1D)
       real c1d0(MX1D),fpc(MX1D),fmc(MX1D)
       real sen1d(MX1D,MXTRSP)
-      real*8 fluxes(nspc,11),flux1,flux2
+      real*8 fluxes(nspc,13),flux1,flux2
       real*8 fluxtmp(MXSPEC,8,MXLAYA)
       dimension tarray2(2)
 c

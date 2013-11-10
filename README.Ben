@@ -15,37 +15,9 @@ CAMx.032009.ASOA.Rads.1 - ASOA aging, NO3 Hertel Chemistry, Radical Conc Output,
 
 CAMx.041009.allage - ASOA and BSOA aging, NO3 QSSA Chemistry, Radical Conc Output, Newest Hvap params, New Density Treatment
 
-
-c-----Rainfield Update ------c
-4-20-09
-
-Downloded monolevel assimilated fields from NOAA.
-
-Current PMCAMx approach:
-  wetdep.f identifies from meteorology all cells in a column that are raining. 
-	If the lowest layer is above the surface layer, any mass that was scavenged is returned to that layer; otherwise it is deposited and removed from the model. 
-        Scavenging is then calculated for all those cells.
-
-Alternate approach:
-  I am going to keep everything done in PMCAMx, all precipitable water predicted by MM5 that doesn't reach the ground will be intact.
-  However, very few, if any, rain events evaporate before hitting the ground, so most will be overwritten.
-  I will also read from the new file; anytime rain is predicted (above a certain threshold), I will start it at 1.5 km and let it rain to the ground.
-  This will occur for the entire 3-hour duration.
-
-  Most of the MM5 rain events reach the ground. THere are significantly (1/3 to 1/2) fewer events in the netCDF data file.
-  Whenever netCDF does not prescribe rain when MM5 does, MM5's rain column will be reduced to only layers 11->14.  Those lower will have no rain.
-  In this way, the boundary layer will be treated uniformly,
-     and the free troposphere (usually it's these layers) is little concern because concentrations are significantly lower.
-
-  A test-case will also be performed where I set the rain over lake Michigan to see if it successfully decreases the pollutant burst.
-
-Clouds:
-  Eventually I need to look at MM5 cloud fraction at different heights and try to improve them with assimilated cloud fraction predictions.
-
-Height/Temp/Press:
-  Need to look at these too, although these inputs should be relatively robust.
-
-c---------------------------c
-
-Makefile1 - this makefile came with the code I inherited from John Dawson
-Makefile2 - I'm testing different compilation flags. I think we are compiling in 32-bit by mistake
+Budget Analysis
+CAMx.Budget.Base.063009 - Only Functionalized OA, Base-case. No BSOA aging
+CAMx.Budget.FUNC1.063009 - Same as Base-Case but with new fragmentation option for aging. Frag is set to 0 so that
+			   I can compare with the base-case and make sure code is working correctly.
+CAMx.Budget.P07S05.063009 - First sensitivity case. FUNC(POA) = 0.7; FRAG(POA) = 0.3
+						    FUNC(SOA) = 0.5; FRAG(SOA) = 0.5

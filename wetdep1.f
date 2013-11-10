@@ -81,8 +81,7 @@ c
      &     pwc(ncol,nrow,nlay),depth(ncol,nrow,nlay)
       integer idfin(ncol,nrow)
       real conc(ncol,nrow,nlay,nspcs),depfld(ncol,nrow,3*nspcs)
-      real*8 fluxes(nspcs,13)
-      real   tmassi(MXSPEC,MXLAYA), tmassb(MXSPEC,MXLAYA), tsplit(MXSPEC), tdiff(MXSPEC)
+      real*8 fluxes(nspcs,11)
       real c0(MXSPEC),rr(MXLAYA),volrat(MXLAYA),tmass(MXSPEC)
       real delr(MXSPEC)
       logical lcloud,ltop,lfreez
@@ -106,14 +105,6 @@ c
         do 20 i = i1,i2
           icl = i
           if (idfin(i,j).gt.igrid) goto 20
-
-C-----Initialize In-Cloud and Below-Cloud Mass Gains
-          do k = 1,nlay
-            do l = 1,nspcs
-              tmassi(l,k) = 0
-              tmassb(l,k) = 0
-            enddo
-          enddo
 c
 c-----Scan column for layers containing precipitation bottom/top
 c
@@ -210,9 +201,6 @@ c
               delc = 0.
               delm = 0.
               if (ltop) tmass(l) = 0.
-              tmassi(l,k) = 0   !BNM Split in-cloud and below deposition
-              tmassb(l,k) = 0   !BNM "  "  "  "  "
-
               c0(l) = tmass(l) / rainvol
               convfac = densfac*(273./tempk(i,j,k))*(press(i,j,k)/1013.)
               cmin = bdnl(l)*convfac
@@ -377,12 +365,6 @@ c
               conc(i,j,k,l) = conc(i,j,k,l) - delc
               delm = delc*cellvol
               tmass(l) = tmass(l) + delm
-C---------------Split Mass Accounting of In-Cloud and Below-Cloud Deposition--(BNM)
-                if (lcloud) then
-                  tmassi(l,k) = delm
-                else
-                  tmassb(l,k) = delm
-                endif
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -506,9 +488,6 @@ c<-
                 delc = 0.
                 delm = 0.
                 if (ltop) tmass(l) = 0.
-                tmassi(l,k) = 0         !BNM split in-cloud and below cloud deposition
-                tmassb(l,k) = 0         !BNM "   "   "   "
-
                 cmin = bdnl(l)
                 conc(i,j,k,l) = amax1(cmin,conc(i,j,k,l))
 cbk                psize = sqrt(dcut(l,1)*dcut(l,2))*1.e-6
@@ -527,13 +506,6 @@ c
                 conc(i,j,k,l) = conc(i,j,k,l) - delc
                 delm = delc*cellvol
                 tmass(l) = tmass(l) + delm
-C---------------Split Mass Accounting of In-Cloud and Below-Cloud Deposition--(BNM)
-                if (lcloud) then
-                  tmassi(l,k) = delm
-                else
-                  tmassb(l,k) = delm
-                endif
-
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -561,23 +533,13 @@ c
             do l = 1,nspec
               conc(i,j,kbot,l) = conc(i,j,kbot,l) + tmass(l)/cellvol
               tmass(l) = 0.
-	      do k = 1,14
-		tmassi(l,k) = 0
-		tmassb(l,k) = 0
-	      enddo
             enddo
 c
 c-----Otherwise rain reaches the ground, increment deposition flux arrays
 c
           else
             do l = 1,nspec
-C BNM 	     Toggle which flux to put mass loss into depending
-C		on whether or not a cloud is present
-	      do k = 1,14
-		fluxes(l,12) = fluxes(l,12) - tmassi(l,k)  !In-Cloud Loss
-		fluxes(l,13) = fluxes(l,13) - tmassb(l,k)  !Below-Cloud Loss
-	      enddo
-C END <- BNM
+              fluxes(l,11) = fluxes(l,11) - tmass(l)
               do ll = 1,navspc
                 if (l .eq. lavmap(ll)) then
                   depfld(i,j,navspc+ll) = depfld(i,j,navspc+ll) +

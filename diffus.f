@@ -93,7 +93,7 @@ c
      &          ro1d(MXLAYA)
       real cnc(MXCOLA,MXROWA),sns(MXCOLA,MXROWA,MXTRSP),
      &     rho(MXCOLA,MXROWA)
-      real*8 fluxes(nspc,11),fluxbot
+      real*8 fluxes(nspc,13),fluxbot
       character*20 strz, strxy
 c
 c-----Entry point
@@ -191,6 +191,7 @@ c
             enddo
             fluxbot = -vdep(i,j,ispc)*conc(i,j,1,ispc)
             fluxes(ispc,11) = fluxes(ispc,11) + fluxbot*dx(j)*dy*deltat
+		!Keep Dry Deposition at Flux 11
             do ll = 1,navspc
               if (ispc .eq. lavmap(ll)) then
                 depfld(i,j,ll) = depfld(i,j,ll) - 1.e-2*fluxbot*deltat

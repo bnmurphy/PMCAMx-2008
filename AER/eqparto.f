@@ -18,9 +18,10 @@ c=====================================================================
 
       parameter (itermax = 1000) ! comparable to ITMAXEQ in equaer.inc
 
-      real*8  q(ntotal),dq,accom,frq(nsec),frqtot,rlambda,frt
+      real*8  q(ntotal),dq,accom,frq(nsec),frqtot,rlambda,frt,t
       real    ctot(nsoap),caer(nsoap),cgas(nsoap),cpre,mwpre,tempk
       real    convfac
+
 
       integer iter
       logical prevsp
@@ -37,6 +38,7 @@ c=====================================================================
 
       ng = nsp*nsecx2                 ! gases
       prod=rgas*temp/(1.01325D5*pres) ! conversion from ppm to umoles/m3
+
       do i=1,nsoap
         cgas(i) = SNGL(q(ng+ICPO1-1+i) * gmw(ICPO1-1+i) / prod) ! ug/m3
         caer(i) = 0.0
@@ -58,13 +60,11 @@ c=====================================================================
 
       call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
 
-c BNM
-c	print *,'SOAP is called!'
-c BNM
-
       call soap(nsoap,caer,cgas,tempk,convfac,
      &          iout,igrdchm,ichm,jchm,kchm,lppm,
      &          cpre,mwpre,csatT)                          ! bkoo (11/14/02)
+
+      
 
       rlambda=0.065d0 ! this should be consistent with that in eqpart.f
 
@@ -168,6 +168,7 @@ cbk            call errprt('EQUIO-F:DQ    ',t,KAPO1-1+isp,-1,dq,0)
           q(ng+ICPO1-1+isp) = q(ng+ICPO1-1+isp) * prod / gmw(ICPO1-1+isp) ! ppm
         endif
       enddo
+
 
       return
       end

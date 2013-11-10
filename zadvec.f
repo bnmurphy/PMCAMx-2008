@@ -92,7 +92,7 @@ c
       integer idfin(ncol,nrow)
       real c1d(MXLAYA+1),d1d(MXLAYA),ent1d(MXLAYA),dil1d(MXLAYA)
       real sen1d((MXLAYA+1)*MXTRSP)
-      real*8 fluxes(nspc,11),fluxtop
+      real*8 fluxes(nspc,13),fluxtop
       logical losat
 c
 c-----Entry point

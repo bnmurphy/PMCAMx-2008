@@ -184,9 +184,6 @@ ccccccc  ------- New Hvap Look-Up Table -------- cccccccccc
 c      print *,'Makes it to Hvap calc', igrdchm
 
 ccc Using Look-up Table Compiled by Scott Epstein  ccc
-c    Set Variables
-c	   ntemp = 231
-c          ncstar = 109
 
 cc   Search for T (seach through all T's)
 cc	Identify index that is upper-bound on values
@@ -234,7 +231,6 @@ c		csatT(i) = csat1
 c	    enddo
 
 ccccc ----------- End New Hvap Look-Up Table --------------
-
 
 c
 c CALCULATE AEROSOL-PHASE CONCENTRATION (CAER) AND GAS-PHASE 
@@ -337,6 +333,7 @@ c
          caer(idx(i))=scaer(i)
          cgas(idx(i))=scgas(i)
       enddo
+
 c
 c Convert to ppm if inputs in ppm
 c

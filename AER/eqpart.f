@@ -1,3 +1,4 @@
+      subroutine EQPART(t,q)
 c=========================================================================
 c  03/09/03: bkoo
 c            - modified to eliminate organics (eqparto now deals with organics)
@@ -53,15 +54,9 @@ C          THE FOLLOWING TWO DIMENSIONAL ARRAYS ARE NECESARY FOR THE
 C          LINKING OF THE WEIGHTING FACTORS FOR NH4, NO3 AND CL.
 C     FRQ(NSEC,nsp)   FRACTION OF DQ TRANSFERED TO EACH AEROSOL SECTION
 C
-      SUBROUTINE EQPART(t,q)
 
       include 'dynamic.inc'
       INCLUDE 'equaer.inc'                  ! ISORROPIA declarations
-
-c BNM - declaring timing variable
-      dimension tarray2(2)
-c BNM
-
 
 cbk      REAL*8 DQ(NSP),FRQ(nsec,nsp),WI(5),q0(3),q(ntotal)
 cbk      real*8 qsav(ntotal), DQsav(nsp), accom(nsp)
@@ -70,42 +65,22 @@ cbk      real*8 qsav(ntotal), DQsav(nsp), accom(nsp)
       real*8 qq, frq0(nsec,nexti) ! bkoo (10/07/03)
       logical done
 
-      if(aerm.eq.'EQUI') then	
+      if(aerm.eq.'EQUI') then
 c
 c     STEP 1/3: CALCULATE NUCLEATION RATE FOR THE WHOLE STEP
 c
-
-c BNM - timing
-c      tcpu = dtime(tarray2)
-c      print *,'Beginning time for Nucleation Module = ',tarray2(1)
-c BNM
-
        call nucl(q)
 c
 c     STEP 2/3: CALCULATE COAGULATION RATE FOR THE WHOLE STEP
 c
-
-c BNM - timing
-c      tcpu = dtime(tarray2)
-c      print *,'Finished Nucleation. On to Coagulation at time = ',tarray2(1)
-c BNM
-
 c       call coagul(q)
 
-c BNM
-c      tcpu = dtime(tarray2)
-c      print *,'Finshed coagulation at time = ',tarray2(1)
-c BNM
 
 
 cbk       call step(nsec,q) ! tmg (10/22/02)
       endif
       call step(nsecx2,q) ! bkoo (03/07/03)
       call wdiameter(q) ! bkoo (03/09/03)
-
-c BNM
-c	print *,'eqparto called'
-c BNM
 
       call eqparto(t,q) ! bkoo (03/09/03)
 c
@@ -185,7 +160,11 @@ C            DQ(KNO3) => now represents the transfer of NH4NO3
 C            DQ(KCl) => now represents the transfer of NH4Cl
 C            DQ(KNH4) => now represents the transfer of NH4 with SO4
 c
+CDEBUG
+      print *,'Called ISORROPIA. Dq(knh4)=',dq(knh4)
       DQ(KNH4)=DQ(KNH4)-DQ(KNO3)-DQ(KCL)
+      print *,'Step 2B. Dq(knh4)=',dq(knh4)
+
 c
 c     Save initial aerosol concentrations
 cbk      do i=1,ntotalx2
@@ -206,6 +185,13 @@ c     due to diferences between aerosol sectional vs. bulk composition
         q0(2)=q0(2)+q((isec-1)*nsp+knh4)    ! initial aerosol NH4
         q0(3)=q0(3)+q((isec-1)*nsp+kcl)     ! initial aerosol Cl
       enddo
+
+CDEBUG
+c        call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)                    ! bkoo_dbg
+c        print *,'EQPART: ISORROPIA RESULTS!'
+c        print '(A6,3I4,3(A8,E15.5))','Cell=',ichm,jchm,kchm,' DQ(KNH4)=',DQ(KNH4),' DQ(KNO3)=',DQ(KNO3),' DQ(KCL)=',DQ(KCL)
+
+
 C
 c   STEP 3: DETERMINE THE RELATIVE RATES OF MASS TRANSFER FOR EACH SECTION
 c       if we assume composition changes between size sections are not 
@@ -292,7 +278,7 @@ C     CHECK FOR COMPLETE EVAPORATION
            frtq=-q(indx+isp)/dqfx/emw(isp)
            if(frtq.lt.frt) then
             frt=frtq
-            ispsav=isp 	                    ! species that evaporates first
+            ispsav=isp                      ! species that evaporates first
             isecsav=isec                    ! section that evaporates first
             if(q(indx+isp).lt.tinys) goto 150
            endif
@@ -348,8 +334,15 @@ c
       else
         if(iter.gt.itmaxeq) then ! moved - bkoo (10/07/03)
          if(min(dq(KNO3),dq(KCL)).lt.-0.3) then                               ! bkoo_dbg
-         call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)                    ! bkoo_dbg
-         write(*,'(A8,2E15.5,4I4)')'EQUI-F: ',dq(KNO3),dq(KCL),ichm,jchm,kchm ! bkoo_dbg
+           call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)                    ! bkoo_dbg
+           write(*,'(A8,2E15.5,4I4)')'EQUI-F: ',dq(KNO3),dq(KCL),ichm,jchm,kchm ! bkoo_dbg
+
+CDEBUGBNM
+c        print '(A15,10(I2,A1,E10.3,1x))','NEGCHK: q(NO3)= ',(i,')',q((i-1)*nsp+KNO3),i=1,10)
+c        print '(A15,10(I2,A1,E10.3,1x))','NEGCHK: q(NH4)= ',(i,')',q((i-1)*nsp+KNH4),i=1,10)
+c        print '(A15,10(I2,A1,E10.3,1x))','NEGCHK: q(SO4)= ',(i,')',q((i-1)*nsp+KSO4),i=1,10)
+c        print '(A15,10(I2,A1,E10.3,1x)/)','NEGCHK: q(CL)= ',(i,')',q((i-1)*nsp+KCL),i=1,10)
+
          endif                                                                ! bkoo_dbg
          goto 200
         endif
@@ -384,6 +377,7 @@ c
       bb=gnh3*1.0d6+dq(ispsav)+g2
       dq(isp2)=(-bb+sqrt(bb**2-4*dq(ispsav)*g2))/2.0d0
 
+      print *,'Step 4. Dq(knh4)=',dq(knh4)
       dq(isp2) = dmax1(dq(isp2), dq(knh4)+dqsav(ispsav)-dq(ispsav) ! bkoo (10/07/03)
      &                          +dqsav(isp2)-q(ng+inh3)/prod)
 
@@ -437,6 +431,7 @@ C
       enddo
 c     correct negative NH3 - bkoo (10/07/03)
       dq(KNH4) = q(ng+inh3) / prod ! umol/m3
+      print *,'Step 4: Correcting Eq Values. Dq(knh4)=',dq(knh4)
       if(dq(KNH4).lt.-tinys) then
         iter = 0
  300    frt = 1.d0
@@ -456,6 +451,7 @@ c     correct negative NH3 - bkoo (10/07/03)
         q(ng+inh3) = q(ng+inh3) - frt*dq(KNH4)*prod
         ! check if we should evaporate more
         dq(KNH4) = (1.d0 - frt) * dq(KNH4)
+        print *,'Should we evap more. Dq(knh4)=',dq(knh4)
         if(dq(KNH4).lt.-tinys) then
           if(frqtot.gt.tinys) then ! we have sections which are not empty    
             if(iter.le.itmaxeq) then ! check infinite loop
@@ -477,9 +473,9 @@ cbk removed - bkoo (03/09/03)
 cbk      DO IOG = 1,NORG-1
 cbk       Q(NG+IHCL+IOG) =PS(1,IHCL+NORG)/(1.01325d-1*pres) ! pres (bkoo, 06/09/00)
 cbk      ENDDO
+
   
       call negchk(t,q,nsecx2)
-
       call eqneut(0, q) ! tmg (12/05/02)
 
       if(aerm.eq.'EQUI') then ! (tmg,01/31/02)
@@ -491,6 +487,9 @@ C
 C   STEP 6: Determine new diameter
 C
         call ddiameter(q)
+CDEBUG
+      print *,'Done with diameter calculation. Returning.'
+
       endif
 C
       RETURN

@@ -2,16 +2,16 @@
 #
 #   Script to Run PMCAMx for eastern US July 12-28, 2001 test case
 #
-set INPUT  = "/usr/people/BaseInput/July"
-set INPUTA = "/usr/people/BaseInput/July/prep99/semivol"
-set INPUTP = "/usr/people/BaseInput/July/prep99/semivol"
+set INPUT  = "/home2/tlane/CAMx4inputs/July"
+set INPUTA = "/home2/tlane/CAMx4inputs/July/prep99/semivol"
+set INPUTP = "/home2/tlane/CAMx4inputs/July/prep99/semivol"
 
 set DATE    = $1
 set DATE2   = $2
 @ DATE3   = $DATE - 1
 #
-set RUN     = "PMCAMx2008_BASE"
-set OUTPUT  = "Output/$RUN"
+set RUN     = "July.FINAL.SEMIvol.test"
+set OUTPUT  = "/home2/tlane/Output/$RUN"
 #
 if ($DATE == "193") then
   mkdir -p $OUTPUT
@@ -131,7 +131,7 @@ Treat point emiss  |true
 1-day emiss inputs |true
 3-D average file   |false
 Probing tools      |false
-Chemparam          |CAMx4.chemparam.5.Base
+Chemparam          |$INPUT/init/CAMx4.chemparam.5.FINAL_SEMIvol_Rxns
 Photolysis rates   |$INPUT/rate99/camx.rt.2001$DATE.EastUS.updt
 Landuse            |$INPUT/init/surf.4rpos.36.ld.bin
 Height/pressure    |$INPUT/pres/pres.2001$DATE.4rpos.36.14.mm5.ld.camx
@@ -151,6 +151,6 @@ ieof
 #
 #  --- Execute the model ---
 #
-/usr/bin/time ./CAMx.ladco.linux
+/usr/bin/time /home2/tlane/PMCAMx+code/PMCAMxSAPRC_FINAL_SEMIvol/CAMx.ladco.linux
 date 
 #

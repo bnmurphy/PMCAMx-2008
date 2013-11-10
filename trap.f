@@ -348,11 +348,11 @@ c	  print *, 'Writing to file unit: ',iavg+(kchm-1)*(1+nrads)+2-1
 c	endif  
 c      enddo
 
-	if (ichm.eq.55.and.jchm.eq.61) then
-	print *,'time = ',time, 'cncrad(OH) = ',cncrad(kOH)
-	print *,'time = ',time, 'cncrad(NO3) = ',cncrad(kNO3)
-	print *,'time = ',time, 'cncrad(HO2) = ',cncrad(kHO2)
-	endif
+c	if (ichm.eq.55.and.jchm.eq.61) then
+c	print *,'time = ',time, 'cncrad(OH) = ',cncrad(kOH)
+c	print *,'time = ',time, 'cncrad(NO3) = ',cncrad(kNO3)
+c	print *,'time = ',time, 'cncrad(HO2) = ',cncrad(kHO2)
+c	endif
 
 	bnmradcnc(1,ichm,jchm,kchm) = cncrad(kOH)
 	bnmradcnc(2,ichm,jchm,kchm) = cncrad(kNO3)

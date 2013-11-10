@@ -82,14 +82,16 @@ c
      &             'CPO2      ','CPO3      ','CPO4      ',
      &             'CPO5      ','CPO6      ',
      &             'CPO7      ','CPO8      ',
-     &             'CPO9      ','CPO10     ','COO1      ',
-     &             'COO2      ','COO3      ','COO4      ',
-     &             'COO5      ','COO6      ','COO7      ',
-     &             'COO8      ','COO9      ',
-     &             'COO10     ','CBS1      ',
-     &             'CBS2      ','CBS3      ','CBS4      ',
+     &             'COO1      ','COO2      ','COO3      ',
+     &		   'COO4      ','COO5      ','COO6      ',
+     &		   'COO7      ','COO8      ',
+     &             'CBS1      ','CBS2      ','CBS3      ',
+     &		   'CBS4      ','CBS5      ',
      &             'CAS1      ','CAS2      ',
-     &             'CAS3      ','CAS4      ',
+     &             'CAS3      ','CAS4      ','CAS5      ',
+     &             'CNS1      ','CNS2      ','CNS3      ',
+     &		   'CNS4      ','CNS5      ','CNS6      ',
+     &		   'CNS7      ','CNS8      ',			! 63 Species so far
 c
      &             'CL2       ','CO        ','CO2H      ',
      &             'CO3H      ','COOH      ','CPRM      ',
@@ -116,17 +118,22 @@ c
      &             'APO2      ','APO3      ','APO4      ',
      &             'APO5      ','APO6      ',
      &             'APO7      ','APO8      ',
-     &             'APO9      ','APO10     ','AOO1      ',
+     &             'AOO1      ',
      &             'AOO2      ','AOO3      ','AOO4      ',
      &             'AOO5      ','AOO6      ','AOO7      ',
-     &             'AOO8      ','AOO9      ',
-     &             'AOO10     ','ABS1      ',
-     &             'ABS2      ','ABS3      ','ABS4      ',
-     &             'AAS1      ','AAS2      ',
-     &             'AAS3      ','AAS4      ',
+     &             'AOO8      ',
+     &             'ABS1      ','ABS2      ','ABS3      ',
+     &		   'ABS4      ','ABS5      ',
+     &             'AAS1      ','AAS2      ','AAS3      ',
+     &		   'AAS4      ','AAS5      ',
+     &             'ANS1      ',
+     &             'ANS2      ','ANS3      ','ANS4      ',
+     &             'ANS5      ','ANS6      ','ANS7      ',
+     &             'ANS8      ',
      &             'SULF      ',
      &             'TERP      ','TOL       ','XN        ',
      &             'XYL       ',
+c							   ! 98 species (161 total)
      &             'APO1_1    ',
      &             'APO1_2    ','APO1_3    ','APO1_4    ',
      &             'APO1_5    ','APO1_6    ','APO1_7    ',
@@ -159,14 +166,6 @@ c
      &             'APO8_2    ','APO8_3    ','APO8_4    ',
      &             'APO8_5    ','APO8_6    ','APO8_7    ',
      &             'APO8_8    ','APO8_9    ','APO8_10   ',
-     &             'APO9_1    ',
-     &             'APO9_2    ','APO9_3    ','APO9_4    ',
-     &             'APO9_5    ','APO9_6    ','APO9_7    ',
-     &             'APO9_8    ','APO9_9    ','APO9_10   ',
-     &             'APO10_1   ',
-     &             'APO10_2   ','APO10_3   ','APO10_4   ',
-     &             'APO10_5   ','APO10_6   ','APO10_7   ',
-     &             'APO10_8   ','APO10_9   ','APO10_10  ',
      &             'AOO1_1    ',
      &             'AOO1_2    ','AOO1_3    ','AOO1_4    ',
      &             'AOO1_5    ','AOO1_6    ','AOO1_7    ',
@@ -174,7 +173,7 @@ c
      &             'AOO2_1    ',
      &             'AOO2_2    ','AOO2_3    ','AOO2_4    ',
      &             'AOO2_5    ','AOO2_6    ','AOO2_7    ',
-     &             'AOO2_8    ','AOO2_9    ','AOO2_10   ',
+     &             'AOO2_8    ','AOO2_9    ','AOO2_10   ',	! 100 (261 total)
      &             'AOO3_1    ',
      &             'AOO3_2    ','AOO3_3    ','AOO3_4    ',
      &             'AOO3_5    ','AOO3_6    ','AOO3_7    ',
@@ -199,14 +198,6 @@ c
      &             'AOO8_2    ','AOO8_3    ','AOO8_4    ',
      &             'AOO8_5    ','AOO8_6    ','AOO8_7    ',
      &             'AOO8_8    ','AOO8_9    ','AOO8_10   ',
-     &             'AOO9_1    ',
-     &             'AOO9_2    ','AOO9_3    ','AOO9_4    ',
-     &             'AOO9_5    ','AOO9_6    ','AOO9_7    ',
-     &             'AOO9_8    ','AOO9_9    ','AOO9_10   ',
-     &             'AOO10_1   ',
-     &             'AOO10_2   ','AOO10_3   ','AOO10_4   ',
-     &             'AOO10_5   ','AOO10_6   ','AOO10_7   ',
-     &             'AOO10_8   ','AOO10_9   ','AOO10_10  ',
      &             'ABS1_1    ',
      &             'ABS1_2    ','ABS1_3    ','ABS1_4    ',
      &             'ABS1_5    ','ABS1_6    ','ABS1_7    ',
@@ -222,7 +213,11 @@ c
      &             'ABS4_1    ',
      &             'ABS4_2    ','ABS4_3    ','ABS4_4    ',
      &             'ABS4_5    ','ABS4_6    ','ABS4_7    ',
-     &             'ABS4_8    ','ABS4_9    ','ABS4_10   ',
+     &             'ABS4_8    ','ABS4_9    ','ABS4_10   ',	! 100 (361 total)
+     &             'ABS5_1    ',
+     &             'ABS5_2    ','ABS5_3    ','ABS5_4    ',
+     &             'ABS5_5    ','ABS5_6    ','ABS5_7    ',
+     &             'ABS5_8    ','ABS5_9    ','ABS5_10   ',
      &             'AAS1_1    ',
      &             'AAS1_2    ','AAS1_3    ','AAS1_4    ',
      &             'AAS1_5    ','AAS1_6    ','AAS1_7    ',
@@ -239,6 +234,43 @@ c
      &             'AAS4_2    ','AAS4_3    ','AAS4_4    ',
      &             'AAS4_5    ','AAS4_6    ','AAS4_7    ',
      &             'AAS4_8    ','AAS4_9    ','AAS4_10   ',
+     &             'AAS5_1    ',
+     &             'AAS5_2    ','AAS5_3    ','AAS5_4    ',
+     &             'AAS5_5    ','AAS5_6    ','AAS5_7    ',
+     &             'AAS5_8    ','AAS5_9    ','AAS5_10   ',
+     &             'ANS1_1    ',
+     &             'ANS1_2    ','ANS1_3    ','ANS1_4    ',
+     &             'ANS1_5    ','ANS1_6    ','ANS1_7    ',
+     &             'ANS1_8    ','ANS1_9    ','ANS1_10   ',
+     &             'ANS2_1    ',
+     &             'ANS2_2    ','ANS2_3    ','ANS2_4    ',
+     &             'ANS2_5    ','ANS2_6    ','ANS2_7    ',
+     &             'ANS2_8    ','ANS2_9    ','ANS2_10   ',
+     &             'ANS3_1    ',
+     &             'ANS3_2    ','ANS3_3    ','ANS3_4    ',
+     &             'ANS3_5    ','ANS3_6    ','ANS3_7    ',
+     &             'ANS3_8    ','ANS3_9    ','ANS3_10   ',
+     &             'ANS4_1    ',
+     &             'ANS4_2    ','ANS4_3    ','ANS4_4    ',
+     &             'ANS4_5    ','ANS4_6    ','ANS4_7    ',
+     &             'ANS4_8    ','ANS4_9    ','ANS4_10   ',	! 100 (461 total)
+     &             'ANS5_1    ',
+     &             'ANS5_2    ','ANS5_3    ','ANS5_4    ',
+     &             'ANS5_5    ','ANS5_6    ','ANS5_7    ',
+     &             'ANS5_8    ','ANS5_9    ','ANS5_10   ',
+     &             'ANS6_1    ',
+     &             'ANS6_2    ','ANS6_3    ','ANS6_4    ',
+     &             'ANS6_5    ','ANS6_6    ','ANS6_7    ',
+     &             'ANS6_8    ','ANS6_9    ','ANS6_10   ',
+     &             'ANS7_1    ',
+     &             'ANS7_2    ','ANS7_3    ','ANS7_4    ',
+     &             'ANS7_5    ','ANS7_6    ','ANS7_7    ',
+     &             'ANS7_8    ','ANS7_9    ','ANS7_10   ',
+     &             'ANS8_1    ',
+     &             'ANS8_2    ','ANS8_3    ','ANS8_4    ',
+     &             'ANS8_5    ','ANS8_6    ','ANS8_7    ',
+     &             'ANS8_8    ','ANS8_9    ','ANS8_10   ',
+c							  	! 40 species (501 total)
      &             'POC_1     ',
      &             'POC_2     ','POC_3     ','POC_4     ',
      &             'POC_5     ','POC_6     ','POC_7     ',
@@ -269,7 +301,7 @@ c
      &             'PNO3_10   ','PSO4_1    ','PSO4_2    ',
      &             'PSO4_3    ','PSO4_4    ','PSO4_5    ',
      &             'PSO4_6    ','PSO4_7    ','PSO4_8    ',
-     &             'PSO4_9    ','PSO4_10   ','PH2O      '/
+     &             'PSO4_9    ','PSO4_10   ','PH2O      '/	! 91 species (592 total)
 c
       data crsspc /'CCRS      ','CPRM      '/
 c
@@ -298,11 +330,11 @@ c
      &             'CXO2      ','HCO3      ','TBUO      ',
      &             'BZO       ','BZNO      '/
 c
-      data mchgas   / 34, 24, 25, 34, 91, 78,  0, 0, 0, 0 /
-      data mchaero  /  0,  0,  0, 16, 37, 53,  0, 0, 0, 0 /
+      data mchgas   / 34, 24, 25, 34, 97, 78,  0, 0, 0, 0 /
+      data mchaero  /  0,  0,  0, 16, 43, 53,  0, 0, 0, 0 /
       data mchrad   / 14, 12, 12, 12, 18, 12,  0, 0, 0, 0 /
       data mchiessr /  4,  2,  2,  2,  2,  2,  0, 0, 0, 0 /
-      data mchrxn   /110, 91, 96,100,237,100,  0, 0, 0, 0 /
+      data mchrxn   /110, 91, 96,100,245,100,  0, 0, 0, 0 /
       data mchphot  / 14, 11, 12, 12, 30, 12,  0, 0, 0, 0 /
       data mchfast  /  4,  4,  4,  4, 13,  4,  0, 0, 0, 0 /
       data mchidmin / 1 /

@@ -52,7 +52,7 @@ c
       deltat= dt                    ! operator timestep in min
       p= press                         ! pressure in atm
       if ( lfrst ) then
-	lfrst = .false.
+        lfrst = .false.
         iaq = 1                        ! first call flag
         sulfbef0 = 0.0
         do i=1, nsect

@@ -138,13 +138,15 @@ c     xmsfin  -- current total fine grid mass by species (moles)
 c     xmstmp  -- temporary total fine grid mass by species (moles)
 c     pigdump -- total mass transferred from PiG to grid by species (moles)
 c     pigmass -- total mass in PiG by species (moles)
+c     xmsjustchem -- total mass from chemistry process 	!<-BNM 6/2/09
+c     xmspart -- total mass from aerosol process   	!<-BNM 6/2/09
 c-----------------------------------------------------------------------
 c
       real*8 xmass(MXSPEC,MXGRID)
       real*8 xmass0(MXSPEC,MXGRID)
       real*8 armass(MXSPEC,MXGRID)
       real*8 ptmass(MXSPEC,MXGRID)
-      real*8 fluxes(MXSPEC*11,MXGRID)
+      real*8 fluxes(MXSPEC*13,MXGRID)
       real*8 xmschem(MXSPEC,MXGRID)
       real*8 xmsold(MXSPEC,MXGRID)
       real*8 resid(MXSPEC,MXGRID)
@@ -152,9 +154,12 @@ c
       real*8 xmstmp(MXSPEC,MXGRID)
       real*8 pigdump(MXSPEC,MXGRID)
       real*8 pigmass(MXSPEC,MXGRID)
+      real*8 xmsjustchem(MXSPEC,MXGRID)  !<- BNM 6/2/09
+      real*8 xmspart(MXSPEC,MXGRID)	 !<- BNM 6/2/09
 c
       common /ms_flx/  xmass, xmass0, armass, ptmass, fluxes, xmschem,
-     &                 xmsold, resid, xmsfin, xmstmp, pigdump, pigmass
+     &                 xmsold, resid, xmsfin, xmstmp, pigdump, pigmass,
+     &		       xmsjustchem, xmspart
 c
 c-----------------------------------------------------------------------
 c     Variables for mass balance calculations for the extent of the

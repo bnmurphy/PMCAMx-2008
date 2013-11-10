@@ -146,8 +146,6 @@ c
       kcpo6_c  = kcpo6
       kcpo7_c  = kcpo7
       kcpo8_c  = kcpo8
-      kcpo9_c  = kcpo9
-      kcpo10_c  = kcpo10
       kcoo1_c  = kcoo1
       kcoo2_c  = kcoo2
       kcoo3_c  = kcoo3
@@ -156,16 +154,24 @@ c
       kcoo6_c  = kcoo6
       kcoo7_c  = kcoo7
       kcoo8_c  = kcoo8
-      kcoo9_c  = kcoo9
-      kcoo10_c  = kcoo10
       kcbs1_c  = kcbs1
       kcbs2_c  = kcbs2
       kcbs3_c  = kcbs3
       kcbs4_c  = kcbs4
+      kcbs5_c  = kcbs5
       kcas1_c  = kcas1
       kcas2_c  = kcas2
       kcas3_c  = kcas3
       kcas4_c  = kcas4
+      kcas5_c  = kcas5
+      kcns1_c  = kcns1
+      kcns2_c  = kcns2
+      kcns3_c  = kcns3
+      kcns4_c  = kcns4
+      kcns5_c  = kcns5
+      kcns6_c  = kcns6
+      kcns7_c  = kcns7
+      kcns8_c  = kcns8
       khno3_c  = khno3
       knh3_c   = knh3
       kh2so4_c = ksulf
@@ -178,8 +184,6 @@ c
       kapo6_c  = kapo6_1
       kapo7_c  = kapo7_1
       kapo8_c  = kapo8_1
-      kapo9_c  = kapo9_1
-      kapo10_c  = kapo10_1
       kaoo1_c  = kaoo1_1
       kaoo2_c  = kaoo2_1
       kaoo3_c  = kaoo3_1
@@ -188,16 +192,24 @@ c
       kaoo6_c  = kaoo6_1
       kaoo7_c  = kaoo7_1
       kaoo8_c  = kaoo8_1
-      kaoo9_c  = kaoo9_1
-      kaoo10_c  = kaoo10_1
       kabs1_c  = kabs1_1
       kabs2_c  = kabs2_1
       kabs3_c  = kabs3_1
       kabs4_c  = kabs4_1
+      kabs5_c  = kabs5_1
       kaas1_c  = kaas1_1
       kaas2_c  = kaas2_1
       kaas3_c  = kaas3_1
       kaas4_c  = kaas4_1
+      kaas5_c  = kaas5_1
+      kans1_c  = kans1_1
+      kans2_c  = kans2_1
+      kans3_c  = kans3_1
+      kans4_c  = kans4_1
+      kans5_c  = kans5_1
+      kans6_c  = kans6_1
+      kans7_c  = kans7_1
+      kans8_c  = kans8_1
       kcrst_c  = kcrust_1
       kpoc_c   = kpoc_1
       kpec_c   = kpec_1
@@ -208,6 +220,7 @@ c
       kpno3_c  = kpno3_1
       kpso4_c  = kpso4_1
       knxoy_c  = knxoy        ! RADM
+
 c
 c  set wtfacs for interface between aerosol modules
 c

@@ -34,11 +34,12 @@ c
 c
       real*8 xincrmnt(MXSPEC),fluxin,fluxout
       real*8 pigdmp(MXSPEC)
-      character*10 nammass(21)
+      character*10 nammass(25)
       data nammass/'Start Mass','Final Mass','Surf Emiss','Pnt Emiss ',
      &             'North IN  ','North OUT ','South IN  ','South OUT ',
      &             'East IN   ','East OUT  ','West IN   ','West OUT  ',
-     &             'Top IN    ','Top OUT   ','Deposition','Chemistry ',
+     &             'Top IN    ','Top OUT   ','Dry Dep   ','Cloud Dep ',
+     &		   'BlwCld Dep','Chemistry ','Just Chem ','Aer Proc. ',
      &             'Nest Chnge','PiG Change','Net Change','Residual  ',
      &             'Mass Error'/
       data cf /1.e-6/
@@ -70,7 +71,10 @@ c
           do i = 2,10,2
             fluxout = fluxout + fluxes(l+(i-1)*nspec,igrd) 
           enddo
-          fluxout = fluxout + fluxes(l+(11-1)*nspec,igrd) 
+          fluxout = fluxout + fluxes(l+(11-1)*nspec,igrd) !Dry Dep
+          fluxout = fluxout + fluxes(l+(12-1)*nspec,igrd) !InCloud Wet Dep
+          fluxout = fluxout + fluxes(l+(13-1)*nspec,igrd) !Below Cloud Wet Dep
+
           xincrmnt(l) = fluxin + fluxout + armass(l,igrd) + 
      &                  ptmass(l,igrd) + xmschem(l,igrd) + 
      &                  xmsfin(l,igrd) + pigdmp(l)
@@ -80,22 +84,23 @@ c
 c-----Write mass and fluxes at this date/hour
 c
         write(imass,*)
-        write(imass,'(a10,3x,a5,2a10,21(3x,a10))') 
-     &       'Species','Grid','Date','Time',(nammass(i),i=1,21)
+        write(imass,'(a10,3x,a5,2a10,25(3x,a10))') 
+     &       'Species','Grid','Date','Time',(nammass(i),i=1,25)
         do l = 1,nspec
           denom = max(xmsold(l,igrd), xmass(l,igrd),
      &            armass(l,igrd), ptmass(l,igrd),
      &            abs(xmschem(l,igrd)), abs(xmsfin(l,igrd)),
      &            abs(pigdmp(l)))
-          do j = 1,11
+          do j = 1,13
             denom = max(abs(real(fluxes(l+(j-1)*nspec,igrd))),denom)
           enddo
-          write(imass,'(3x,a10,i5,i10.5,f10.0,21(1pe13.4))') 
+          write(imass,'(3x,a10,i5,i10.5,f10.0,25(1pe13.4))') 
      &       spname(l),igrd,idate,time,
-     &       xmsold(l,igrd)*cf,xmass(l,igrd)*cf,armass(l,igrd)*cf,
-     &       ptmass(l,igrd)*cf,(fluxes(l+(i-1)*nspec,igrd)*cf,i=1,11),
-     &       xmschem(l,igrd)*cf,xmsfin(l,igrd)*cf,pigdmp(l)*cf,
-     &       xincrmnt(l)*cf,resid(l,igrd)*cf,abs(resid(l,igrd)/denom)
+     &       xmsold(l,igrd)*cf,  xmass(l,igrd)*cf,    armass(l,igrd)*cf,
+     &       ptmass(l,igrd)*cf,  (fluxes(l+(i-1)*nspec,igrd)*cf,i=1,13),
+     &       xmschem(l,igrd)*cf, xmsjustchem(l,igrd)*cf, xmspart(l,igrd)*cf,
+     &	     xmsfin(l,igrd)*cf,  pigdmp(l)*cf,
+     &       xincrmnt(l)*cf,     resid(l,igrd)*cf,    abs(resid(l,igrd)/denom)
         enddo
 c
 c-----Move current mass array to old mass array
@@ -110,10 +115,12 @@ c
       do l = 1,nspec
         armass(l,igrd) = 0.
         ptmass(l,igrd) = 0.
-        do i=1,11
+        do i=1,13
           fluxes(l+(i-1)*nspec,igrd) = 0.
         enddo
         xmschem(l,igrd) = 0.
+	xmsjustchem(l,igrd) = 0.	!<- BNM 6/2/09
+	xmspart(l,igrd) = 0.  		!<- BNM 6/2/09
         xmsfin(l,igrd) = 0.
         pigdmp(l) = 0.
       enddo

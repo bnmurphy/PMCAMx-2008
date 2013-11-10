@@ -107,7 +107,7 @@ c
       integer   NSPNAM
       integer   NRADNM
 c
-      parameter ( MXSPEC  =   520 )
+      parameter ( MXSPEC  =   592 ) ! BNM changed from 520 when added NTSOA
       parameter ( MXRADCL =    18 )
       parameter ( MXPHT1  =     6 )
       parameter ( MXPHT2  =    24 )
@@ -117,8 +117,8 @@ c
       parameter ( NPRESR  =    10 )
       parameter ( PRESLO  = 100.0 ) ! 326 for July
       parameter ( PRESHI  = 1100. )
-      parameter ( MXRXN   =   237 )
-      parameter ( NSPNAM  =   520 )
+      parameter ( MXRXN   =   245 )
+      parameter ( NSPNAM  =   592 ) ! BNM changed from 520 when added NTSOA
       parameter ( NRADNM  =    26 )
 c
 c-----------------------------------------------------------------------

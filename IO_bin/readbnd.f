@@ -64,8 +64,13 @@ c
           if (n.gt.2) nc = ncol(1)
          read(ibc) idum,(bcspec(j),j=1,10),iedge,
      &              ((bctmp(i,k,n,l),k=1,nz),i=1,nc)
-c BNM             read(ibc) (bcspec(j),j=1,10),iedge,
-c     &              ((bctmp(i,k,n,l),k=1,nz),i=1,nc)
+CDEBUG BNM
+c	print *,'READBND: bcspec=',(bcspec(j),j=1,5),'  iedge=',iedge,' n=',n
+c	if (bcspec(1).eq.'P'.and.bcspec(2).eq.'O'.and.bcspec(3).eq.'A') then
+c	  print *,'         nc=',nc,'  bctmp=',(bctmp(j,5,n,l),j=1,nc)
+c	endif
+C END BN<
+
 	enddo
       enddo
 c

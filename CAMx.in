@@ -1,6 +1,6 @@
 CAMx Version       |VERSION4.0
 Run Message        |PMCAMx v4.0 eastern US PM Test Run July 1-31 2001
-Root output name   |Output/PMCAMx2008_BASE/4rpos.baseE.193.PMCAMx2008_BASE
+Root output name   |/home/bnmurphy/Research/Output/aqchem/4rpos.baseE.193.aqchem
 Start yr/mo/dy/hr  |01 07 12 0000.
 End   yr/mo/dy/hr  |01 07 12 2400.
 DT:max,met,ems,out |15. 60. 60. 60.
@@ -101,7 +101,7 @@ Treat point emiss  |true
 1-day emiss inputs |true
 3-D average file   |false
 Probing tools      |false
-Chemparam          |CAMx4.chemparam.5.Base
+Chemparam          |/home/bnmurphy/Research/PMCAMx_Code/PMCAMxSAPRC_FINAL_SEMIvol/CAMx4.chemparam.5.FINAL_SEMIvol_Rxns
 Photolysis rates   |/usr/people/BaseInput/July/rate99/camx.rt.2001193.EastUS.updt
 Landuse            |/usr/people/BaseInput/July/init/surf.4rpos.36.ld.bin
 Height/pressure    |/usr/people/BaseInput/July/pres/pres.2001193.4rpos.36.14.mm5.ld.camx

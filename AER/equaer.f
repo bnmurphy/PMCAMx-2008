@@ -70,6 +70,7 @@ C
       integer k                  ! master array section indices
       integer nsec0              ! last section of master array NOT in q
       integer nsec1              ! last section of master array occuring in q
+      integer iprob
 C
 C *** CONVERT INPUT CONCENTRATIONS TO moles/m3 **************************
 C
@@ -78,6 +79,7 @@ C
       if(q(nn+KNa).le.tinys.and.q(nn+KSO4).le.tinys.and.
      #   q(nn+KNH4).le.tinys.and.q(nn+KNO3).le.tinys.and.
      #   q(nn+KCL).le.tinys) go to 999
+
  100  WI(1) = q(nn+KNa) /emw(KNa) *1.D-6
       WI(2) = q(nn+KSO4)/emw(KSO4)*1.D-6
       WI(3) = q(nn+KNH4)/emw(KNH4)*1.D-6
@@ -206,10 +208,10 @@ c Also, MADM is somewhat more stable since there is no division between
 c "equilibrium" and "dynamic" particles. - Kevin, 5/30/00
 c (bkoo, 06/06/00)
 c      if(aerm.eq.'MADM') then ! bkoo (01/08/01)
-         ps(k,INH3  ) = GNH3 *rgas*temp	!  NH3(g)	(Pa)
-         ps(k,IHNO3 ) = GHNO3*rgas*temp	!  HNO3(g)	(Pa)
-         ps(k,IH2SO4) = 0.0D0		!  H2SO4(g)	(Pa)
-         ps(k,IHCL  ) = GHCL *rgas*temp	!  HCL(g)	(Pa)
+         ps(k,INH3  ) = GNH3 *rgas*temp !  NH3(g)	(Pa)
+         ps(k,IHNO3 ) = GHNO3*rgas*temp !  HNO3(g)	(Pa)
+         ps(k,IH2SO4) = 0.0D0           !  H2SO4(g)	(Pa)
+         ps(k,IHCL  ) = GHCL *rgas*temp !  HCL(g)	(Pa)
 c      else
 c         ps(k,INH3  ) = min(1.0d0,GNH3 *rgas*temp)
 c         ps(k,IHNO3 ) = min(1.0d0,GHNO3*rgas*temp)
@@ -220,11 +222,12 @@ C
 C 'DRY' FLAG
 C
       dry(k) = DRYF
-c
+
       RETURN
 
 
 999   CONTINUE
+
       q(nn+KH2O)= 0.0                   !  H2O
       C(k,01)   = 0.0                   !  H2O
       C(k,02)   = 0.0D0                 !  H+(aq)          

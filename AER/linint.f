@@ -27,15 +27,27 @@ c...OUTPUT
 c     yf(n) : LINEAR INTERPOLATED VALUES (UNITS ARE MASS CONCENTRATION)
 c
 c
-      implicit double precision (a-h,o-z)
-      dimension dx(m+1),yx(m*ns),df(n+1),yf(n*ns)
-      dimension diamb(m), diame(m)
-      dimension bound(n+1)
-      dimension ax(ns), af(ns)
-      dimension secsize(m)
-      real*8 tempod
-      integer ifsec,isec,iupper
+      !BNM - Commented out these declarations (2-23-11)
+      !implicit double precision (a-h,o-z)
+      !dimension dx(m+1),yx(m*ns),df(n+1),yf(n*ns)
+      !dimension diamb(m), diame(m)
+      !dimension bound(n+1)
+      !dimension ax(ns), af(ns)
+      !dimension secsize(m)
+      !real*8 tempod
+      !integer ifsec,isec,iupper
 
+      !Replace with these - BNM
+      implicit none
+      integer i,m,ns,n,k,kk,nsp
+      real*8 bound(n+1),df(n+1),dx(m+1),secsize(m)
+      real*8 diamb(m),diame(m),ax(ns),af(ns)
+      real*8 yx(m*ns),yf(n*ns),tempod
+      integer ifsec,isec,iupper
+      integer igrdchm, ichm, jchm, kchm, iout, idiag
+      !End BNM
+
+      print *,'linint: ns=',ns,'   nsp=',nsp
 c     set fixed section boundaries
       bound(1)=log10(df(1))
       do i=2,n+1
@@ -76,11 +88,15 @@ c     sort by minimum diameter
             tempod=secsize(i)
             secsize(i)=secsize(i+1)
             secsize(i+1)=tempod
-            do kk=1,nsp
-               tempod=yx((i-1)*nsp+kk)
-               yx((i-1)*nsp+kk)=yx(i*nsp+kk)
-               yx(i*nsp+kk)=tempod
+            !BNM Changed all occurences nsp -> ns (2-23-11)
+            !nsp = ns
+            print *,'linint: nsp=',nsp
+            do kk=1,ns
+               tempod = yx((i-1)*ns+kk)
+               yx((i-1)*ns+kk) = yx(i*ns+kk)
+               yx(i*ns+kk) = tempod
             enddo
+            !BNM Changed nsp -> ns (2-23-11)
          endif
       enddo
 

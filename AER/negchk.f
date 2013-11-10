@@ -71,38 +71,40 @@ c     if there is no NO3- to loose and there is NH3 add NH4
           q(ng+ihcl)=q(ng+ihcl)+q(indx+kcl)*prod/gmw(ihcl)
           q(indx+kcl)=0.0d0
         endif
+
 c     check negative concentrations for aerosols (Apr, 2000)
+
         do isp=1,nsp
           if(q(indx+isp).lt.0.0d0) then
-c     subtract from gas to compensate the negative aerosol (bkoo, 10/07/03)
+
+c           subtract from gas to compensate the negative aerosol (bkoo, 10/07/03)
             idg = 0
             if(isp.eq.KSO4) idg = IH2SO4
             if(isp.eq.KNO3) idg = IHNO3
             if(isp.eq.KNH4) idg = INH3
             if(isp.eq.KCL)  idg = IHCL
-            if(isp.ge.KAA41 .and. isp.lt.KAA41+ngas-4)
-     &                      idg = ICA41+isp-KAA41
             if(idg.gt.0) then
-          if(q(ng+idg)+q(indx+isp)*prod/gmw(idg).lt.-0.0001)            ! bkoo_dbg
-     &    write(*,222)q(indx+isp),q(ng+idg)+q(indx+isp)*prod/gmw(idg),  ! bkoo_dbg
-     &                isp,isec                                          ! bkoo_dbg
- 222      format('NEG-AER: q=',G,' dgas=',G,' isp=',I3,' isec=',I3)     ! bkoo_dbg
-              q(ng+idg)=dmax1(q(ng+idg)+q(indx+isp)*prod/gmw(idg)
-     &                        ,1.d-12)
+               if(q(ng+idg)+q(indx+isp)*prod/gmw(idg).lt.-0.0001)            ! bkoo_dbg
+     &            write(*,222)q(indx+isp),q(ng+idg)+q(indx+isp)*prod/gmw(idg),  ! bkoo_dbg
+     &                 isp,isec                                          ! bkoo_dbg
+ 222              format('NEG-AER: q=',G,' dgas=',G,' isp=',I3,' isec=',I3)     ! bkoo_dbg
+                q(ng+idg)=dmax1(q(ng+idg)+q(indx+isp)*prod/gmw(idg),1.d-12)
             endif
-c
             q(indx+isp)=0.0d0
           endif
+
         enddo
-      enddo
+      enddo     !Loop Over Sections
+
 c     check negative concentrations for gases (Apr, 2000)
       do isp=1,ngas
         if(q(ng+isp).lt.0.0d0) then
-        if(q(ng+isp).lt.-0.001) then                                    ! bkoo_dbg
-        call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)               ! bkoo_dbg
-        write(*,223)q(ng+isp),isp,ichm,jchm,kchm                        ! bkoo_dbg
- 223    format('NEG-GAS: q=',G,' isp,i,j,k=',4I4)                       ! bkoo_dbg
-        endif                                                           ! bkoo_dbg
+
+          if(q(ng+isp).lt.-0.001) then                                    ! bkoo_dbg
+            call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)               ! bkoo_dbg
+            write(*,223)q(ng+isp),isp,ichm,jchm,kchm                        ! bkoo_dbg
+ 223        format('NEG-GAS: q=',G,' isp,i,j,k=',4I4)                       ! bkoo_dbg
+          endif                                                           ! bkoo_dbg
           q(ng+isp)=0.0d0
         endif
       enddo

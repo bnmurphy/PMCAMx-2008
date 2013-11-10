@@ -250,10 +250,12 @@ c
          diag(j) = one
  51   CONTINUE      
 c
-c     CALL HYBRID
-      call hybrd(state,numfunc,x,fvec,xtol,par,maxfev,ml,mu,epsfcn,diag,
-     *                 mode,factor,nprint,info,nfev,fjac,ldfjac,r,lr,
-     *                 qtf,wa1,wa2,wa3,wa4,302)
+c     CALL HYBRID (BNM commented out the call to the hybrd
+c                  subroutine since the code is missing - 2-24-11)
+      !call hybrd(state,numfunc,x,fvec,xtol,par,maxfev,ml,mu,epsfcn,diag,
+      !*                 mode,factor,nprint,info,nfev,fjac,ldfjac,r,lr,
+      !*                 qtf,wa1,wa2,wa3,wa4,302)
+      !END-BNM
 c      if (info .ne. 1) write(6,*)'INFO = ', info
      
 c     hybrd error control
