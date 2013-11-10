@@ -460,7 +460,12 @@ c->   calculate wet diameter - bkoo (11/05/03)
                     delr(l) = rcrs
                   endif
                 enddo
+
+
               elseif (kph2o_1.ne.nspec+1) then ! mechanism 6
+
+cBNM 4-20-09    This is the mechanism currently in use. SAPRC, semivolatile POA
+   
                 kwtr = (kph2o_1 - ngas) / nsec + 1
                 if (nsec.eq.1) kwtr = kph2o_1 - ngas
                 do isec = 1, nsec
@@ -504,6 +509,7 @@ c->   calculate wet diameter - bkoo (11/05/03)
                 enddo
               endif
 c<-
+c----------Apply scavenging rate to find mass change
               do 50 l = ngas+1,nspec
                 delc = 0.
                 delm = 0.
@@ -540,7 +546,7 @@ c
 c
 c========================= Process Analysis End =====================================
 c
- 50           continue
+ 50           continue   !End mass change from scavenging rate
             endif
             ltop = .false.
  30       continue

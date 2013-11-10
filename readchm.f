@@ -944,7 +944,11 @@ c
       write(idiag,*)
       call flush(idiag)
 c
-c============ BNM - Reading Hvap tables ===================
+
+
+
+
+c================ BNM - Reading Hvap tables ===================
 c
 c      ccc   Using Look-up Table Compiled by Scott Epstein   ccc
 c       Set Variables
@@ -952,13 +956,13 @@ c            ntemp = 231
 c            ncstar = 109
 
 c       Read in all data from look-up tables
-            open (96, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+            open (96, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
      &           'SOAP/POA_DHVAP.txt', status='OLD')
-            open (97, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+            open (97, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
      &           'SOAP/POA_LOGCSTAR.txt', status='OLD')
-            open (98, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+            open (98, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
      &           'SOAP/POA_T.txt', status='OLD')
-            open (99, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+            open (99, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
      &          'SOAP/SOA_DHVAP.txt', status='OLD')
             do tempcnt = 1,ntemp
                 read(98, *), dhtemp(tempcnt)
@@ -973,8 +977,6 @@ c       Read in all data from look-up tables
 
 c=============== End Hvap Table Open and Read =============
 
-
-c
       return
 c
  900  write(iout,'(//,a)') 'ERROR: Reading CHEMPARAM file record:'

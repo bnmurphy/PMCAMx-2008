@@ -384,11 +384,12 @@ c       Back-Calculate the precipitable water content (pwc) for the surface cell
 	    do i = 1,ngcol
 		do j = 1,ngrow
 		    do k = 1,10
-			pcpwtr(i,j,k) = (rrncep(i,j)**0.877) /1e7 *1e6
+c			pcpwtr(i,j,k) = (rrncep(i,j)**0.877) /1e7 *1e6
+			pcpwtr(i,j,k) = 0   !Test lower bound of rain sensitivity => no rain
 		    enddo
-c		    do k = 11,14
-c			pcpwtr(i,j,k) = 0
-c		    enddo
+		    do k = 11,14   !Test no rain in layers 11-14 as well
+			pcpwtr(i,j,k) = 0
+		    enddo
 		enddo
 	    enddo
 c BNM
