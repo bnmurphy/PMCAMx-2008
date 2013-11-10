@@ -74,7 +74,8 @@ c
 c
 c========================= Process Analysis End =====================================
 c
-      real*8 armass(nspec),ptmass(nspec),dmass
+      real*8 armass(nspec),ptmass(nspec*14),dmass  	!<---multilayer mass BNM
+      integer subd(ncol,nrow)
       dimension larmap(narspc),lptmap(nptspc),idsrc(nsrc),isrc(nsrc),
      &          jsrc(nsrc),pttrace(MXPTSRC,nspec),
      &          conc(ncol,nrow,nlay,nspec),aremis(ncol,nrow,narspc),
@@ -90,6 +91,8 @@ c
 c
 c-----Entry point
 c
+      call subdomain(subd)
+
 c-----Update concentration due to area source
 c
       if (larsrc) then
@@ -111,7 +114,7 @@ c
               vol = dx(j)*dy*depth(i,j,1)/(mapscl(i,j)**2)
               dmass = aremis(i,j,lar)*deltat*1e6
               dconc = REAL(dmass)/vol
-              armass(l) = armass(l) + dmass
+              armass(l) = armass(l) + dmass*subd(i,j)
               conc(i,j,1,l) = conc(i,j,1,l) + dconc
 c
 c======================== Process Analysis Begin ====================================
@@ -184,7 +187,7 @@ c
             vol = dx(j)*dy*depth(i,j,k)/(mapscl(i,j)**2)
             dmass = pttrace(n,lpt)*deltat*1e6
             dconc = REAL(dmass)/vol
-            ptmass(l) = ptmass(l) + dmass
+            ptmass((l-1)*14 + k) = ptmass((l-1)*14 + k) + dmass*subd(i,j)
             conc(i,j,k,l) = conc(i,j,k,l) + dconc
 c
 c======================== Process Analysis Begin ====================================

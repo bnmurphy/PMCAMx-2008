@@ -57,7 +57,7 @@ c
       if (icode.le.1) then
         call massum(ip,nspec,ncol(ip),nrow(ip),nlay(ip),deltax(1,ip),
      &             deltay(ip),depth(iptr3d(ip)),conc(iptr4d(ip)),
-     &             xmstmp(1,ip))
+     &             xmstmp(1,ip),subxmass(1,ip))
       endif
 c
       call aggreg(ncol(igrd),nrow(igrd),nlay(igrd),ncol(ip),nrow(ip),
@@ -98,8 +98,8 @@ c
       if (icode.eq.0 .or. icode.eq.2) then
         call massum(ip,nspec,ncol(ip),nrow(ip),nlay(ip),deltax(1,ip),
      &              deltay(ip),depth(iptr3d(ip)),conc(iptr4d(ip)),
-     &              xmass(1,ip))
-        do l = 1,nspec 
+     &              xmass(1,ip),subxmass(1,ip))
+        do l = 1,nspec*14 
           xmsfin(l,ip) = xmsfin(l,ip) + xmass(l,ip) - xmstmp(l,ip) 
         enddo
       endif

@@ -32,7 +32,7 @@ c
       include 'filunit.com'
       include 'chmstry.com'
 
-      real masschem(nspec), masspart(nspec)
+      real masschem(nspec*14), masspart(nspec*14)
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -45,13 +45,13 @@ c-----Entry point
 c
       call massum(igrd,nspec,ncol(igrd),nrow(igrd),nlay(igrd),
      &            deltax(1,igrd),deltay(igrd),depth(iptr3d(igrd)),
-     &            conc(iptr4d(igrd)),xmstmp(1,igrd))
+     &            conc(iptr4d(igrd)),xmstmp(1,igrd), subxmstmp(1,igrd))
 c
       if (lchem) then
         write(*,'(a20,$)') 'chemdriv ......'
         write(iout,'(a20,$)') 'chemdriv ......'
 
- 	do l = 1,nspec
+ 	do l = 1,nspec*14
 	  masschem(l) = 0
 	  masspart(l) = 0
 	enddo
@@ -78,19 +78,17 @@ c
 c
       call massum(igrd,nspec,ncol(igrd),nrow(igrd),nlay(igrd),
      &            deltax(1,igrd),deltay(igrd),depth(iptr3d(igrd)),
-     &            conc(iptr4d(igrd)),xmass(1,igrd))
-c
-      do l = 1,nspec 
-        xmschem(l,igrd) = xmschem(l,igrd) + xmass(l,igrd) - 
-     &                    xmstmp(l,igrd)
+     &            conc(iptr4d(igrd)),xmass(1,igrd), subxmass(1,igrd))
+
+C    SUM UP BUDGET ANALYSIS ARRAYS
+C	XMSCHEM - total chemistry + partitioning
+C	XMSJUSTCHEM - just change due to chemistry
+C	XMSPART - change due to partitioning
+      do l = 1,nspec*14 
+        xmschem(l,igrd) = xmschem(l,igrd) + subxmass(l,igrd) - 
+     &                    subxmstmp(l,igrd)
 	xmsjustchem(l,igrd) = xmsjustchem(l,igrd) + masschem(l)
 	xmspart(l,igrd) = xmspart(l,igrd) + masspart(l)
-
-CDEBUG
-c	print '(A9,I3,6(2x,E10.3),2x,4(2x,E10.3))','CHEMRXN: ',l,xmsjustchem(l,igrd),xmspart(l,igrd),
-c     &		xmsjustchem(l,igrd)+xmspart(l,igrd),xmschem(l,igrd), 
-c     &		(xmsjustchem(l,igrd)+xmspart(l,igrd))/xmschem(l,igrd),xmspart(l,igrd)/xmschem(l,igrd),
-c     &		masschem(l), masspart(l), masschem(l)+masspart(l),xmass(l,igrd)-xmstmp(l,igrd)
 
       enddo
 c

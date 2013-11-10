@@ -142,6 +142,13 @@ c
         term3 = term3**1.5
         eff = term1 + term2 + term3
 
+C Alter wet removal rate of dry particles by changing efficiency 
+C by a factor of 2 high and low
+C BNM 12-23-09
+c	eff = eff / 2
+c	eff = eff * 2
+C END WET REMOVAL SENSITIVITY STUDY
+
         ascav = 4.2e-7*pmm*eff/drpdia
       endif
 

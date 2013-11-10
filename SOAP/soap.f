@@ -238,6 +238,8 @@ c CONCENTRATION (CGAS) FOR NON-SOLUTION-FORMING COMPOUNDS
 c COMPOUNDS THAT HAVE A CONCENTRATION OF LESS THAN conmin ARE IGN0RED
 c MAP COMPOUNDS THAT FORM SOLUTIONS ONTO ARRAYS
 c
+      do iflg = 1,5	!Loop Through Solutions to Test Mixing Assumptions (BNM, 11/04/09)
+			!Make sure this agrees with the highest flag in soapdat.f
       icont=0
       do i=1,ntot
          if (flagsoap(i).eq.0) then
@@ -246,6 +248,9 @@ c
          elseif (ctot(i).lt.conmin) then
             cgas(i) = ctot(i)
             caer(i) = 0.0
+	 elseif (flagsoap(i).ne.iflg) then	!Don't do anything if the species
+	    continue				!is not part of this solution. Just
+						!skip it (11/04/09)
          else
             icont=icont+1
             idx(icont) = i
@@ -256,6 +261,7 @@ c
          endif
       enddo
       nsol=icont
+
 c
 c Check for a trivial solution
 c
@@ -288,7 +294,7 @@ c Find the solution using a bi-section method (approach from max)
 c
       xend = 0.0
       do i = 1, nsol
-        xend = xend + sctot(i)/smw(i)  !BNM density correction
+        xend = xend + sctot(i)/smw(i)
       enddo
       xend = xend + cpx
       call spfcn (nsol,sctot,scsat,scaer,smw,cpx,xend,fend)
@@ -338,11 +344,14 @@ c
 c Convert to ppm if inputs in ppm
 c
  1000 continue
+      enddo	!End Solution Flag Loop (BNM 11/04/09)
+
       if (lppm) then
          do i=1,ntot
             cgas(i) = cgas(i)/(convfac*mwsoap(i))
          enddo
       endif
+
 c
       return
       end

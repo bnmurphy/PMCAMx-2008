@@ -128,6 +128,8 @@ c     Variables for mass flux calculations:
 c
 c     xmass   -- current total grid mass by species (moles)
 c     xmass0  -- initial total grid mass by species (moles)
+c     subxmass-- grid mass by species of subdomain	!<-BNM 9-23-09
+c     subxmstmp--subdomain temporary grid mass		!<-BNM 9-24-09
 c     armass  -- total area emissions mass by species (moles)
 c     ptmass  -- total point emissions mass by species (moles)
 c     fluxes  -- array of mass tranport by species (moles)
@@ -142,24 +144,26 @@ c     xmsjustchem -- total mass from chemistry process 	!<-BNM 6/2/09
 c     xmspart -- total mass from aerosol process   	!<-BNM 6/2/09
 c-----------------------------------------------------------------------
 c
-      real*8 xmass(MXSPEC,MXGRID)
-      real*8 xmass0(MXSPEC,MXGRID)
-      real*8 armass(MXSPEC,MXGRID)
-      real*8 ptmass(MXSPEC,MXGRID)
-      real*8 fluxes(MXSPEC*13,MXGRID)
-      real*8 xmschem(MXSPEC,MXGRID)
-      real*8 xmsold(MXSPEC,MXGRID)
-      real*8 resid(MXSPEC,MXGRID)
-      real*8 xmsfin(MXSPEC,MXGRID)
-      real*8 xmstmp(MXSPEC,MXGRID)
+      real*8 xmass(MXSPEC*MXLAYA,MXGRID)	!<- BNM 7/28/09 dimensioned for multi-layer
+      real*8 xmass0(MXSPEC*MXLAYA,MXGRID)
+      real*8 subxmass(MXSPEC*MXLAYA,MXGRID)
+      real*8 subxmstmp(MXSPEC*MXLAYA,MXGRID)
+      real*8 armass(MXSPEC*MXLAYA,MXGRID)
+      real*8 ptmass(MXSPEC*MXLAYA,MXGRID)
+      real*8 fluxes(MXSPEC*13*MXLAYA,MXGRID)
+      real*8 xmschem(MXSPEC*MXLAYA,MXGRID)
+      real*8 xmsold(MXSPEC*MXLAYA,MXGRID)
+      real*8 resid(MXSPEC*MXLAYA,MXGRID)
+      real*8 xmsfin(MXSPEC*MXLAYA,MXGRID)
+      real*8 xmstmp(MXSPEC*MXLAYA,MXGRID)
       real*8 pigdump(MXSPEC,MXGRID)
       real*8 pigmass(MXSPEC,MXGRID)
-      real*8 xmsjustchem(MXSPEC,MXGRID)  !<- BNM 6/2/09
-      real*8 xmspart(MXSPEC,MXGRID)	 !<- BNM 6/2/09
+      real*8 xmsjustchem(MXSPEC*MXLAYA,MXGRID)  !<- BNM 6/2/09
+      real*8 xmspart(MXSPEC*MXLAYA,MXGRID)	 !<- BNM 6/2/09
 c
       common /ms_flx/  xmass, xmass0, armass, ptmass, fluxes, xmschem,
      &                 xmsold, resid, xmsfin, xmstmp, pigdump, pigmass,
-     &		       xmsjustchem, xmspart
+     &		       xmsjustchem, xmspart, subxmass, subxmstmp
 c
 c-----------------------------------------------------------------------
 c     Variables for mass balance calculations for the extent of the
@@ -175,7 +179,7 @@ c-----------------------------------------------------------------------
 c
       real*8 tarmass(MXSPEC,MXGRID)
       real*8 tptmass(MXSPEC,MXGRID)
-      real*8 tfluxes(MXSPEC*12,MXGRID)
+      real*8 tfluxes(MXSPEC*13,MXGRID)
       real*8 tresid(MXSPEC,MXGRID)
       real*8 txmschem(MXSPEC,MXGRID)
       real*8 txmsfin(MXSPEC,MXGRID)

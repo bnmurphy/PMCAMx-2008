@@ -69,9 +69,9 @@ c	print *,'READBND: bcspec=',(bcspec(j),j=1,5),'  iedge=',iedge,' n=',n
 c	if (bcspec(1).eq.'P'.and.bcspec(2).eq.'O'.and.bcspec(3).eq.'A') then
 c	  print *,'         nc=',nc,'  bctmp=',(bctmp(j,5,n,l),j=1,nc)
 c	endif
-C END BN<
+C END BNM
 
-	enddo
+        enddo
       enddo
 c
 
@@ -104,7 +104,7 @@ c-----Set POC and PEC BC to zero-----------------------------------
 c              if (l.ge.548.and.l.le.553) then
 c                conc(n4d) = 0.18 
 c              endif
-c              if (l.ge.118.and.l.le.123) then
+c              if (l.ge.438.and.l.le.443) then     !POC
 c                conc(n4d) = 0.0
 c              endif
 c------------------------------------------------------------------              
@@ -124,7 +124,7 @@ c-----Set POC and PEC BC to zero-----------------------------------
 c              if (l.ge.548.and.l.le.553) then
 c                conc(n4d) = 0.18
 c              endif
-c              if (l.ge.118.and.l.le.123) then
+c              if (l.ge.438.and.l.le.443) then    !POC
 c                conc(n4d) = 0.0
 c              endif 
 c------------------------------------------------------------------
@@ -148,7 +148,7 @@ c-----Set POC and PEC BC to zero-----------------------------------
 c              if (l.ge.548.and.l.le.553) then
 c                conc(n4d) = 0.18
 c              endif
-c              if (l.ge.118.and.l.le.123) then
+c              if (l.ge.438.and.l.le.443) then        !POC
 c                conc(n4d) = 0.0
 c              endif
 c------------------------------------------------------------------
@@ -169,7 +169,7 @@ c-----Set POC and PEC BC to zero-----------------------------------
 c              if (l.ge.548.and.l.le.553) then
 c                conc(n4d) = 0.18
 c              endif
-c              if (l.ge.118.and.l.le.123) then
+c              if (l.ge.438.and.l.le.443) then     !POC
 c                conc(n4d) = 0.0
 c              endif
 c------------------------------------------------------------------

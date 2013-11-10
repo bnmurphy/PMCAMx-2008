@@ -72,7 +72,7 @@ c-----Open output files for instantaneous concentration
 c
       nopen = 0
       filroot(ii+1:) = '.inst.1'
-      iconc(1) = 10 
+      iconc(1) = imass + 1
       nopen = nopen + 1
       action = 'Opening output INST file for coarse grid.'
       open(unit=iconc(1),file=filroot(1:ii+7),form='UNFORMATTED',
@@ -82,7 +82,7 @@ c
       write(iout,9002) '   File: ',filroot(1:ii+7)
 c
       filroot(ii+1:) = '.inst.2'
-      iconc(2) = 11 
+      iconc(2) = iconc(1) + 1
       nopen = nopen + 1
       action = 'Opening output INST file for coarse grid.'
       open(unit=iconc(2),file=filroot(1:ii+7),form='UNFORMATTED',
@@ -93,7 +93,7 @@ c
 c
 c-----Open optional output concentration files
 c
-      nfils = 12
+      nfils = iconc(2) + 1
       if (nnest.gt.0) then
         filroot(ii+1:) = '.finst.1'
         filtmp = filroot

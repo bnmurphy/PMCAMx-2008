@@ -97,6 +97,8 @@ c     integer begdate,inpdate,emsdate,wrtdate,enddate,hazdate,ozndate,
       integer   nemiss, nlines
       integer   cbdate,cedate
       logical   lexist,lbot,lfound, lpig
+
+      character*2 clay(14)	! BNM array for naming multi-level mass files
 c
       data inp /3/
       data ctlfil /'CAMx.in'/
@@ -164,10 +166,20 @@ c
       idiag = 8
       open(unit=idiag,file=filroot(1:ii+5),status='UNKNOWN',ERR=7000)
 c
-      filroot(ii+1:ii+5) = '.mass'
-      imass = 9 
-      open(unit=imass,file=filroot(1:ii+5),status='UNKNOWN',ERR=7000)
+c------------BNM Adding Multi-layer Mass Output Files-----------------
+      data clay /'01','02','03','04','05','06','07','08','09','10',
+     &		 '11','12','13','14' /
+      do ilay = 1,14      
+      	filroot(ii+1:ii+7) = '.mass'//clay(ilay)
+      	imass = 8 + ilay
+      	open(unit=imass,file=filroot(1:ii+7),status='UNKNOWN',ERR=7000)
+      enddo
       iifroot = ii
+      
+c      filroot(ii+1:ii+5) = '.mass'
+c      imass = 9
+c      open(unit=imass,file=filroot(1:ii+5),status='UNKNOWN',ERR=7000)
+c      iifroot = ii
 c
 c-----Write model version to output and diagnostic files
 c

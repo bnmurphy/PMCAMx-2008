@@ -91,9 +91,10 @@ c
       real cnco3(MX1D), cncvoc(MX1D), cncnox(MX1D)
       real c1d0(MX1D),fpc(MX1D),fmc(MX1D)
       real sen1d(MX1D,MXTRSP)
-      real*8 fluxes(nspc,13),flux1,flux2
+      real*8 fluxes(nspc*14,13),flux1,flux2
       real*8 fluxtmp(MXSPEC,8,MXLAYA)
       dimension tarray2(2)
+      integer subd(ncol,nrow), subdvec(MX1D)	!BNM 9-23-09
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -103,6 +104,8 @@ c========================= Process Analysis End ================================
 c
 c-----Entry point
 c
+      call subdomain(subd)
+
 c  ---- intialize the local flux aray to zero ---
 c
       do i=1,nspc
@@ -180,6 +183,8 @@ c
             do i = i1,i2
               l = l + 1
               c1d(l) = conc(i,j,k,ispc)*dy*depth(i,j,k)
+C	      Move subd to appropriate vector (BNM 9-23-09)
+	      subdvec(l) = subd(i,j)
             enddo
             if (igrd.eq.1 .and. v1d(1).lt.0.) c1d(1) = c1d(2)
             if (igrd.eq.1 .and. v1d(nn-1).gt.0.) c1d(nn) = c1d(nn-1)
@@ -209,7 +214,7 @@ c
      &                                   flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
               call hadvppm(nn,dtuse,dx(j),c1d,v1d,m1d,flxarr,flux1,
-     &                                           flux2,saflux,fc1,fc2)
+     &                               flux2,saflux,fc1,fc2,subdvec)
             endif
 c
 c======================== DDM Begin =======================
@@ -337,8 +342,8 @@ c
 c
 c  --- next layer ---
 c
-  21  continue
-  20  continue
+  21  continue		!istep
+  20  continue  	!Layer
 
 c
 c  --- end of parallelized loop ---
@@ -414,6 +419,8 @@ c
             do j = j1,j2
               l = l + 1
               c1d(l) = conc(i,j,k,ispc)*dx(j)*depth(i,j,k)
+C	      Move subd to vector (BNM 9-23-09)
+	      subdvec(l) = subd(i,j)
             enddo
             if (igrd.eq.1 .and. v1d(1).lt.0.) c1d(1) = c1d(2)
             if (igrd.eq.1 .and. v1d(nn-1).gt.0.) c1d(nn) = c1d(nn-1)
@@ -443,7 +450,7 @@ c
      &                                 flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
               call hadvppm(nn,dtuse,dy,c1d,v1d,m1d,flxarr,flux1,
-     &                                         flux2,saflux,fc1,fc2)
+     &                                 flux2,saflux,fc1,fc2,subdvec)
             endif
 c
 c======================== DDM Begin =======================
@@ -584,7 +591,7 @@ c
       do i=1,nspc
         do j=1,8
           do k=1,nlay
-            fluxes(i,j) = fluxes(i,j) + fluxtmp(i,j,k)
+            fluxes(k+(i-1)*14,j) = fluxes(k+(i-1)*14,j) + fluxtmp(i,j,k)
           enddo
         enddo
       enddo

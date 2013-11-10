@@ -1,5 +1,5 @@
       subroutine hadvppm(nn,dt,dx,con,vel,mscl,flxarr,flux1,
-     &                   flux2,saflux,fc1,fc2)
+     &                   flux2,saflux,fc1,fc2,subd)	!BNM added subd 9-23-09
 c  
 c-----CAMx v4.02 030709
 c
@@ -66,6 +66,7 @@ c
 c
       real con(nn),vel(nn),flxarr(nn),mscl(nn),saflux(nn)
       real*8 flux1,flux2
+      integer subd(nn), lsubd, lsubd2
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -252,8 +253,29 @@ c
 c========================= Process Analysis End =====================================
 c
       enddo
-      flux1 = mscl(2)*flxarr(1)
-      flux2 = mscl(nn-1)*flxarr(nn-1)
+
+c-----Store Fluxes at End Points
+c      flux1 = mscl(2)*flxarr(1)
+c      flux2 = mscl(nn-1)*flxarr(nn-1)
+
+c     Alter to Sub-Domain End Points <-BNM 9-23-09
+      lsubd = 0
+      lsubd2 = 0
+      do i = 2,nn-1
+	if (subd(i).eq.1 .and. lsubd.eq.0) then
+          flux1 = mscl(i)*flxarr(i)
+	  lsubd = 1
+	  lsubd2 = 1
+	endif
+	if (subd(i).eq.0 .and. lsubd.eq.1) then
+          flux2 = mscl(i-1)*flxarr(i-1)
+	  lsubd = 0
+	endif
+      enddo
+      if (lsubd2.eq.0) then
+	flux1 = 0
+	flux2 = 0
+      endif
 c
       return
       end

@@ -1,5 +1,5 @@
       subroutine massum(igrid,nospec,ncol,nrow,nlay,dx,dy,depth,conc,
-     &                  xmass)
+     &                  xmass,subxmass)
 c
 c-----CAMx v4.02 030709
 c
@@ -37,14 +37,19 @@ c
       include "bndary.com"
 c
       real*8 xmass,dtmp
-      dimension conc(ncol,nrow,nlay,nospec),xmass(nospec)
+      real*8 subxmass
+      integer subd(ncol,nrow)
+      dimension conc(ncol,nrow,nlay,nospec),xmass(nospec*14), subxmass(nospec*14)
       dimension dx(nrow),depth(ncol,nrow,nlay)
 c
 c-----Entry point
 c
+      call subdomain(subd)
+
       do 50 is = 1,nospec
-        xmass(is) = 0.
         do 30 k = 1,nlay
+          xmass(k+(is-1)*14) = 0.	!<-BNM altered for multi-layer mass budget
+          subxmass(k+(is-1)*14) = 0.	!<-BNM altered for subdomain mass budget (9-24-09)
           do 20 j = 2,nrow-1
             i1 = 2
             i2 = ncol-1
@@ -55,7 +60,8 @@ c
             endif
             do i = i1,i2
               dtmp = conc(i,j,k,is)*dx(j)*dy*depth(i,j,k)
-              xmass(is) = xmass(is) + dtmp
+              xmass(k+(is-1)*14) = xmass(k+(is-1)*14) + dtmp	!<-BNM altered for multi-layer mass budget
+	      subxmass(k+(is-1)*14) = subxmass(k+(is-1)*14) + dtmp*subd(i,j)	!BNM 9-23-09
             enddo
   20      continue
   30    continue

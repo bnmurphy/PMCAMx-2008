@@ -205,9 +205,9 @@ c
             call wrtmass(igrd,date,time,0)
             call massum(igrd,nspec,ncol(igrd),nrow(igrd),nlay(igrd),
      &                  deltax(1,igrd),deltay(igrd),depth(iptr3d(igrd)),
-     &                  conc(iptr4d(igrd)),xmass0(1,igrd))
-            do l = 1,nspec
-              xmsold(l,igrd) = xmass0(l,igrd)
+     &                  conc(iptr4d(igrd)),xmass0(1,igrd),subxmass(1,igrd))
+            do l = 1,nspec*14
+              xmsold(l,igrd) = subxmass(l,igrd)
             enddo
 c
 c --- initialize the mass summary array for PiG ---

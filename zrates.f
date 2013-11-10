@@ -67,6 +67,7 @@ c
       real ronxt(MXLAYA+1)
       real fpc(MX1D),fmc(MX1D)
       real*8 flux1,flux2
+      integer subd(ncol,nrow), subdvec(MX1D)
 c
 c========================= Process Analysis Begin ==============================
 c-----These are not used here, but are needed to give the correct
@@ -79,6 +80,8 @@ c
 c
 c-----Entry point 
 c
+      call subdomain(subd)
+
       do 30 k = 1,nlay
 c
 c-----Load current atmospheric density (rho) and advected density (rhon)
@@ -116,6 +119,9 @@ c
      &        v1d(l) = 2.*v1d(l)/(mapscl(i+1,j) + mapscl(i,j)) 
             c1d(l) = rhon(i,j,k)*dy*depth(i,j,k)
             m1d(l) = mapscl(i,j)*mapscl(i,j)
+cBNM        Move subdomain array to vector
+	    subdvec(l) = subd(i,j)
+
           enddo
           nn = i2 - i1 + 1
 c
@@ -129,7 +135,7 @@ c
      &                                flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
               call hadvppm(nn,dtuse,dx(j),c1d,v1d,m1d,flxarr,flux1,
-     &                                        flux2,saflux,fc1,fc2)
+     &                                    flux2,saflux,fc1,fc2,subdvec)
             endif
 c
             l = 0
@@ -162,6 +168,9 @@ c
      &        v1d(l) = 2.*v1d(l)/(mapscl(i,j+1) + mapscl(i,j)) 
             c1d(l) = rhon(i,j,k)*dx(j)*depth(i,j,k)
             m1d(l) = mapscl(i,j)*mapscl(i,j)
+cBNM	    Move subdomain array to vector
+	    subdvec(l) = subd(i,j)
+
           enddo
           nn = j2 - j1 + 1
 c
@@ -175,7 +184,7 @@ c
      &                               flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
               call hadvppm(nn,dtuse,dy,c1d,v1d,m1d,flxarr,flux1,
-     &                                     flux2,saflux,fc1,fc2)
+     &                               flux2,saflux,fc1,fc2,subdvec)
             endif
 c
             l = 0
