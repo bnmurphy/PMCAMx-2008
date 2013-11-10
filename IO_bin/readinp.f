@@ -383,13 +383,13 @@ c BNM ---- Read in alternate rain fields from NCEP --------
 c       Back-Calculate the precipitable water content (pwc) for the surface cell given ncep data
 	    do i = 1,ngcol
 		do j = 1,ngrow
-		    do k = 1,10
-c			pcpwtr(i,j,k) = (rrncep(i,j)**0.877) /1e7 *1e6
-			pcpwtr(i,j,k) = 0   !Test lower bound of rain sensitivity => no rain
+		    do k = 1,12
+			pcpwtr(i,j,k) = (rrncep(i,j)**0.877) /1e7 *1e6
 		    enddo
-		    do k = 11,14   !Test no rain in layers 11-14 as well
-			pcpwtr(i,j,k) = 0
-		    enddo
+		    
+c		    do k = 11,14
+c			pcpwtr(i,j,k) = 0
+c		    enddo
 		enddo
 	    enddo
 c BNM

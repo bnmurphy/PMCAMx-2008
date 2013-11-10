@@ -88,8 +88,10 @@ c
       real conc(ncol,nrow,nlay,nspcs),depfld(ncol,nrow,3*nspcs)
       real*8 fluxes(nspcs,11)
       real c0(MXSPEC),rr(MXLAYA),volrat(MXLAYA),tmass(MXSPEC)
-      real delr(MXSPEC)
+      real delr(MXSPEC), depthtot
       logical lcloud,ltop,lfreez
+
+      real rainweight(14)
 c
       data rd /287./         ! Dry air gas constant (J/K/kg)
       data rhoh2o /1.e6/     ! water density (g/m3)
@@ -100,6 +102,9 @@ c-----Loop over rows and columns
 c
 
 cBNM
+        data rainweight /1.000, 0.999, 0.999, 0.999, 0.995, 0.984,
+     &                   0.956, 0.907, 0.837, 0.737, 0.617, 0.499,
+     &                   0.365, 0.084 /
  	groundrain = 0
 	totrain = 0
 cBNM
@@ -119,6 +124,17 @@ cBNM
 c
 c-----Scan column for layers containing precipitation bottom/top
 c
+          !Recalculating pwc by weighting with cell depth - BNM ***
+	  do k = 1,14
+	    pwc(i,j,k) = pwc(i,j,k) * rainweight(k)
+	  enddo
+	  if (pwc(i,j,12).gt.cwmin .and. cwc(i,j,12).le.cwmin) then
+	    cwc(i,j,12) = cwmin + 0.005
+	    if (cwc(i,j,13).gt.cwmin) cwc(i,j,13) = cwmin - 0.005
+	    if (cwc(i,j,14).gt.cwmin) cwc(i,j,14) = cwmin - 0.005
+	  endif
+	  !Done recalculating pwc - BNM ***
+
           kbot = 0
           ktop = 0
           do k = 1,nlay
@@ -498,6 +514,7 @@ cBNM 4-20-09    This is the mechanism currently in use. SAPRC, semivolatile POA
                     delr(l) = 1. - exp(-ascav*deltat)
                   enddo
                 enddo
+
               else
                 do l = ngas+1,nspec
                   psize = sqrt(dcut(l,1)*dcut(l,2))*1.e-6
@@ -555,6 +572,11 @@ c-----If rain evaporates before reaching the ground, return all mass back
 c     to layer KBOT
 c
           if (kbot.gt.1) then
+
+cBNM
+c	    print *, 'Some rain has evaporated in cell i=',i,', j=',j,'!!!'
+cBNM
+
             cellvol = deltax(j)*deltay*depth(i,j,kbot)
             do l = 1,nspec
               conc(i,j,kbot,l) = conc(i,j,kbot,l) + tmass(l)/cellvol
