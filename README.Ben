@@ -1,0 +1,51 @@
+CAMx.102108.ASOA.3D - most up-to-date run as of November, 2008.  This is the base-case.  It does not include Lea's toluene yields, Scott's deltaH parameterizations, or anything with nitrate radicals.  It is capable of making multiple layer output files though.
+
+CAMx.122308.ASOA.3D.2 - is the same as the one before but it includes a comment in chemdriv.f to output the layer number so I can time how long the aerosol module is taking.
+
+CAMx.NOAGE.022609 - Density is corrected in SOAP module. ALL (POA, OPOA, ASOA, BSOA) aging is turned off by setting rxn rates themselves to 0.
+
+wetdep1.f - Version accompanying SAPRC, Gaydos code
+wetdep2.f - Version with Vlassis and alexandra code
+
+trap_SAPRC.f - Default version of trap capmatible with PSSA solveing of NO3 radicals
+trap_NO3.f  - new version of trap (Vlassis KARYDIS) which calls new radslvr subroutine correctly and implements OH concentration reporting
+
+
+CAMx.032009.ASOA.Rads.1 - ASOA aging, NO3 Hertel Chemistry, Radical Conc Output, Newest Hvap parameters (3-20-09)
+
+CAMx.041009.allage - ASOA and BSOA aging, NO3 QSSA Chemistry, Radical Conc Output, Newest Hvap params, New Density Treatment
+
+
+c-----Rainfield Update ------c
+4-20-09
+
+Downloded monolevel assimilated fields from NOAA.
+
+Current PMCAMx approach:
+  wetdep.f identifies from meteorology all cells in a column that are raining. 
+	If the lowest layer is above the surface layer, any mass that was scavenged is returned to that layer; otherwise it is deposited and removed from the model. 
+        Scavenging is then calculated for all those cells.
+
+Alternate approach:
+  I am going to keep everything done in PMCAMx, all precipitable water predicted by MM5 that doesn't reach the ground will be intact.
+  However, very few, if any, rain events evaporate before hitting the ground, so most will be overwritten.
+  I will also read from the new file; anytime rain is predicted (above a certain threshold), I will start it at 1.5 km and let it rain to the ground.
+  This will occur for the entire 3-hour duration.
+
+  Most of the MM5 rain events reach the ground. THere are significantly (1/3 to 1/2) fewer events in the netCDF data file.
+  Whenever netCDF does not prescribe rain when MM5 does, MM5's rain column will be reduced to only layers 11->14.  Those lower will have no rain.
+  In this way, the boundary layer will be treated uniformly,
+     and the free troposphere (usually it's these layers) is little concern because concentrations are significantly lower.
+
+  A test-case will also be performed where I set the rain over lake Michigan to see if it successfully decreases the pollutant burst.
+
+Clouds:
+  Eventually I need to look at MM5 cloud fraction at different heights and try to improve them with assimilated cloud fraction predictions.
+
+Height/Temp/Press:
+  Need to look at these too, although these inputs should be relatively robust.
+
+c---------------------------c
+
+Makefile1 - this makefile came with the code I inherited from John Dawson
+Makefile2 - I'm testing different compilation flags. I think we are compiling in 32-bit by mistake

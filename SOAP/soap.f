@@ -184,6 +184,9 @@ ccccccc  ------- New Hvap Look-Up Table -------- cccccccccc
 c      print *,'Makes it to Hvap calc', igrdchm
 
 ccc Using Look-up Table Compiled by Scott Epstein  ccc
+c    Set Variables
+c	   ntemp = 231
+c          ncstar = 109
 
 cc   Search for T (seach through all T's)
 cc	Identify index that is upper-bound on values

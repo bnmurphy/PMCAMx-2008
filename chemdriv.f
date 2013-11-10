@@ -400,17 +400,22 @@ c
                  else
                    nflag=1.0d0
                  endif
+c BNM
+c		print *, 'Trap is getting called'
+c BNM
+
                  call trap(rxnrate5,radslvr5,ratejac5,rateslo5,dtchem,
      &             ldark(i,j),water(i,j,k),atm,O2,CH4,H2,con,crad,
      &             avgrad,tcell,
      &             sddm,nddmsp,ngas,ddmjac5,lddm,nirrrxn,titrt,rrxn_irr,
      &             lirr)
 
-                 if ( laero_upd )
-     &           call fullaero(water(i,j,k),tcell,pcell,cwc(i,j,k),
+                 if ( laero_upd ) then
+                call fullaero(water(i,j,k),tcell,pcell,cwc(i,j,k),
      &                         MXSPEC,MXRADCL,NSPEC,NGAS,
      &                         con,crad,convfac,time,aero_dt(igrd),
      &                         i,j,k,height)
+		endif
                elseif (idmech.eq.6) then
                  if (ldark(i,j)) then
                    nflag=1.0d0
@@ -607,10 +612,7 @@ cbk            endif
 
   89      continue  !col
   90    continue    !row
-
-c BNM
 	print *,'Layer: ',k
-c BNM
 
 c
 c$omp end parallel
