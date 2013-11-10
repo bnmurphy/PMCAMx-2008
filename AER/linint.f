@@ -47,7 +47,6 @@ c
       integer igrdchm, ichm, jchm, kchm, iout, idiag
       !End BNM
 
-      print *,'linint: ns=',ns,'   nsp=',nsp
 c     set fixed section boundaries
       bound(1)=log10(df(1))
       do i=2,n+1

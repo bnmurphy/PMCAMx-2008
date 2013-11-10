@@ -59,12 +59,9 @@ c=====================================================================
       lppm = .false. ! gases in ppm if true, ugm3 if false
 
       call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
-
       call soap(nsoap,caer,cgas,tempk,convfac,
      &          iout,igrdchm,ichm,jchm,kchm,lppm,
      &          cpre,mwpre,csatT)                          ! bkoo (11/14/02)
-
-      
 
       rlambda=0.065d0 ! this should be consistent with that in eqpart.f
 
@@ -89,7 +86,7 @@ c=====================================================================
         mxk = 0.d0 ! bkoo (11/14/02)
         do isec = 1,nsecx2
           frq(isec) = qn(isec)*
-     &        ( q(ng+ICPO1-1+isp)*gmw(ICPO1-1+isp)/prod                   ! bkoo (11/14/02)
+     &        ( q(ng+ICPO1-1+isp)*gmw(ICPO1-1+isp)/prod       ! bkoo (11/14/02)
      &        - q((isec-1)*nsp+KAPO1-1+isp)/emw(KAPO1-1+isp)/xsum(isec) ! bkoo (11/14/02)
      &        * csatT(isp) )*                                       ! bkoo (11/14/02)
      &        dsec(isec)/(1.d0+rlambda/(accom*dsec(isec)))
@@ -168,7 +165,6 @@ cbk            call errprt('EQUIO-F:DQ    ',t,KAPO1-1+isp,-1,dq,0)
           q(ng+ICPO1-1+isp) = q(ng+ICPO1-1+isp) * prod / gmw(ICPO1-1+isp) ! ppm
         endif
       enddo
-
 
       return
       end

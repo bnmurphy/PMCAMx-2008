@@ -65,7 +65,8 @@ cbk      real*8 qsav(ntotal), DQsav(nsp), accom(nsp)
       real*8 qq, frq0(nsec,nexti) ! bkoo (10/07/03)
       logical done
 
-      if(aerm.eq.'EQUI') then
+
+      if(aerm.eq.'EQUI') then	
 c
 c     STEP 1/3: CALCULATE NUCLEATION RATE FOR THE WHOLE STEP
 c
@@ -79,6 +80,7 @@ c       call coagul(q)
 
 cbk       call step(nsec,q) ! tmg (10/22/02)
       endif
+
       call step(nsecx2,q) ! bkoo (03/07/03)
       call wdiameter(q) ! bkoo (03/09/03)
 
@@ -160,11 +162,7 @@ C            DQ(KNO3) => now represents the transfer of NH4NO3
 C            DQ(KCl) => now represents the transfer of NH4Cl
 C            DQ(KNH4) => now represents the transfer of NH4 with SO4
 c
-CDEBUG
-      print *,'Called ISORROPIA. Dq(knh4)=',dq(knh4)
       DQ(KNH4)=DQ(KNH4)-DQ(KNO3)-DQ(KCL)
-      print *,'Step 2B. Dq(knh4)=',dq(knh4)
-
 c
 c     Save initial aerosol concentrations
 cbk      do i=1,ntotalx2
@@ -278,7 +276,7 @@ C     CHECK FOR COMPLETE EVAPORATION
            frtq=-q(indx+isp)/dqfx/emw(isp)
            if(frtq.lt.frt) then
             frt=frtq
-            ispsav=isp                      ! species that evaporates first
+            ispsav=isp 	                    ! species that evaporates first
             isecsav=isec                    ! section that evaporates first
             if(q(indx+isp).lt.tinys) goto 150
            endif
@@ -377,7 +375,6 @@ c
       bb=gnh3*1.0d6+dq(ispsav)+g2
       dq(isp2)=(-bb+sqrt(bb**2-4*dq(ispsav)*g2))/2.0d0
 
-      print *,'Step 4. Dq(knh4)=',dq(knh4)
       dq(isp2) = dmax1(dq(isp2), dq(knh4)+dqsav(ispsav)-dq(ispsav) ! bkoo (10/07/03)
      &                          +dqsav(isp2)-q(ng+inh3)/prod)
 
@@ -431,7 +428,6 @@ C
       enddo
 c     correct negative NH3 - bkoo (10/07/03)
       dq(KNH4) = q(ng+inh3) / prod ! umol/m3
-      print *,'Step 4: Correcting Eq Values. Dq(knh4)=',dq(knh4)
       if(dq(KNH4).lt.-tinys) then
         iter = 0
  300    frt = 1.d0
@@ -451,7 +447,6 @@ c     correct negative NH3 - bkoo (10/07/03)
         q(ng+inh3) = q(ng+inh3) - frt*dq(KNH4)*prod
         ! check if we should evaporate more
         dq(KNH4) = (1.d0 - frt) * dq(KNH4)
-        print *,'Should we evap more. Dq(knh4)=',dq(knh4)
         if(dq(KNH4).lt.-tinys) then
           if(frqtot.gt.tinys) then ! we have sections which are not empty    
             if(iter.le.itmaxeq) then ! check infinite loop
@@ -473,9 +468,9 @@ cbk removed - bkoo (03/09/03)
 cbk      DO IOG = 1,NORG-1
 cbk       Q(NG+IHCL+IOG) =PS(1,IHCL+NORG)/(1.01325d-1*pres) ! pres (bkoo, 06/09/00)
 cbk      ENDDO
-
   
       call negchk(t,q,nsecx2)
+
       call eqneut(0, q) ! tmg (12/05/02)
 
       if(aerm.eq.'EQUI') then ! (tmg,01/31/02)
@@ -487,9 +482,6 @@ C
 C   STEP 6: Determine new diameter
 C
         call ddiameter(q)
-CDEBUG
-      print *,'Done with diameter calculation. Returning.'
-
       endif
 C
       RETURN

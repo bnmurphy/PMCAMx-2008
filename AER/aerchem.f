@@ -30,14 +30,10 @@ c
       icount = 0  ! tmg (01/21/02)
       icnt = 1
       ierr = 0
-
-CDEBUG
-      print *,'Started AERCHEM'
-
 c   save initial total ion concentrations for ion balance
-c      if ( lfrst ) then ! always do since each cell different (tmg, 01/24/02)
-      prod=rgas*temp/(1.01325d5*pres)   ! pres (bkoo, 6/9/00)
-      qtot0(kH2O)= 0.d0                 !gas phase mass
+c	if ( lfrst ) then ! always do since each cell different (tmg, 01/24/02)
+      prod=rgas*temp/(1.01325d5*pres)	! pres (bkoo, 6/9/00)
+      qtot0(kH2O)= 0.d0			!gas phase mass
       qtot0(kSO4)= q(naer+ih2so4)/(prod/gmw(ih2so4))  
       qtot0(kNa) = 0.d0  
       qtot0(kNO3)= q(naer+ihno3) /(prod/gmw(ihno3))  
@@ -45,7 +41,7 @@ c      if ( lfrst ) then ! always do since each cell different (tmg, 01/24/02)
       qtot0(kCl) = q(naer+ihcl)  /(prod/gmw(ihcl))  
       do ki=1,nexti                 
         do i=1,nsec
-          qtot0(ki)=qtot0(ki)+q((i-1)*nsp+ki)   !aerosol mass
+          qtot0(ki)=qtot0(ki)+q((i-1)*nsp+ki)	!aerosol mass
         enddo
         save4(ki)=qtot0(ki) ! bkoo
       enddo
@@ -101,12 +97,7 @@ c
          nsecx    = 0 ! not used
          ntotalx2 = ntotal
          nsecx2   = nsec
-
-CDEBUG
-         print *,'Calling eqpart.'
          call eqpart(t1,q)
-         print *,'BNM: Done with eqpart.'
-
       elseif(aerm.eq.'HYBR') then
          ntotalx  = ntotald
          nsecx    = nsecd
@@ -134,13 +125,11 @@ c     if HYBR failed try EQUI after restore q, dsec, qn & qtot0
         aerm='EQUI'
         goto 100
       endif
+CDEBUG
+c	print *,'AERCHEM: Before Interpolation. con(NO2)='
 
 c
 c     Linear Interpolation Routine
-
-CDEBUG
-      print *,'Beginning Linear Interpolation'
-      
       do i=1,nexti
         qtot1(i)=0.0d0
       enddo
@@ -162,17 +151,9 @@ c     (only needed for MADM)
       if (aerm.eq.'MADM') call ddiameter(q)
 
 c
-cbk      if (.not.lsoap) call newdist(tt1,q)
-CDEBUG
-      print *,'Calling newdist'
-
+cbk      if (.not.lsoap) call newdist(tt1,q) 
       call newdist(t1,q) ! bkoo (03/09/03)
-      print *,'Done with newdist'
-      print *,'nsp=',nsp,'  nsec=',nsec,'  nexti=',nexti
-      print *,'ih2so4=',ih2so4,'  ihno3=',ihno3,'  inh3=',inh3
-      print *,'ihcl=',ihcl,'  rgas=',rgas,'  temp=',temp
-      print *,'pres=',pres
- 
+c
       do  i=1,nsp
         qmass(i)=0.
         do k=1,nsec
@@ -184,7 +165,7 @@ CDEBUG
         qtot2(i)=0.0d0
       enddo
       prod=rgas*temp/(1.01325d5*pres) ! pres (bkoo, 6/9/00)
-      qtot2(kH2O)= 0.d0               ! gas phase mass
+      qtot2(kH2O)= 0.d0	              ! gas phase mass
       qtot2(kSO4)= q(naer+ih2so4)/(prod/gmw(ih2so4))  
       qtot2(kNa) = 0.d0  
       qtot2(kNO3)= q(naer+ihno3) /(prod/gmw(ihno3))  
@@ -196,13 +177,7 @@ CDEBUG
         enddo
       enddo
 
-CDEBUG
-      print *,'Calling step in aerchem'
-
       call step(nsec,q) ! tmg (01/31/02)
-
-CDEBUG
-      print *,'Returning from aerchem.'
 c
 c      ----- End Main loop -----
       return
