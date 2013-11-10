@@ -57,6 +57,11 @@ c=====================================================================
       lppm = .false. ! gases in ppm if true, ugm3 if false
 
       call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
+
+c BNM
+c	print *,'SOAP is called!'
+c BNM
+
       call soap(nsoap,caer,cgas,tempk,convfac,
      &          iout,igrdchm,ichm,jchm,kchm,lppm,
      &          cpre,mwpre,csatT)                          ! bkoo (11/14/02)

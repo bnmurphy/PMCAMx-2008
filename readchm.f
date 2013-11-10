@@ -20,6 +20,9 @@ c        1/18/02   Added EC, PFIN, and PCRS to mechanism 4 species list
 c        12/12/02  Expanded species list for Mechanism 4
 c        3/26/03   Added surface resistance scaling factor to gas params
 c
+c	 12/23/08  Added Enthalpy of Vaporization table look-up for SOAP module. (BNM)
+c
+c
 c     Input arguments: 
 c        none 
 c 
@@ -38,6 +41,7 @@ c
       include 'flags.com'
       include 'ddmchm.com'
       include 'iehchem.com'
+      include 'soap.com'
 c
       parameter(ncrsspc = 2)
       character*180 record
@@ -54,6 +58,11 @@ c
       real kdum(MXRXN,3), tdum(3), pdum(3)
       real*8  dsec_i(MXSECT+1)
       integer omp_get_num_procs
+
+c BNM - variables for Hvap look-up
+      integer icstar, tempcnt
+c
+
 c 
 c-----Data that define the mechanism/solver options
 c     The fast state species must come first in SPLIST
@@ -934,6 +943,37 @@ c======================== DDM End   =======================
 c
       write(idiag,*)
       call flush(idiag)
+c
+c============ BNM - Reading Hvap tables ===================
+c
+c      ccc   Using Look-up Table Compiled by Scott Epstein   ccc
+c       Set Variables
+c            ntemp = 231
+c            ncstar = 109
+
+c       Read in all data from look-up tables
+            open (96, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+     &           'SOAP/POA_DHVAP.txt', status='OLD')
+            open (97, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+     &           'SOAP/POA_LOGCSTAR.txt', status='OLD')
+            open (98, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+     &           'SOAP/POA_T.txt', status='OLD')
+            open (99, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_delH_SEMIvol/'//
+     &          'SOAP/SOA_DHVAP.txt', status='OLD')
+            do tempcnt = 1,ntemp
+                read(98, *), dhtemp(tempcnt)
+                read(96, *), (poadhvap(tempcnt,icstar),icstar=1,ncstar)
+                read(99, *), (soadhvap(tempcnt,icstar),icstar=1,ncstar)
+            end do
+            read(97, *), (dhcstar(icstar),icstar=1,ncstar)
+            close(96)
+            close(97)
+            close(98)
+            close(99)
+
+c=============== End Hvap Table Open and Read =============
+
+
 c
       return
 c

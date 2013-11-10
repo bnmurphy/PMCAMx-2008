@@ -1,5 +1,9 @@
-CAMx.HNO3.daytime.102708 - turns off Nitrate radical chemistry at night for the NOy species. Reaction rates for nitrate radical and VOC species are still computed and used.
+These files are for the investigation of Scott Epstein's new deltaHvap parameterizations.
 
-CAMx.NO3.nonightSOA.120908 - turns off night-time Nitrate radical chemistry with the VOC SOA precursors. This way the total contribution of NO3 reactions to SOA can be found for the model.
+CAMx.delH.121508 - code with Hvap improvements made to soap.f.   Comments are included for tracking down timing and errors.
 
-This code is used to explore radical concentrations and reaction rates throughtout the domain during simulation.  Most changes are made in chemdriv.f for outputting these values.
+CAMx.delH.121508 - code with no comments.
+
+CAMx.delH.122308.fast - code with open and read statements moved to readchm.f routine.  This should take the slowest part of the algorithm (opening, reading and closing input files) out of the converging loops and speed up the algorithm substantially.
+
+

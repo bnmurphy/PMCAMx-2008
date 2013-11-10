@@ -603,7 +603,8 @@ readaho.o 		: readaho.f                                            \
 
 readchm.o 		: readchm.f                                            \
                         $(INC)/camx.prm $(INC)/chmstry.com $(INC)/filunit.com  \
-                        $(INC)/flags.com $(INC)/ddmchm.com $(INC)/iehchem.com
+                        $(INC)/flags.com $(INC)/ddmchm.com $(INC)/iehchem.com  \
+			$(INC)/soap.com
 
 readpht.o 		: readpht.f                                            \
                         $(INC)/camx.prm $(INC)/chmstry.com $(INC)/filunit.com  \

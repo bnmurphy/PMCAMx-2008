@@ -96,13 +96,6 @@ c
       real      modo3, modnox, modvoc, o3old, o3new
       real      cold(MXTRSP), cnew(MXTRSP)
 
-c BNM variables-------------------------------------
-
-      character*4 cdate, ctime
-      character*3 crxn
-      real      rrxn(MXRXN)
-c---------------------------------------------------
-
 c
 c========================= Source Apportion End ========================
 c
@@ -173,38 +166,6 @@ c     aero_dt  : actual time interval for each grid (hr) (accumulated dtchem)
      &                                          ,aero_dt(igrd)
       endif
       endif                 ! bkoo_dbg
-c
-
-c BNM --------Open files for radical and rxn rate diagnostic
-
-      print *,'\n date: ',date,'\n'
-      print *,'time: ',time,'\n'
-
-      write (cdate, 'I4'), date
-      write (ctime, 'F9.4'), time
-
-      print *,'\n cdate: ',cdate,'\n'
-      print *,'ctime: ',ctime,'\n'
-
-      if (ctime(2:2).eq.' ') then
-        ctime = '00'//ctime(3:4)
-      elseif (ctime(1:1).eq.' ') then
-        ctime = '0'//ctime(2:4)
-      endif
-
-      if (ctime(3:4).eq.'00') then
-      	open (unit=92, file='/home/bnmurphy/Research/Output/SAPRC.July/Hgt/HGT.'//cdate//'.'//ctime, status='unknown')
-      	open (unit=93, file='/home/bnmurphy/Research/Output/SAPRC.July/Rads/OH.'//cdate//'.'//ctime, status='unknown')
-
-      	do nrxn = 212,237
-	    write (crxn, 'I3'), nrxn
-	    open (unit=(93-211+nrxn), file='/home/bnmurphy/Research/Output/SAPRC.July/rxns/r'//crxn//
-     &				       '.'//cdate//'.'//ctime, status='unknown')
-      	end do
-      endif
-
-c end BNM ---------------------------------------------------------
-
 c
       igrdchm = igrd
       do 91 k = 1,nlay
@@ -434,26 +395,32 @@ c
                  call aerochem(water(i,j,k),tcell,pcell,cwc(i,j,k),con,
      &                                  convfac,dtchem,ldoipr,ipa_idx)
                elseif (idmech.eq.5) then
-                 if (ldark(i,j)) then    !Flag to turn off nitrate chemistry
-                   nflag=0.0d0
+                 if (ldark(i,j)) then
+                   nflag=1.0d0
                  else
                    nflag=1.0d0
                  endif
+c BNM
+c		print *, 'Trap is getting called'
+c BNM
+
                  call trap(rxnrate5,radslvr5,ratejac5,rateslo5,dtchem,
      &             ldark(i,j),water(i,j,k),atm,O2,CH4,H2,con,crad,
      &             avgrad,tcell,
      &             sddm,nddmsp,ngas,ddmjac5,lddm,nirrrxn,titrt,rrxn_irr,
-     &             lirr,rrxn)
+     &             lirr)
 
-c BNM --------------------------------------
-c  Added rrxn to the trap function call for diagnostic
-c---------------------------------------------
+                 if ( laero_upd ) then
 
-                 if ( laero_upd )
-     &           call fullaero(water(i,j,k),tcell,pcell,cwc(i,j,k),
+c BNM
+c		print *,'Fullaero is getting called'
+c BNM
+
+                call fullaero(water(i,j,k),tcell,pcell,cwc(i,j,k),
      &                         MXSPEC,MXRADCL,NSPEC,NGAS,
      &                         con,crad,convfac,time,aero_dt(igrd),
      &                         i,j,k,height)
+		endif
                elseif (idmech.eq.6) then
                  if (ldark(i,j)) then
                    nflag=1.0d0
@@ -647,49 +614,15 @@ cbk            endif
                 conc(i,j,k,is) = amax1(con(is),bdnl(is))
               enddo
             endif
-c
-
-c BNM  cccccc Print radical concentrations and reaction rates
-c
-      if (ctime(3:4).eq.'00') then
-      
-c      write (93, fmt=(A3,2x,A6,2x,I2,2x,I2,2x,I2,2x,e10.5) ),cdate, ctime, i, j, k, cncrad(i,j,k,kOH) 
-      	hgt = height(i,j,k)/2000
-      	if (k.gt.1) hgt = (height(i,j,k)+height(i,j,k-1))/2000
-
-      	write (92, * ),cdate, ctime, i, j, k, hgt 
-      	write (93, * ),cdate, ctime, i, j, k, cncrad(i,j,k,koh) 
-
-      	do nrxn = 212,237
-c           write ((93-211+nrxn), fmt=(I3,2x,I4,2x,I2,2x,I2,2x,I2,2x,e12.5) ),date, time, i, j, k, (rrxn(nrxn)) 
-            write ((93-211+nrxn), * ),date, time, i, j, k, rrxn(nrxn)
-
-      	end do
-      endif
-
-ccc BNM cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-
 
   89      continue  !col
   90    continue    !row
+	print *,'Layer: ',k
+
 c
 c$omp end parallel
 c
   91  continue  !Layer
-c
-
-c BNM -------Close diagnostic files
-      if (ctime(3:4).eq.'00') then
-	close (92)
-	close (93)
-	do nrxn = 212,237
-	  close(93-211+nrxn)
-	enddo
-
-	a = a + 1
-	print *, 'Closing files for time #: ',a
-      endif
-c End BNM ---------------------------------
 
 c
 c     if fullaero was called

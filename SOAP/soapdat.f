@@ -17,8 +17,7 @@ c
 
 
 c--------------------------------------
-c BNM
-c   Aerosol Map Table
+c BNM - Aerosol Map Table
 c
 c     / APO1,  APO2,  APO3,  APO4,
 c       APO5,  APO6,  APO7,  APO8,

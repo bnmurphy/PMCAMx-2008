@@ -79,6 +79,11 @@ cbk       call step(nsec,q) ! tmg (10/22/02)
       endif
       call step(nsecx2,q) ! bkoo (03/07/03)
       call wdiameter(q) ! bkoo (03/09/03)
+
+c BNM
+c	print *,'eqparto called'
+c BNM
+
       call eqparto(t,q) ! bkoo (03/09/03)
 c
 C     STEP 1:  DETERMINE BULK EQUILIBRIUM

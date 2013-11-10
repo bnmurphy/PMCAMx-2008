@@ -5,3 +5,4 @@ rateslo5d.f - ro=1.5 g/cm3, SOA aging turned ON
 
 rateslo5e.f - ro=1.5 g/cm3, noNO3, SOA aging off
 rateslo5g.f - ro=1.5 g/cm3, ASOA aging on, BSOA aging off
+rateslo5f.f - ro=1.5 g/cm3, ASOA aging on, BSOA aging off, Lea's new toluene yields
