@@ -37,11 +37,12 @@ c
       REAL         csat(NSOAP)
       REAL         cstemp(NSOAP)
       REAL         deltah(NSOAP)
+      REAL         oaro(NSOAP)
       INTEGER      flagsoap(NSOAP)
       LOGICAL      lae3
 c
       common /soapx/ mwsoap, csat, cstemp, deltah, flagsoap,
-     &               lae3
+     &               lae3, oaro
 c
 c-----------------------------------------------------------------------
 c  BNM

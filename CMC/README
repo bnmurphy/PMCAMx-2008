@@ -6,3 +6,13 @@ rateslo5d.f - ro=1.5 g/cm3, SOA aging turned ON
 rateslo5e.f - ro=1.5 g/cm3, noNO3, SOA aging off
 rateslo5g.f - ro=1.5 g/cm3, ASOA aging on, BSOA aging off
 rateslo5f.f - ro=1.5 g/cm3, ASOA aging on, BSOA aging off, Lea's new toluene yields
+rateslo5h.f - rho=1.0 (put density change into soap module). No rxns are commented (commenting done in rxnrate.f from now on). Lea's Toluene yields implemented.
+
+
+rxnrate5a.f - all aging rxns turned on
+rxnrate5b.f - base case, BSOA aging turned off
+rxnrate5c.f - SOA aging turned off
+
+radslvr5_SAPRC.f  - default radical chemistry solver. NO3 radical is unstable
+radslvr5_NO3.f - Vlassis version.  Uses Hertel's method to solve NO3-N2O5 system/
+radslvr5_BenNO3.f - BNM version.  Uses Hertel's eqn but includes r(12) in gain for NO3 because I think it should be there.

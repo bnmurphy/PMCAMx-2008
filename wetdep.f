@@ -53,6 +53,11 @@ c
 
       include 'deposit.com'
       include 'section.inc'
+
+cBNM
+      integer groundrain, totrain
+cBNM
+
 c
 c======================== Source Apportion Begin =======================
 c======================== DDM Begin ====================================
@@ -93,7 +98,13 @@ c-----Entry point
 c
 c-----Loop over rows and columns
 c
-      do 10 j = 2,nrow-1 
+
+cBNM
+ 	groundrain = 0
+	totrain = 0
+cBNM
+
+      do 10 j = 2,nrow-1    !Rows
         jcl = j
         i1 = 2 
         i2 = ncol-1 
@@ -102,7 +113,7 @@ c
           i1 = ibeg(j) 
           i2 = iend(j) 
         endif 
-        do 20 i = i1,i2
+        do 20 i = i1,i2   !Columns
           icl = i
           if (idfin(i,j).gt.igrid) goto 20
 c
@@ -142,6 +153,15 @@ c
             volrat(k) = pwc(i,j,k)/rhoh2o            ! drop volume/air volume
             rr(k) = (volrat(k)/1.0e-7)**1.14         ! rainfall rate (mm/hr)
           enddo
+cBNM
+c	    print *,'Cell: (i,j): (',i,',',j,') has ',ncnt,' raining cells.'
+c	    print *,'    from ',kbot,' to ',ktop
+	    totrain = totrain + 1
+	    if (kbot.eq.1) then
+   		groundrain = groundrain + 1
+	    endif
+c	    print *,'\tRain Rate at Surface = ',rr(1)
+cBNM    
 c
 c======================== Source Apportion Begin =======================
 c
@@ -379,7 +399,7 @@ c
 c
 c========================= Process Analysis End =====================================
 c
- 40         continue
+ 40         continue   !End Gas Scavenging
 c
 c======================== Source Apportion Begin =======================
 c
@@ -553,8 +573,14 @@ c
             enddo
           endif
 c
- 20     continue
- 10   continue
+ 20     continue    !Columns
+ 10   continue      !Rows
+
+cBNM
+      print *,groundrain,' columns of rain hit the ground.'
+      print *,totrain,' columns were raining total.'
+cBNM
 c
+
       return
       end

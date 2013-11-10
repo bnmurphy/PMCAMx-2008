@@ -41,7 +41,15 @@ c
       include 'grid.com'
       include 'flags.com'
 
+c BNM ----------------------------------------------
+
       character*2 clay(14)     !Added by BNM to carry naming for avrg layer output files
+      character*100 filencep   !Added for new rain field
+      character*3 cdate
+      integer hrncep
+
+c BNM
+
 c
 c======================== Source Apportion Begin =======================
 c
@@ -129,28 +137,45 @@ cBNM  -  add new more .avrg output files to take output from higher layers
         nlayer = 1
       endif
       if (navspc.gt.0) then
-
+	iavg = nfils
 	data clay /'01','02','03','04','05','06','07','08','09',
      &		   '10','11','12','13','14'/
 
 	do ilayer = 1,nlayer
-          if (l3davg) then
+c          if (l3davg) then
 		write(filroot(ii+1:),'(A)') '.avrg'//clay(ilayer)
-	  else
-		write(filroot(ii+1:),'(A)') '.avrg'
-	  endif
+		iifil = 8
+c	  else
+c		write(filroot(ii+1:),'(A)') '.avrg'
+c		iifil = 6
+c	  endif
           filtmp = filroot
-          iavg = nfils
           nopen = nopen + 1
           action = 'Opening output AVERAGE file for coarse grid.'
-          open(unit=(iavg+ilayer-1),file=filroot(1:ii+7),form='UNFORMATTED',
+          open(unit=(iavg),file=filroot(1:ii+iifil),form='UNFORMATTED',
      &                                       status= 'UNKNOWN',ERR=7005)
           write(iout,9000)'Output AVERAGE file coarse grid      (unit):',
      &                                                          iavg
-          write(iout,9002) '   File: ',filroot(1:ii+5)
+          write(iout,9002) '   File: ',filroot(1:)
+	  iavg = iavg + 1
+
+c ccc BNM --- Opening Radical Concentration Output Files ---- ccc
+	  do irads = 1,nrads  
+	    write(filroot(ii+iifil:),'(A)') '.'//crads(irads)
+	    open(unit=(iavg),file=filroot(1:ii+11),form='UNFORMATTED',
+     &					    status= 'UNKNOWN',ERR=7005)
+	    write(iout,9000)'Output AVERAGE file coarse grid   (unit):',
+     &								iavg
+	    write(iout,9002) ' File: ',filroot(1:)
+	    iavg = iavg + 1
+	  enddo
+	  
+c ccc BNM --- End opening Radical species output files --- ccc
+
 	end do
-        nfils = nfils + nlayer
-cBNM
+	iavg = nfils
+        nfils = nfils + nlayer*(1+nrads)
+cBNM -- End Opening Multiple Layer output files.
 
         if (ngrid.gt.1) then
           write(filroot(ii+1:),'(A)') '.favrg'
@@ -411,6 +436,18 @@ c
           if( cldhdr(1:10) .EQ. 'CAMX CLOUD' ) goto 7011
           goto 7006
         endif
+
+c BNM ---- Open NCEP rain field file -----
+	do i = 4,istrln(filtmp)
+	    if (filtmp(i-3:i).eq.'2001') then
+		cdate = filtmp(i+1:i+3)
+	    endif
+	enddo
+	filencep = '/home/bnmurphy/Research/Rain/clra.2001'//cdate//'.4rpos.36.14.mm5.ld.camx.ncep'
+        print *,'ncep file = ',filencep
+	open(unit=95,file=filencep, form='UNFORMATTED')
+c BNM
+
       endif
       if( lwet .and. filtmp .EQ. ' ' ) goto 7003
 c

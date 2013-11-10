@@ -19,8 +19,8 @@ c                  BDNL values from ug/m3 to umol/m3
 c        1/18/02   Added EC, PFIN, and PCRS to mechanism 4 species list
 c        12/12/02  Expanded species list for Mechanism 4
 c        3/26/03   Added surface resistance scaling factor to gas params
-c
-c	 12/23/08  Added Enthalpy of Vaporization table look-up for SOAP module. (BNM)
+c        12/23/08  Added Enthalpy of Vaporization table look-up for SOA module.
+c			compatible with SAPRC and SOA vol basis-se approach
 c
 c
 c     Input arguments: 

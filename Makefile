@@ -631,7 +631,8 @@ timrates.o 		: timrates.f                                           \
                         $(INC)/camx.prm $(INC)/camx.com $(INC)/bndary.com
 
 trap.o 			: trap.f                                               \
-                        $(INC)/camx.prm $(INC)/chmstry.com $(INC)/filunit.com
+                        $(INC)/camx.prm $(INC)/chmstry.com $(INC)/filunit.com  \
+			$(INC)/flags.com
  
 updtmet.o 		: updtmet.f                                            \
                         $(INC)/camx.prm $(INC)/bndary.com
