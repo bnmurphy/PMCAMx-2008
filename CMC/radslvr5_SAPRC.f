@@ -1,5 +1,4 @@
-      subroutine radslvr5(ldark,H2O,M,O2,CH4,H2,cncrad,conc,r,crold,
-     &                    dt)
+      subroutine radslvr5(ldark,H2O,M,O2,CH4,H2,cncrad,conc,r,crold,dt)
 c
 c-----CAMx v4.02 030709
 c
@@ -18,15 +17,11 @@ c
       include "chmstry.com"
       include "filunit.com"
 c
-      logical ldark, lusecp, lsafe
+      logical ldark, lusecp
+      real M
       real conc(MXSPEC+1),cncrad(MXRADCL),r(MXRXN),rate(MXSPEC+1),
      &     loss(MXSPEC+1),gain(MXSPEC+1),jac(MXRADCL,MXRADCL),
      &     crold(MXRADCL)
-      integer i, j, l, kount, nstrt, nend, nendcp, ierr
-      real H2O, M, O2, CH4, H2
-      real tol, weight, errbig, thresh, det, err, rlim, bnstrt, bnend
-      real dt
-      real gnNO3, lsNO3, lsN2O5, pdNO3, tpNO3, tpN2O5, fwd, bck, denom
       data tol/0.01/
 c
 c
@@ -81,114 +76,23 @@ c
       r(207) = rk(207)*conc(kOLE1)*cncrad(kO)
       r(211) = rk(211)*conc(kOLE2)*cncrad(kO)
       endif
-cVAK
-c  new group of radicals
-c
-c  N2O5   NO3
-c
-c  Explicitly solve N2O5 and NO3 using Hertel's solution
-c  Note that NO3 self-reaction is hacked
-cVAK
-        gnNO3  =      +( 1.000)*r(  6)
-     &                +( 1.000)*r(  8)
-     &                +( 1.000)*r( 27)
-     &                +( 0.390)*r( 34)
-        lsN2O5 =      +( 1.000)*rk( 12)
-     &                +( 1.000)*rk( 13)*H2O
-        lsNO3  =      +( 1.000)*rk(  9)*conc(kNO)
-     &                +( 1.000)*rk( 11)*conc(kNO2)
-     &                +( 1.000)*rk( 14)*conc(kNO2)
-     &                +( 1.000)*rk( 15)
-     &                +( 1.000)*rk( 16)
-     &                +( 1.000)*rk( 26)*cncrad(kOH)
-     &                +( 1.000)*rk( 39)*cncrad(kHO2)
-     &                +( 2.000)*rk( 40)*cncrad(kNO3)
-     &                +( 1.000)*rk( 48)*cncrad(kCXO2)
-     &                +( 1.000)*rk( 53)*cncrad(kRO2R)
-     &                +( 1.000)*rk( 58)*cncrad(kR2O2)
-     &                +( 1.000)*rk( 65)*cncrad(kRO2N)
-     &                +( 1.000)*rk( 73)*cncrad(kCCO3)
-     &                +( 1.000)*rk( 83)*cncrad(kRCO3)
-     &                +( 1.000)*rk( 94)*cncrad(kBZCO)
-     &                +( 1.000)*rk(106)*cncrad(kMCO3)
-     &                +( 1.000)*rk(129)*conc(kHCHO)
-     &                +( 1.000)*rk(132)*conc(kCCHO)
-     &                +( 1.000)*rk(135)*conc(kRCHO)
-     &                +( 1.000)*rk(148)*conc(kGLY)
-     &                +( 1.000)*rk(151)*conc(kMGLY)
-     &                +( 1.000)*rk(154)*conc(kPHEN)
-     &                +( 1.000)*rk(156)*conc(kCRES)
-     &                +( 1.000)*rk(157)*conc(kNPHE)
-     &                +( 1.000)*rk(160)*conc(kBALD)
-     &                +( 1.000)*rk(163)*conc(kMETH)
-     &                +( 1.000)*rk(172)*conc(kISPD)
-     &                +( 1.000)*rk(187)*conc(kETHE)
-     &                +( 1.000)*rk(191)*conc(kISOP)
-     &                +( 1.000)*rk(195)*conc(kTERP)
-     &                +( 1.000)*rk(206)*conc(kOLE1)
-     &               +( 1.000)*rk(210)*conc(kOLE2)
-      lsNO3 = 1.0 + dt*lsNO3
-      lsN2O5 = 1.0 + dt*lsN2O5
-      pdNO3 = crold(kNO3) + dt*gnNO3
-      fwd = dt*rk( 12)
-      bck = dt*rk( 11)*conc(kNO2)
-      tpNO3 = lsN2O5*pdNO3 + fwd*crold(kN2O5)
-      tpN2O5 = lsNO3*crold(kN2O5) + bck*pdNO3
-      denom = (lsN2O5*lsNO3) - (fwd*bck)
-      cncrad(kNO3) = tpNO3/denom
-      cncrad(kN2O5) = tpN2O5/denom
-      r(  9) = rk(  9)*conc(kNO)*cncrad(kNO3)
-      r( 11) = rk( 11)*conc(kNO2)*cncrad(kNO3)
-      r( 12) = rk( 12)*cncrad(kN2O5)
-      r( 13) = rk( 13)*cncrad(kN2O5)*H2O
-      r( 14) = rk( 14)*conc(kNO2)*cncrad(kNO3)
-      r( 15) = rk( 15)*cncrad(kNO3)
-      r( 16) = rk( 16)*cncrad(kNO3)
-      r( 26) = rk( 26)*cncrad(kOH)*cncrad(kNO3)
-      r( 39) = rk( 39)*cncrad(kNO3)*cncrad(kHO2)
-      r( 40) = rk( 40)*cncrad(kNO3)*cncrad(kNO3)
-      r( 48) = rk( 48)*cncrad(kCXO2)*cncrad(kNO3)
-      r( 53) = rk( 53)*cncrad(kRO2R)*cncrad(kNO3)
-      r( 58) = rk( 58)*cncrad(kR2O2)*cncrad(kNO3)
-      r( 65) = rk( 65)*cncrad(kRO2N)*cncrad(kNO3)
-      r( 73) = rk( 73)*cncrad(kCCO3)*cncrad(kNO3)
-      r( 83) = rk( 83)*cncrad(kRCO3)*cncrad(kNO3)
-      r( 94) = rk( 94)*cncrad(kBZCO)*cncrad(kNO3)
-      r(106) = rk(106)*cncrad(kMCO3)*cncrad(kNO3)
-      r(129) = rk(129)*conc(kHCHO)*cncrad(kNO3)
-      r(132) = rk(132)*conc(kCCHO)*cncrad(kNO3)
-      r(135) = rk(135)*conc(kRCHO)*cncrad(kNO3)
-      r(148) = rk(148)*conc(kGLY)*cncrad(kNO3)
-      r(151) = rk(151)*conc(kMGLY)*cncrad(kNO3)
-      r(154) = rk(154)*conc(kPHEN)*cncrad(kNO3)
-      r(156) = rk(156)*conc(kCRES)*cncrad(kNO3)
-      r(157) = rk(157)*conc(kNPHE)*cncrad(kNO3)
-      r(160) = rk(160)*conc(kBALD)*cncrad(kNO3)
-      r(163) = rk(163)*conc(kMETH)*cncrad(kNO3)
-      r(172) = rk(172)*conc(kISPD)*cncrad(kNO3)
-      r(187) = rk(187)*conc(kETHE)*cncrad(kNO3)
-      r(191) = rk(191)*conc(kISOP)*cncrad(kNO3)
-      r(195) = rk(195)*conc(kTERP)*cncrad(kNO3)
-      r(206) = rk(206)*conc(kOLE1)*cncrad(kNO3)
-      r(210) = rk(210)*conc(kOLE2)*cncrad(kNO3)
 c
 c  new group of radicals
 c
-c    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2
-c  HCO3  TBUO   BZO  BZNO
+c  N2O5   NO3    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3
+c  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
 c
-      nstrt = kOH
+      nstrt = kN2O5
       nend  = kBZNO
       weight = 1.0
       errbig = 1.0
       thresh = 1.0e-15
-      lsafe = .false.
       kount = 0
- 14   kount = kount + 1
-      if (kount.gt.500) then
-        write(iout,'(//,A,//)') 'ERROR in RADSLVR5:'
+  13  kount = kount + 1
+      if (kount.gt.100) then
+        write(iout,'(//,A)') 'ERROR in RADSLVR5:'
         write(iout,*) 'No Convergence in RADSLVR5, errbig = ', errbig
-        write(iout,*) 'statement number = ', 14
+        write(iout,*) 'statement number = ', 13
         write(iout,*) 'igrd,i, j, k = ', igrdchm,ichm,jchm,kchm
         write(iout,*) 'LDARK is set ', ldark
         do l=1,ngas
@@ -268,6 +172,22 @@ c
       r(120) = rk(120)*cncrad(kBZNO)*conc(kNO2)
       r(121) = rk(121)*cncrad(kBZNO)*cncrad(kHO2)
       r(122) = rk(122)*cncrad(kBZNO)
+        Loss(kN2O5 )= +( 1.000)*r( 12)+( 1.000)*r( 13)
+        Gain(kN2O5 )= +( 1.000)*r( 11)
+        Loss(kNO3  )= +( 1.000)*r(  9)+( 1.000)*r( 11)+( 1.000)*r( 14)
+     &                +( 1.000)*r( 15)+( 1.000)*r( 16)+( 1.000)*r( 26)
+     &                +( 1.000)*r( 39)+( 2.000)*r( 40)+( 1.000)*r( 48)
+     &                +( 1.000)*r( 53)+( 1.000)*r( 58)+( 1.000)*r( 65)
+     &                +( 1.000)*r( 73)+( 1.000)*r( 83)+( 1.000)*r( 94)
+     &                +( 1.000)*r(106)+( 1.000)*r(129)+( 1.000)*r(132)
+     &                +( 1.000)*r(135)+( 1.000)*r(148)+( 1.000)*r(151)
+     &                +( 1.000)*r(154)+( 1.000)*r(156)+( 1.000)*r(157)
+     &                +( 1.000)*r(160)+( 1.000)*r(163)+( 1.000)*r(172)
+        Loss(kNO3  ) = Loss(kNO3  )
+     &                +( 1.000)*r(187)+( 1.000)*r(191)+( 1.000)*r(195)
+     &                +( 1.000)*r(206)+( 1.000)*r(210)
+        Gain(kNO3  )= +( 1.000)*r(  6)+( 1.000)*r(  8)+( 1.000)*r( 12)
+     &                +( 1.000)*r( 27)+( 0.390)*r( 34)
         Loss(kOH   )= +( 1.000)*r( 21)+( 1.000)*r( 24)+( 1.000)*r( 25)
      &                +( 1.000)*r( 26)+( 1.000)*r( 27)+( 1.000)*r( 29)
      &                +( 1.000)*r( 30)+( 1.000)*r( 35)+( 1.000)*r( 42)
@@ -443,7 +363,38 @@ c
      &                +( 1.000)*r(156)
         Loss(kBZNO )= +( 1.000)*r(120)+( 1.000)*r(121)+( 1.000)*r(122)
         Gain(kBZNO )= +( 1.000)*r(157)
- 
+
+          JAC(kN2O5,kN2O5)= +( 1.000)*r( 12)+( 1.000)*r( 13)
+          JAC(kN2O5,kNO3 )= +(-1.000)*r( 11)
+          JAC(kNO3 ,kN2O5)= +(-1.000)*r( 12)
+          JAC(kNO3 ,kNO3 )= +( 1.000)*r(  9)+( 1.000)*r( 11)
+     &                      +( 1.000)*r( 14)+( 1.000)*r( 15)
+     &                      +( 1.000)*r( 16)+( 1.000)*r( 26)
+     &                      +( 1.000)*r( 39)+( 4.000)*r( 40)
+     &                      +( 1.000)*r( 48)+( 1.000)*r( 53)
+     &                      +( 1.000)*r( 58)+( 1.000)*r( 65)
+     &                      +( 1.000)*r( 73)+( 1.000)*r( 83)
+     &                      +( 1.000)*r( 94)+( 1.000)*r(106)
+     &                      +( 1.000)*r(129)+( 1.000)*r(132)
+          JAC(kNO3 ,kNO3 )=JAC(kNO3 ,kNO3 )
+     &                      +( 1.000)*r(135)+( 1.000)*r(148)
+     &                      +( 1.000)*r(151)+( 1.000)*r(154)
+     &                      +( 1.000)*r(156)+( 1.000)*r(157)
+     &                      +( 1.000)*r(160)+( 1.000)*r(163)
+     &                      +( 1.000)*r(172)+( 1.000)*r(187)
+     &                      +( 1.000)*r(191)+( 1.000)*r(195)
+     &                      +( 1.000)*r(206)+( 1.000)*r(210)
+          JAC(kNO3 ,kOH  )= +( 1.000)*r( 26)+(-1.000)*r( 27)
+          JAC(kNO3 ,kHO2 )= +( 1.000)*r( 39)
+          JAC(kNO3 ,kRO2R)= +( 1.000)*r( 53)
+          JAC(kNO3 ,kR2O2)= +( 1.000)*r( 58)
+          JAC(kNO3 ,kRO2N)= +( 1.000)*r( 65)
+          JAC(kNO3 ,kCCO3)= +( 1.000)*r( 73)
+          JAC(kNO3 ,kRCO3)= +( 1.000)*r( 83)
+          JAC(kNO3 ,kMCO3)= +( 1.000)*r(106)
+          JAC(kNO3 ,kBZCO)= +( 1.000)*r( 94)
+          JAC(kNO3 ,kCXO2)= +( 1.000)*r( 48)
+          JAC(kOH  ,kNO3 )= +( 1.000)*r( 26)+(-0.800)*r( 39)
           JAC(kOH  ,kOH  )= +( 1.000)*r( 21)+( 1.000)*r( 24)
      &                      +( 1.000)*r( 25)+( 1.000)*r( 26)
      &                      +( 1.000)*r( 27)+( 1.000)*r( 29)
@@ -484,9 +435,12 @@ c
      &                      +( 1.000)*r(233)+( 1.000)*r(234)
      &                      +( 1.000)*r(235)+( 1.000)*r(236)
      &                      +( 1.000)*r(237)
-          JAC(kOH  ,kOH  )=JAC(kOH  ,kOH  )
           JAC(kOH  ,kHO2 )= +(-1.000)*r( 31)+(-1.000)*r( 36)
      &                      +(-0.800)*r( 39)+( 1.000)*r( 43)
+          JAC(kHO2 ,kNO3 )= +(-1.000)*r( 26)+( 1.000)*r( 39)
+     &                      +(-1.000)*r( 48)+(-1.000)*r( 53)
+     &                      +(-1.000)*r( 65)+(-1.000)*r(129)
+     &                      +(-0.630)*r(148)
           JAC(kHO2 ,kOH  )= +(-1.000)*r( 26)+(-1.000)*r( 29)
      &                      +(-1.000)*r( 30)+(-1.000)*r( 42)
      &                      +( 1.000)*r( 43)+(-1.000)*r( 44)
@@ -523,6 +477,11 @@ c
           JAC(kHO2 ,kHCO3)= +(-1.000)*r(127)+(-1.000)*r(128)
           JAC(kHO2 ,kBZO )= +( 1.000)*r(118)
           JAC(kHO2 ,kBZNO)= +( 1.000)*r(121)
+          JAC(kRO2R,kNO3 )= +( 1.000)*r( 53)+(-1.000)*r( 83)
+     &                      +(-0.500)*r(163)+(-0.799)*r(172)
+     &                      +(-1.000)*r(187)+(-0.749)*r(191)
+     &                      +(-0.276)*r(195)+(-0.824)*r(206)
+     &                      +(-0.442)*r(210)
           JAC(kRO2R,kOH  )= +(-0.034)*r(133)+(-0.370)*r(138)
      &                      +(-0.340)*r(143)+(-0.760)*r(153)
      &                      +(-0.760)*r(155)+(-0.500)*r(161)
@@ -553,6 +512,9 @@ c
           JAC(kRO2R,kMCO3)= +( 1.000)*r(108)+(-1.000)*r(112)
           JAC(kRO2R,kBZCO)= +( 1.000)*r( 96)+(-1.000)*r(100)
           JAC(kRO2R,kCXO2)= +( 1.000)*r( 54)
+          JAC(kR2O2,kNO3 )= +( 1.000)*r( 58)+(-1.000)*r( 94)
+     &                      +(-0.187)*r(191)+(-0.750)*r(195)
+     &                      +(-0.488)*r(206)+(-0.711)*r(210)
           JAC(kR2O2,kOH  )= +(-1.000)*r(136)+(-0.616)*r(138)
      &                      +(-0.675)*r(166)+(-0.596)*r(176)
      &                      +(-1.000)*r(180)+(-1.000)*r(182)
@@ -577,6 +539,9 @@ c
      &                      +(-1.000)*r(100)+(-4.000)*r(101)
      &                      +(-1.000)*r(113)
           JAC(kR2O2,kCXO2)= +( 1.000)*r( 59)
+          JAC(kRO2N,kNO3 )= +( 1.000)*r( 65)+(-0.051)*r(172)
+     &                      +(-0.064)*r(191)+(-0.250)*r(195)
+     &                      +(-0.176)*r(206)+(-0.136)*r(210)
           JAC(kRO2N,kOH  )= +(-0.001)*r(133)+(-0.042)*r(138)
      &                      +(-0.025)*r(166)+(-0.041)*r(170)
      &                      +(-0.070)*r(174)+(-0.173)*r(176)
@@ -599,6 +564,8 @@ c
           JAC(kRO2N,kMCO3)= +( 1.000)*r(110)
           JAC(kRO2N,kBZCO)= +( 1.000)*r( 98)
           JAC(kRO2N,kCXO2)= +( 1.000)*r( 64)
+          JAC(kCCO3,kNO3 )= +( 1.000)*r( 73)+(-1.000)*r(106)
+     &                      +(-1.000)*r(132)+(-1.000)*r(151)
           JAC(kCCO3,kOH  )= +(-1.000)*r(130)+(-1.000)*r(136)
      &                      +(-0.492)*r(138)+(-1.000)*r(150)
      &                      +(-0.675)*r(166)+(-0.029)*r(174)
@@ -622,6 +589,8 @@ c
      &                      +(-4.000)*r(114)
           JAC(kCCO3,kBZCO)= +( 1.000)*r( 99)+(-1.000)*r(113)
           JAC(kCCO3,kCXO2)= +( 1.000)*r( 74)
+          JAC(kRCO3,kNO3 )= +( 1.000)*r( 83)+(-1.000)*r(135)
+     &                      +(-0.370)*r(148)
           JAC(kRCO3,kOH  )= +(-0.965)*r(133)+(-0.096)*r(138)
      &                      +(-0.370)*r(147)+(-0.049)*r(174)
           JAC(kRCO3,kHO2 )= +( 1.000)*r( 82)
@@ -639,6 +608,8 @@ c
           JAC(kRCO3,kMCO3)= +( 1.000)*r(112)
           JAC(kRCO3,kBZCO)= +( 1.000)*r(100)
           JAC(kRCO3,kCXO2)= +( 1.000)*r( 84)
+          JAC(kMCO3,kNO3 )= +( 1.000)*r(106)+(-0.500)*r(163)
+     &                      +(-0.150)*r(172)
           JAC(kMCO3,kOH  )= +(-0.500)*r(161)+(-0.289)*r(170)
           JAC(kMCO3,kHO2 )= +( 1.000)*r(105)
           JAC(kMCO3,kRO2R)= +( 1.000)*r(108)
@@ -655,6 +626,7 @@ c
      &                      +( 4.000)*r(114)
           JAC(kMCO3,kBZCO)= +( 1.000)*r(113)
           JAC(kMCO3,kCXO2)= +( 1.000)*r(107)
+          JAC(kBZCO,kNO3 )= +( 1.000)*r( 94)+(-1.000)*r(160)
           JAC(kBZCO,kOH  )= +(-1.000)*r(158)
           JAC(kBZCO,kHO2 )= +( 1.000)*r( 93)
           JAC(kBZCO,kRO2R)= +( 1.000)*r( 96)
@@ -671,6 +643,8 @@ c
      &                      +( 1.000)*r(100)+( 4.000)*r(101)
      &                      +( 1.000)*r(113)
           JAC(kBZCO,kCXO2)= +( 1.000)*r( 95)
+          JAC(kCXO2,kNO3 )= +( 1.000)*r( 48)+(-1.000)*r( 73)
+     &                      +(-0.030)*r(210)
           JAC(kCXO2,kOH  )= +(-0.650)*r(141)+(-1.000)*r(184)
      &                      +(-0.011)*r(200)
           JAC(kCXO2,kHO2 )= +( 1.000)*r( 47)
@@ -696,6 +670,8 @@ c
           JAC(kHCO3,kHCO3)= +( 1.000)*r(127)+( 1.000)*r(128)
           JAC(kTBUO,kOH  )= +(-0.236)*r(199)
           JAC(kTBUO,kTBUO)= +( 1.000)*r(115)+( 1.000)*r(116)
+          JAC(kBZO ,kNO3 )= +(-1.000)*r( 94)+(-1.000)*r(154)
+     &                      +(-1.000)*r(156)
           JAC(kBZO ,kOH  )= +(-0.240)*r(153)+(-0.240)*r(155)
           JAC(kBZO ,kHO2 )= +( 1.000)*r(118)
           JAC(kBZO ,kCCO3)= +(-1.000)*r( 99)
@@ -706,6 +682,7 @@ c
      &                      +(-4.000)*r(101)+(-1.000)*r(113)
           JAC(kBZO ,kBZO )= +( 1.000)*r(117)+( 1.000)*r(118)
      &                      +( 1.000)*r(119)
+          JAC(kBZNO,kNO3 )= +(-1.000)*r(157)
           JAC(kBZNO,kHO2 )= +( 1.000)*r(121)
           JAC(kBZNO,kBZNO)= +( 1.000)*r(120)+( 1.000)*r(121)
      &                      +( 1.000)*r(122)
@@ -724,7 +701,7 @@ c
 c  Jacobian is modified due to substitution of HCO3
 c
 c
-c    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
+c  N2O5   NO3    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
 c
           JAC(kHO2 ,kHO2 ) = JAC(kHO2 ,kHO2 )
      &         - JAC(kHO2 ,kHCO3)*JAC(kHCO3,kHO2 )/JAC(kHCO3,kHCO3)
@@ -735,7 +712,7 @@ c
 c  Jacobian is modified due to substitution of TBUO
 c
 c
-c    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
+c  N2O5   NO3    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
 c
           JAC(kCXO2,kOH  ) = JAC(kCXO2,kOH  )
      &         - JAC(kCXO2,kTBUO)*JAC(kTBUO,kOH  )/JAC(kTBUO,kTBUO)
@@ -746,8 +723,10 @@ c
 c  Jacobian is modified due to substitution of BZO
 c
 c
-c    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
+c  N2O5   NO3    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
 c
+          JAC(kHO2 ,kNO3 ) = JAC(kHO2 ,kNO3 )
+     &         - JAC(kHO2 ,kBZO )*JAC(kBZO ,kNO3 )/JAC(kBZO ,kBZO )
           JAC(kHO2 ,kOH  ) = JAC(kHO2 ,kOH  )
      &         - JAC(kHO2 ,kBZO )*JAC(kBZO ,kOH  )/JAC(kBZO ,kBZO )
           JAC(kHO2 ,kHO2 ) = JAC(kHO2 ,kHO2 )
@@ -767,8 +746,10 @@ c
 c  Jacobian is modified due to substitution of BZNO
 c
 c
-c    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
+c  N2O5   NO3    OH   HO2  RO2R  R2O2  RO2N  CCO3  RCO3  MCO3  BZCO  CXO2  HCO3  TBUO   BZO  BZNO
 c
+          JAC(kHO2 ,kNO3 ) = JAC(kHO2 ,kNO3 )
+     &         - JAC(kHO2 ,kBZNO)*JAC(kBZNO,kNO3 )/JAC(kBZNO,kBZNO)
           JAC(kHO2 ,kHO2 ) = JAC(kHO2 ,kHO2 )
      &         - JAC(kHO2 ,kBZNO)*JAC(kBZNO,kHO2 )/JAC(kBZNO,kBZNO)
 c
@@ -777,20 +758,22 @@ c
 c
 c  solve the matrix
 c
-      if (errbig.gt.500.0 .or. lsafe) then
-        thresh = 1.0e+15
-      else
+      if (errbig.lt.500.0) then
         thresh = 1.0e-15
+      else
+        thresh = 1.0e+15
       endif
       lusecp = .false.
 c
       nendcp=nend-4
       do j=nstrt,nendcp
         if (cncrad(j).le.thresh) then
+          cncrad(j) = gain(j)/loss(j)*cncrad(j)
           do i=nstrt,nendcp
             jac(i,j) = 0.
             jac(j,i) = 0.
           enddo
+          rate(j) = 0.
           jac(j,j) = 1.
       else
         lusecp = .true.
@@ -805,48 +788,32 @@ c
 c  update radical concentrations
 c
       errbig = 0.
-      weight = 1.
-      rlim = 100.0
-      if (kount.gt.10) then
-        rlim = 10.0
-        weight = 0.7
-      elseif (kount.gt.50) then
-        rlim = 3.0
-        weight = 0.5
-      endif
-      do l=nstrt,nendcp
-        if (cncrad(l) .le. thresh) then ! solve independantly
-          cncrad(l) = crold(l)*(1.-weight) +
-     &                         weight*gain(l)/loss(l)*crold(l)
-          cncrad(l) = amax1(cncrad(l),crold(l)/rlim)
-          cncrad(l) = amin1(cncrad(l),crold(l)*rlim)
+      if (kount.gt.5) weight = 0.5
+      do l=nstrt,nend-4
+        if (cncrad(l) .le. thresh) then
           err = abs((cncrad(l)/crold(l))-1.0)
           err = amin1(err,thresh)
-        else                            ! part of coupled solution
-          rate(l) = amin1(rate(l), rlim*cncrad(l))
-          rate(l) = amax1(rate(l), -cncrad(l)*(1.0-(1.0/rlim)))
+        else
+          err = abs(rate(l))/cncrad(l)
+        endif
+        errbig = amax1(errbig,err)
+        if (rate(l)*weight.gt.10.0*cncrad(l)) then
+          cncrad(l) = cncrad(l)*10.
+        elseif (-rate(l)*weight.gt.0.9*cncrad(l)) then
+          cncrad(l) = cncrad(l)/10.
+        else
           cncrad(l) = cncrad(l) + rate(l)*weight
-          err = abs((cncrad(l)/crold(l))-1.0)
         endif
         cncrad(l) = amax1(cncrad(l), bdlrad)
-c        cncrad(l) = amin1(cncrad(l), 10.0)
-        errbig = amax1(errbig,err)
       enddo
 c
-      if (kount.eq.100) then
-        lsafe = .true.
-        write(iout,'(a)') 'WARNING:'
-        write(iout,'(a)') 'Monitor slow convergence in RADSLVR5'
-        write(iout,'(a3,30a9)')
-     &     ' ', (nmrad(l),l=nstrt,nendcp),'rel err'
-        do l=nstrt,nendcp
-          cncrad(l) = 1.0e-12
-        enddo
-      endif
-      if (kount.ge.100)
-     &   write(iout,'(i3,1p30e9.2)')
-     &     kount, (cncrad(l),l=nstrt,nendcp), errbig
-c
+      r(  9) = rk(  9)*conc(kNO)*cncrad(kNO3)
+      r( 11) = rk( 11)*conc(kNO2)*cncrad(kNO3)
+      r( 12) = rk( 12)*cncrad(kN2O5)
+      r( 13) = rk( 13)*cncrad(kN2O5)*H2O
+      r( 14) = rk( 14)*conc(kNO2)*cncrad(kNO3)
+      r( 15) = rk( 15)*cncrad(kNO3)
+      r( 16) = rk( 16)*cncrad(kNO3)
       r( 21) = rk( 21)*cncrad(kOH)*conc(kNO)
       r( 24) = rk( 24)*cncrad(kOH)*conc(kHONO)
       r( 25) = rk( 25)*cncrad(kOH)*conc(kNO2)
@@ -861,6 +828,7 @@ c
       r( 37) = rk( 37)*cncrad(kHO2)*cncrad(kHO2)
       r( 38) = rk( 38)*cncrad(kHO2)*cncrad(kHO2)*H2O
       r( 39) = rk( 39)*cncrad(kNO3)*cncrad(kHO2)
+      r( 40) = rk( 40)*cncrad(kNO3)*cncrad(kNO3)
       r( 42) = rk( 42)*conc(kHO2H)*cncrad(kOH)
       r( 43) = rk( 43)*cncrad(kOH)*cncrad(kHO2)
       r( 44) = rk( 44)*cncrad(kOH)*conc(kSO2)
@@ -942,21 +910,32 @@ c
       r(126) = rk(126)*conc(kHCHO)*cncrad(kHO2)
       r(127) = rk(127)*cncrad(kHCO3)
       r(128) = rk(128)*cncrad(kHCO3)*conc(kNO)
+      r(129) = rk(129)*conc(kHCHO)*cncrad(kNO3)
       r(130) = rk(130)*conc(kCCHO)*cncrad(kOH)
+      r(132) = rk(132)*conc(kCCHO)*cncrad(kNO3)
       r(133) = rk(133)*conc(kRCHO)*cncrad(kOH)
+      r(135) = rk(135)*conc(kRCHO)*cncrad(kNO3)
       r(136) = rk(136)*conc(kACET)*cncrad(kOH)
       r(138) = rk(138)*conc(kMEK)*cncrad(kOH)
       r(140) = rk(140)*conc(kMEOH)*cncrad(kOH)
       r(141) = rk(141)*conc(kCOOH)*cncrad(kOH)
       r(143) = rk(143)*conc(kROOH)*cncrad(kOH)
       r(147) = rk(147)*conc(kGLY)*cncrad(kOH)
+      r(148) = rk(148)*conc(kGLY)*cncrad(kNO3)
       r(150) = rk(150)*conc(kMGLY)*cncrad(kOH)
+      r(151) = rk(151)*conc(kMGLY)*cncrad(kNO3)
       r(153) = rk(153)*conc(kPHEN)*cncrad(kOH)
+      r(154) = rk(154)*conc(kPHEN)*cncrad(kNO3)
       r(155) = rk(155)*conc(kCRES)*cncrad(kOH)
+      r(156) = rk(156)*conc(kCRES)*cncrad(kNO3)
+      r(157) = rk(157)*conc(kNPHE)*cncrad(kNO3)
       r(158) = rk(158)*conc(kBALD)*cncrad(kOH)
+      r(160) = rk(160)*conc(kBALD)*cncrad(kNO3)
       r(161) = rk(161)*conc(kMETH)*cncrad(kOH)
+      r(163) = rk(163)*conc(kMETH)*cncrad(kNO3)
       r(166) = rk(166)*conc(kMVK)*cncrad(kOH)
       r(170) = rk(170)*conc(kISPD)*cncrad(kOH)
+      r(172) = rk(172)*conc(kISPD)*cncrad(kNO3)
       r(174) = rk(174)*conc(kPROD)*cncrad(kOH)
       r(176) = rk(176)*conc(kRNO3)*cncrad(kOH)
       r(178) = rk(178)*conc(kDCB1)*cncrad(kOH)
@@ -964,8 +943,11 @@ c
       r(182) = rk(182)*conc(kDCB3)*cncrad(kOH)
       r(184) = rk(184)*CH4*cncrad(kOH)
       r(185) = rk(185)*conc(kETHE)*cncrad(kOH)
+      r(187) = rk(187)*conc(kETHE)*cncrad(kNO3)
       r(189) = rk(189)*conc(kISOP)*cncrad(kOH)
+      r(191) = rk(191)*conc(kISOP)*cncrad(kNO3)
       r(193) = rk(193)*conc(kTERP)*cncrad(kOH)
+      r(195) = rk(195)*conc(kTERP)*cncrad(kNO3)
       r(197) = rk(197)*conc(kALK1)*cncrad(kOH)
       r(198) = rk(198)*conc(kALK2)*cncrad(kOH)
       r(199) = rk(199)*conc(kALK3)*cncrad(kOH)
@@ -974,7 +956,9 @@ c
       r(202) = rk(202)*conc(kARO1)*cncrad(kOH)
       r(203) = rk(203)*conc(kARO2)*cncrad(kOH)
       r(204) = rk(204)*conc(kOLE1)*cncrad(kOH)
+      r(206) = rk(206)*conc(kOLE1)*cncrad(kNO3)
       r(208) = rk(208)*conc(kOLE2)*cncrad(kOH)
+      r(210) = rk(210)*conc(kOLE2)*cncrad(kNO3)
       r(212) = rk(212)*cncrad(kOH)*conc(kCPO1)
       r(213) = rk(213)*cncrad(kOH)*conc(kCPO2)
       r(214) = rk(214)*cncrad(kOH)*conc(kCPO3)
@@ -1001,15 +985,15 @@ c
       r(235) = rk(235)*cncrad(kOH)*conc(kCAS2)
       r(236) = rk(236)*cncrad(kOH)*conc(kCAS3)
       r(237) = rk(237)*cncrad(kOH)*conc(kCAS4)
- 
-      if (errbig.gt.tol) goto 14
+
+      if (errbig.gt.tol) goto 13
 c
 c  new group of radicals
 c
 c  HCO3
 c
-       Loss(kHCO3 )= +( 1.000)*r(127)+( 1.000)*r(128)
-       Gain(kHCO3 )= +( 1.000)*r(126)
+        Loss(kHCO3 )= +( 1.000)*r(127)+( 1.000)*r(128)
+        Gain(kHCO3 )= +( 1.000)*r(126)
 c
 c  first order method chosen for this radical
 c  solved by direct substitution
@@ -1023,8 +1007,8 @@ c  new group of radicals
 c
 c  TBUO
 c
-       Loss(kTBUO )= +( 1.000)*r(115)+( 1.000)*r(116)
-       Gain(kTBUO )= +( 0.236)*r(199)
+        Loss(kTBUO )= +( 1.000)*r(115)+( 1.000)*r(116)
+        Gain(kTBUO )= +( 0.236)*r(199)
 c
 c  first order method chosen for this radical
 c  solved by direct substitution
@@ -1072,7 +1056,7 @@ c
       return
 c
  900  continue
-      write(iout,'(//,A,//)') 'ERROR in RADSLVR5:'
+      write(iout,'(//,A)') 'ERROR in RADSLVR5:'
       write(iout,*) 'Zero determinant in CPIVOT at ', ierr
       write(iout,*) 'igrd,i, j, k = ', igrdchm,ichm,jchm,kchm
       write(iout,*) 'LDARK is set ', ldark

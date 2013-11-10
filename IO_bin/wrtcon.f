@@ -121,7 +121,7 @@ cBNM  -  add ability to print one layer to its own avrg file
           do l = 1,nsptmp
             read(spname(lavmap(l)),'(10a1)') (ispec(n,l),n=1,10)
           enddo
-          write(iunit+k-1) idat1,btim,idat2,etim
+          write(iunit+(k-1)*(1+nrads)) idat1,btim,idat2,etim
 	enddo
       endif
 c
@@ -133,7 +133,7 @@ c
             write(iunit) nseg,(ispec(n,l),n=1,10),
      &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
 	  else    !write to layered .avrg file
-            write(iunit+k-1) nseg,(ispec(n,l),n=1,10),
+            write(iunit+(k-1)*(1+nrads)) nseg,(ispec(n,l),n=1,10),
      &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
 	  endif
         enddo

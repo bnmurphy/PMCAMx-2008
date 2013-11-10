@@ -99,6 +99,13 @@ c
       dimension tsrf(ngcol,ngrow),psptim(ngcol,ngrow),
      &          tsnext(ngcol,ngrow)
       character*60 string
+
+c BNM --- Declare variables for new NCEP rainfield ----
+      integer hrncep
+      real rrncep(ngcol,ngrow)
+c BNM
+
+
 c
 c-----Entry point
 c
@@ -365,8 +372,27 @@ c
             read(iunit,end=7000,err=7001)
      &           ((pcpwtr(i,j,k),i=1,ngcol),j=1,ngrow) 
             read(iunit,end=7000,err=7001)
-     &           ((cldod(i,j,k),i=1,ngcol),j=1,ngrow) 
+     &           ((cldod(i,j,k),i=1,ngcol),j=1,ngrow)
           enddo 
+
+c BNM ---- Read in alternate rain fields from NCEP -------- 
+	    read(95),hrncep
+	    read(95),((rrncep(i,j),i=1,ngcol),j=1,ngrow)
+	    print *,'The current hour from the ncep data-file read is: ',hrncep
+
+c       Back-Calculate the precipitable water content (pwc) for the surface cell given ncep data
+	    do i = 1,ngcol
+		do j = 1,ngrow
+		    do k = 1,10
+c			pcpwtr(i,j,k) = (rrncep(i,j)**0.877) /1e7 *1e6
+			pcpwtr(i,j,k) = 0   !Test lower bound of rain sensitivity => no rain
+		    enddo
+		    do k = 11,14   !Test no rain in layers 11-14 as well
+			pcpwtr(i,j,k) = 0
+		    enddo
+		enddo
+	    enddo
+c BNM
 c
           if (.not.ly2k .and. idt.gt.100000) call juldate(idt)
           if (hr.ge.2400.) then

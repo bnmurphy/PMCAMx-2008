@@ -249,10 +249,16 @@ c
       r(227) = rk(227)*cncrad(kOH)*conc(kCOO7)
       r(228) = rk(228)*cncrad(kOH)*conc(kCOO8)
       r(229) = rk(229)*cncrad(kOH)*conc(kCOO9)
-      r(230) = rk(230)*cncrad(kOH)*conc(kCBS1)
-      r(231) = rk(231)*cncrad(kOH)*conc(kCBS2)
-      r(232) = rk(232)*cncrad(kOH)*conc(kCBS3)
-      r(233) = rk(233)*cncrad(kOH)*conc(kCBS4)
+
+c      r(230) = rk(230)*cncrad(kOH)*conc(kCBS1)
+c      r(231) = rk(231)*cncrad(kOH)*conc(kCBS2)
+c      r(232) = rk(232)*cncrad(kOH)*conc(kCBS3)
+c      r(233) = rk(233)*cncrad(kOH)*conc(kCBS4)
+      r(230) = 0
+      r(231) = 0
+      r(232) = 0
+      r(233) = 0
+
       r(234) = rk(234)*cncrad(kOH)*conc(kCAS1)
       r(235) = rk(235)*cncrad(kOH)*conc(kCAS2)
       r(236) = rk(236)*cncrad(kOH)*conc(kCAS3)

@@ -65,7 +65,6 @@ c
       include "camx.prm"
       include "chmstry.com"
       include "filunit.com"
-      include "flags.com"
 c
       parameter (MXDDM = MXSPEC + MXRADCL)
       parameter (WT = 0.5)
@@ -84,7 +83,7 @@ c=========================== Process Analysis End ==============================
 c
       dimension conc(MXSPEC+1),rate(MXSPEC+1),res(MXSPEC),rrxn(MXRXN),
      &          rloss(MXSPEC+1),xjac(MXSPEC,MXSPEC),cncrad(MXRADCL),
-     &          crold(MXRADCL),cncold(MXSPEC),ctmp(MXSPEC+1),avgrad(MXRADCL)
+     &          cncold(MXSPEC),ctmp(MXSPEC+1),avgrad(MXRADCL)
       dimension y(MXDDM+1), prod(MXDDM), stmp(MXDDM), ipvt(MXDDM),
      &          djac(MXDDM+1,MXDDM+1), amx(MXDDM,MXDDM), 
      &          bmx(MXDDM,MXDDM), cmx(MXDDM,MXDDM),
@@ -218,7 +217,6 @@ c-----Initialize time-averaging of radical concentrations
 c
       do l=1,nrad
         avgrad(l) = 0.0
-        crold(l) = cncrad(l) !VAK
       enddo
 c
 c-----Start iteration loop for the solution of the fast state species
@@ -257,9 +255,7 @@ c
 c
 c-----Solve for radical species concentrations
 c
-      call radslvr(ldark,H2O,atm,O2,CH4,H2,cncrad,ctmp,rrxn,crold,dt) !VAK
-
-
+      call radslvr(ldark,H2O,atm,O2,CH4,H2,cncrad,ctmp,rrxn)
 c
 c-----Get rate and Jacobian for fast state species
 c
@@ -325,43 +321,11 @@ c
       enddo
       do l=1,nrad
         avgrad(l) = avgrad(l) + (dt/dtin)*cncrad(l)
-        crold(l) = cncrad(l) !VAK
       enddo
 c
 c-----Compute reaction rate
 c
       call rxnrate(H2O,atm,O2,CH4,H2,cncrad,ctmp,rrxn)
-
-
-c-----------------write OH Tsimpidi------------------------
-      call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
-c      do irads = 1,nrads
-c	if (l3davg.or.kchm.eq.1) then
-c	  print *, 'l3davg = ',l3davg
-c	  print *,'Time: ',dtin
-c	  print *,'Grid cell: i=',ichm,' j=',jchm,' k=',kchm
-c	  print *,'iavg = ',iavg
-c	  write(iavg+(kchm-1)*(1+nrads)+1) dtin,ichm,jchm,cncrad(kOH)
-c	  print *, 'Writing to file unit: ',iavg+(kchm-1)*(1+nrads)+1-1
-c	  write(iavg+(kchm-1)*(1+nrads)+2) dtin,ichm,jchm,cncrad(kNO3)
-c	  print *, 'Writing to file unit: ',iavg+(kchm-1)*(1+nrads)+2-1
-c	endif  
-c      enddo
-
-	if (ichm.eq.55.and.jchm.eq.61) then
-	print *,'time = ',time, 'cncrad(OH) = ',cncrad(kOH)
-	print *,'time = ',time, 'cncrad(NO3) = ',cncrad(kNO3)
-	print *,'time = ',time, 'cncrad(HO2) = ',cncrad(kHO2)
-	endif
-
-	bnmradcnc(1,ichm,jchm,kchm) = cncrad(kOH)
-	bnmradcnc(2,ichm,jchm,kchm) = cncrad(kNO3)
-c	bnmradcnc(3,ichm,jchm,kchm) = cncrad(kN2O5)
-	bnmradcnc(3,ichm,jchm,kchm) = cncrad(kHO2)
-
-c----------------------------------------------------------
-
-
 c
 c-----Get rates for slow species
 c

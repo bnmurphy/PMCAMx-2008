@@ -232,39 +232,62 @@ c
       r(210) = rk(210)*conc(kOLE2)*cncrad(kNO3)
       r(211) = rk(211)*conc(kOLE2)*cncrad(kO)
 
-C     HOA Aging Reactions
-      r(212) = rk(212)*cncrad(kOH)*conc(kCPO1)
-      r(213) = rk(213)*cncrad(kOH)*conc(kCPO2)
-      r(214) = rk(214)*cncrad(kOH)*conc(kCPO3)
-      r(215) = rk(215)*cncrad(kOH)*conc(kCPO4)
-      r(216) = rk(216)*cncrad(kOH)*conc(kCPO5)
-      r(217) = rk(217)*cncrad(kOH)*conc(kCPO6)
-      r(218) = rk(218)*cncrad(kOH)*conc(kCPO7)
-      r(219) = rk(219)*cncrad(kOH)*conc(kCPO8)
-      r(220) = rk(220)*cncrad(kOH)*conc(kCPO9)
+c      r(212) = rk(212)*cncrad(kOH)*conc(kCPO1)
+c      r(213) = rk(213)*cncrad(kOH)*conc(kCPO2)
+c      r(214) = rk(214)*cncrad(kOH)*conc(kCPO3)
+c      r(215) = rk(215)*cncrad(kOH)*conc(kCPO4)
+c      r(216) = rk(216)*cncrad(kOH)*conc(kCPO5)
+c      r(217) = rk(217)*cncrad(kOH)*conc(kCPO6)
+c      r(218) = rk(218)*cncrad(kOH)*conc(kCPO7)
+c      r(219) = rk(219)*cncrad(kOH)*conc(kCPO8)
+c      r(220) = rk(220)*cncrad(kOH)*conc(kCPO9)
+c      r(221) = rk(221)*cncrad(kOH)*conc(kCOO1)
+c      r(222) = rk(222)*cncrad(kOH)*conc(kCOO2)
+c      r(223) = rk(223)*cncrad(kOH)*conc(kCOO3)
+c      r(224) = rk(224)*cncrad(kOH)*conc(kCOO4)
+c      r(225) = rk(225)*cncrad(kOH)*conc(kCOO5)
+c      r(226) = rk(226)*cncrad(kOH)*conc(kCOO6)
+c      r(227) = rk(227)*cncrad(kOH)*conc(kCOO7)
+c      r(228) = rk(228)*cncrad(kOH)*conc(kCOO8)
+c      r(229) = rk(229)*cncrad(kOH)*conc(kCOO9)
 
-C     OPOA Aging Reactions
-      r(221) = rk(221)*cncrad(kOH)*conc(kCOO1)
-      r(222) = rk(222)*cncrad(kOH)*conc(kCOO2)
-      r(223) = rk(223)*cncrad(kOH)*conc(kCOO3)
-      r(224) = rk(224)*cncrad(kOH)*conc(kCOO4)
-      r(225) = rk(225)*cncrad(kOH)*conc(kCOO5)
-      r(226) = rk(226)*cncrad(kOH)*conc(kCOO6)
-      r(227) = rk(227)*cncrad(kOH)*conc(kCOO7)
-      r(228) = rk(228)*cncrad(kOH)*conc(kCOO8)
-      r(229) = rk(229)*cncrad(kOH)*conc(kCOO9)
+      r(212) = 0
+      r(213) = 0
+      r(214) = 0
+      r(215) = 0
+      r(216) = 0
+      r(217) = 0
+      r(218) = 0
+      r(219) = 0
+      r(220) = 0
+      r(221) = 0
+      r(222) = 0
+      r(223) = 0
+      r(224) = 0
+      r(225) = 0
+      r(226) = 0
+      r(227) = 0
+      r(228) = 0
+      r(229) = 0
 
-C     Biogenic SOA Aging Reactions
-      r(230) = rk(230)*cncrad(kOH)*conc(kCBS1)
-      r(231) = rk(231)*cncrad(kOH)*conc(kCBS2)
-      r(232) = rk(232)*cncrad(kOH)*conc(kCBS3)
-      r(233) = rk(233)*cncrad(kOH)*conc(kCBS4)
+c      r(230) = rk(230)*cncrad(kOH)*conc(kCBS1)
+c      r(231) = rk(231)*cncrad(kOH)*conc(kCBS2)
+c      r(232) = rk(232)*cncrad(kOH)*conc(kCBS3)
+c      r(233) = rk(233)*cncrad(kOH)*conc(kCBS4)
+      r(230) = 0
+      r(231) = 0
+      r(232) = 0
+      r(233) = 0
 
-C     Antropogenic SOA Aging Reactions
-      r(234) = rk(234)*cncrad(kOH)*conc(kCAS1)
-      r(235) = rk(235)*cncrad(kOH)*conc(kCAS2)
-      r(236) = rk(236)*cncrad(kOH)*conc(kCAS3)
-      r(237) = rk(237)*cncrad(kOH)*conc(kCAS4)
+c      r(234) = rk(234)*cncrad(kOH)*conc(kCAS1)
+c      r(235) = rk(235)*cncrad(kOH)*conc(kCAS2)
+c      r(236) = rk(236)*cncrad(kOH)*conc(kCAS3)
+c      r(237) = rk(237)*cncrad(kOH)*conc(kCAS4)
+
+      r(234) = 0
+      r(235) = 0
+      r(236) = 0
+      r(237) = 0
 
 c
       return
