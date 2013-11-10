@@ -41,15 +41,7 @@ c
       include 'grid.com'
       include 'flags.com'
 
-c BNM ----------------------------------------------
-
       character*2 clay(14)     !Added by BNM to carry naming for avrg layer output files
-      character*100 filencep   !Added for new rain field
-      character*3 cdate
-      integer hrncep
-
-c BNM
-
 c
 c======================== Source Apportion Begin =======================
 c
@@ -436,18 +428,6 @@ c
           if( cldhdr(1:10) .EQ. 'CAMX CLOUD' ) goto 7011
           goto 7006
         endif
-
-c BNM ---- Open NCEP rain field file -----
-	do i = 4,istrln(filtmp)
-	    if (filtmp(i-3:i).eq.'2001') then
-		cdate = filtmp(i+1:i+3)
-	    endif
-	enddo
-	filencep = '/home/bnmurphy/Research/Rain/clra.2001'//cdate//'.4rpos.36.14.mm5.ld.camx.ncep'
-        print *,'ncep file = ',filencep
-	open(unit=95,file=filencep, form='UNFORMATTED')
-c BNM
-
       endif
       if( lwet .and. filtmp .EQ. ' ' ) goto 7003
 c

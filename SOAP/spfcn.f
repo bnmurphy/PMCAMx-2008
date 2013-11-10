@@ -21,7 +21,7 @@ c
 c
       fval = 0.0
       do i = 1, n
-        ca(i) = ct(i) * oaro(i) * tom / ( tom + cs(i) / mw(i) )
+        ca(i) = ct(i) * tom / ( tom + cs(i) / mw(i) )
         fval  = fval + ca(i) / mw(i)
       enddo
       fval = fval + cpx - tom

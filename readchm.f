@@ -956,24 +956,24 @@ c            ntemp = 231
 c            ncstar = 109
 
 c       Read in all data from look-up tables
-            open (96, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
-     &           'SOAP/POA_DHVAP.txt', status='OLD')
-            open (97, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
-     &           'SOAP/POA_LOGCSTAR.txt', status='OLD')
-            open (98, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
-     &           'SOAP/POA_T.txt', status='OLD')
-            open (99, file='/home/bnmurphy/Research/PMCAMx/PMCAMx_rain/'//
-     &          'SOAP/SOA_DHVAP.txt', status='OLD')
-            do tempcnt = 1,ntemp
-                read(98, *), dhtemp(tempcnt)
-                read(96, *), (poadhvap(tempcnt,icstar),icstar=1,ncstar)
-                read(99, *), (soadhvap(tempcnt,icstar),icstar=1,ncstar)
-            end do
-            read(97, *), (dhcstar(icstar),icstar=1,ncstar)
-            close(96)
-            close(97)
-            close(98)
-            close(99)
+c            open (96, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_SEMIvol/'//
+c     &           'SOAP/POA_DHVAP.txt', status='OLD')
+c            open (97, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_SEMIvol/'//
+c     &           'SOAP/POA_LOGCSTAR.txt', status='OLD')
+c            open (98, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_SEMIvol/'//
+c     &           'SOAP/POA_T.txt', status='OLD')
+c            open (99, file='/home/bnmurphy/Research/PMCAMx/PMCAMxSAPRC_SEMIvol/'//
+c     &          'SOAP/SOA_DHVAP.txt', status='OLD')
+c            do tempcnt = 1,ntemp
+c                read(98, *), dhtemp(tempcnt)
+c                read(96, *), (poadhvap(tempcnt,icstar),icstar=1,ncstar)
+c                read(99, *), (soadhvap(tempcnt,icstar),icstar=1,ncstar)
+c            end do
+c            read(97, *), (dhcstar(icstar),icstar=1,ncstar)
+c            close(96)
+c            close(97)
+c            close(98)
+c            close(99)
 
 c=============== End Hvap Table Open and Read =============
 

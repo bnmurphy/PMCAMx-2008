@@ -623,6 +623,38 @@ c
 c$omp end parallel
 c
   91  continue  !Layer
+c
+
+c BNM cccc ------------- Write Radicals Murphy -------------- cccc
+c Write these radicals once every time step instead of within the
+c  Trap.f subroutine (1 write statement vs 90*97*14 write statements
+
+c-----------------write OH Tsimpidi------------------------
+c      call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
+       do irads = 1,nrads
+	do k = 1,MXLAY1
+          if (l3davg.or.k.eq.1) then
+c            print *, 'l3davg = ',l3davg
+c            print *,'Trap Time: ',dtchem
+c	    print *,'Time Time: ',time
+c            print *,'Grid cell: i=',ichm,' j=',jchm,' k=',kchm
+c            print *,'iavg = ',iavg
+            write(iavg+(k-1)*(1+nrads)+irads) time,((bnmradcnc(irads,i,j,k),i=1,MXCOL1),j=1,MXROW1)
+	     print *,'bnmradcnc(OH,Pit) = ', bnmradcnc(1,55,61,k)
+	     print *,'bnmradcnc(NO3,Pit) = ', bnmradcnc(2,55,61,k)
+	     print *,'bnmradcnc(HO2,Pit) = ', bnmradcnc(3,55,61,k)
+
+
+c            print *, 'Writing to file unit: ',iavg+(k-1)*(1+nrads)+irads, '  for radical ',crads(irads)
+          endif
+        enddo
+       enddo
+c----------------------------------------------------------
+
+
+
+
+c BNM cccc -------------------------------------------------
 
 c
 c     if fullaero was called

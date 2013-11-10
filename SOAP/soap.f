@@ -175,10 +175,10 @@ c	print *,'Begining time for Hvap = ',tarray2(1)
 c BNM
 
 ccc Traditional Hvap calculation, Clausius Clapeyron ccc
-cBNM      do i=1,ntot
-cBNM         csatT(i)=csat(i)*(cstemp(i)/tempk)*exp((deltah(i)/8.314)
-cBNM     &                *(1/cstemp(i)-1/tempk))
-cBNM      enddo     
+      do i=1,ntot
+         csatT(i)=csat(i)*(cstemp(i)/tempk)*exp((deltah(i)/8.314)
+     &                *(1/cstemp(i)-1/tempk))
+      enddo     
 
 ccccccc  ------- New Hvap Look-Up Table -------- cccccccccc
 c      print *,'Makes it to Hvap calc', igrdchm
@@ -188,51 +188,50 @@ c    Set Variables
 c	   ntemp = 231
 c          ncstar = 109
 
-
-c   Search for T (seach through all T's)
-c	Identify index that is upper-bound on values
-c        eg. if tempk=298.3, return index for temp=298.5
-      if (tempk.lt.200) then
-	ctemp = 1
-      elseif (tempk.gt.315) then
-        ctemp = ntemp
-      else
-	do tempcnt = 1,ntemp
-	    if (dhtemp(tempcnt).ge.tempk) then
-		ctemp = tempcnt
-		goto 300
-	    endif
-	enddo
-      endif
- 300  continue
-
-c    Iterate on deltah and Cstar to get Cstemp
-c	Search for Cstar index
-	    do i = 1,ntot
-	    	csat1 = csat(i)
-		csat2 = 0
-		iter = 0
-		do while (abs(log10(csat1)-log10(csat2)).ge.0.1.and.iter.le.20)
-		    iter = iter + 1
-		    csat2 = csat1
-		    do icstar = 1,ncstar
-			if (dhcstar(icstar).ge.log10(csat1)) then
-			    if (i.le.20) then
-				deltah(i) = poadhvap(ctemp,icstar)*1000
-			    else
-				deltah(i) = soadhvap(ctemp,icstar)*1000
+cc   Search for T (seach through all T's)
+cc	Identify index that is upper-bound on values
+cc        eg. if tempk=298.3, return index for temp=298.5
+c      if (tempk.lt.200) then
+c	ctemp = 1
+c      elseif (tempk.gt.315) then
+c        ctemp = ntemp
+c      else
+c	do tempcnt = 1,ntemp
+c	    if (dhtemp(tempcnt).ge.tempk) then
+c		ctemp = tempcnt
+c		goto 300
+c	    endif
+c	enddo
+c      endif
+c 300  continue
+c
+cc    Iterate on deltah and Cstar to get Cstemp
+cc	Search for Cstar index
+c	    do i = 1,ntot
+c	    	csat1 = csat(i)
+c		csat2 = 0
+c		iter = 0
+c		do while (abs(log10(csat1)-log10(csat2)).ge.0.1.and.iter.le.20)
+c		    iter = iter + 1
+c		    csat2 = csat1
+c		    do icstar = 1,ncstar
+c			if (dhcstar(icstar).ge.log10(csat1)) then
+c			    if (i.le.20) then
+c				deltah(i) = poadhvap(ctemp,icstar)*1000
+c			    else
+c				deltah(i) = soadhvap(ctemp,icstar)*1000
 c				if (deltah(i).lt.8) deltah(i) = 8
-			    endif
-			    csat1=csat(i)*(cstemp(i)/tempk)*exp((deltah(i)/8.314)
-     &						*(1/cstemp(i)-1/tempk))
-			    goto 301
-			endif
-		    enddo
- 301		    continue
-		enddo
-
-		csatT(i) = csat1
-	    enddo
+c			    endif
+c			    csat1=csat(i)*(cstemp(i)/tempk)*exp((deltah(i)/8.314)
+c     &						*(1/cstemp(i)-1/tempk))
+c			    goto 301
+c			endif
+c		    enddo
+c 301		    continue
+c		enddo
+c
+c		csatT(i) = csat1
+c	    enddo
 
 ccccc ----------- End New Hvap Look-Up Table --------------
 
