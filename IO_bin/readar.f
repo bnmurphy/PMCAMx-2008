@@ -113,6 +113,14 @@ c-----------------------------------------------------------------
       do 10 l = 1,narspc
         do j = 1,nrow
           do i = 1,ncol
+c-----Added if statements to set POC and PEC emissions zero--------
+c            if (l.ge.23.and.l.le.28) then   ! PEC
+c              aremis(i,j,l) = 0.0
+c            endif
+c            if (l.ge.35.and.l.le.40) then   ! POC
+c              aremis(i,j,l) = 0.0
+c            endif
+c-------------------------------------------------------------------
             if (aremis(i,j,l).lt.0.) then
               write(iout,'(//,a)') 'ERROR in READAR:'
               write(iout,'(a,i3)') 'Negative emissions for grid:',igrd

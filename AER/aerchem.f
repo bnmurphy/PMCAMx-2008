@@ -97,11 +97,6 @@ c
          nsecx    = 0 ! not used
          ntotalx2 = ntotal
          nsecx2   = nsec
-
-c BNM
-c	print *, 'Eqpart is called'
-c BNM
-
          call eqpart(t1,q)
       elseif(aerm.eq.'HYBR') then
          ntotalx  = ntotald

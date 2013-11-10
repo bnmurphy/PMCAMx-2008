@@ -200,8 +200,8 @@ c BNM    - add avrg output files for each layer
         write(iavg+(ilay-1)) ifile,note,nseg,navspc,idat1,tim1,idat2,tim2
         write(iavg+(ilay-1)) zero,zero,izone,orgx,orgy,dx,dy,nx,ny,nlayer,
      &            izero,izero,zero,zero,zero
-        write(iavg+(ilay-1)) izero,izero,nx,ny
-        write(iavg+(ilay-1)) ((icspec(n,l),n=1,10),l=1,navspc)
+        write(iavg+(nrads+1)*(ilay-1)) izero,izero,nx,ny
+        write(iavg+(nrads+1)*(ilay-1)) ((icspec(n,l),n=1,10),l=1,navspc)
       enddo  !nlayer  BNM
 
 c BNM

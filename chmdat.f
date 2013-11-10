@@ -117,4 +117,11 @@ c
      &          9999., 800.,1000., 800.,9999.,1000., 500., 500.,
      &          1500., 700.,9999.,9999., 600., 800., 800./ 
 c
+
+c     Pavan: to make compatible w/ ifort this data statement was removed from Inc/deposit.com and placed here
+      data diadep /0.055013, 0.12847,     0.3, 0.70057,  1.6360,
+     &               3.8204,  8.9214,  20.833/
+      data wfdep  /  0.0294,  0.2094,  0.4061,  0.2216,  0.1335,
+     &               0.4078,  0.4205,  0.1717/
+
       end

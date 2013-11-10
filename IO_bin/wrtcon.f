@@ -105,23 +105,23 @@ c
           read(spname(l),'(10a1)') (ispec(n,l),n=1,10) 
         enddo
 c
-          rewind(iunit)
-          write(iunit) ifile,note,nseg,nsptmp,idat2,etim,idat3,etim3
-          write(iunit) zero,zero,izone,orgx,orgy,dx,dy,
+        rewind(iunit)
+        write(iunit) ifile,note,nseg,nsptmp,idat2,etim,idat3,etim3  !VAK
+        write(iunit) zero,zero,izone,orgx,orgy,dx,dy,
      &               nox,noy,noz,izero,izero,zero,zero,zero
-          write(iunit) izero,izero,nox,noy
-          write(iunit) ((ispec(n,l),n=1,10),l=1,nsptmp)
-          write(iunit) idat2,etim,idat3,etim3
+        write(iunit) izero,izero,nox,noy
+        write(iunit) ((ispec(n,l),n=1,10),l=1,nsptmp)
+        write(iunit) idat2,etim,idat3,etim3           !VAK
       else
 c
 cBNM  -  add ability to print one layer to its own avrg file
 
-        if (.not.l3davg) nlayer = 1 
+        if (.not.l3davg) nlayer = 1
 	do k = 1,nlayer
           do l = 1,nsptmp
             read(spname(lavmap(l)),'(10a1)') (ispec(n,l),n=1,10)
           enddo
-          write(iunit+(k-1)*(1+nrads)) idat1,btim,idat2,etim
+          write(iunit+(k-1)) idat1,btim,idat2,etim
 	enddo
       endif
 c
@@ -133,12 +133,12 @@ c
             write(iunit) nseg,(ispec(n,l),n=1,10),
      &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
 	  else    !write to layered .avrg file
-            write(iunit+(k-1)*(1+nrads)) nseg,(ispec(n,l),n=1,10),
+            write(iunit+(k-1)) nseg,(ispec(n,l),n=1,10),
      &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
 	  endif
         enddo
       enddo
 cBNM  - adding does not affect this point on
-
+c
       return
       end

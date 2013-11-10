@@ -62,11 +62,9 @@ c
         do n = 1,4
           nc = nrow(1)
           if (n.gt.2) nc = ncol(1)
-         read(ibc) idum,(bcspec(j),j=1,10),iedge,
+          read(ibc) idum,(bcspec(j),j=1,10),iedge,
      &              ((bctmp(i,k,n,l),k=1,nz),i=1,nc)
-c BNM             read(ibc) (bcspec(j),j=1,10),iedge,
-c     &              ((bctmp(i,k,n,l),k=1,nz),i=1,nc)
-	enddo
+        enddo
       enddo
 c
 
