@@ -1,5 +1,5 @@
       subroutine hadvppm(nn,dt,dx,con,vel,mscl,flxarr,flux1,
-     &                   flux2,saflux,fc1,fc2,subd)	!BNM added subd 9-23-09
+     &                   flux2,saflux,fc1,fc2,subd,fp,fm) !BNM added subd 9-23-09
 c  
 c-----CAMx v4.02 030709
 c

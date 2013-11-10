@@ -95,6 +95,8 @@ c
       real*8 fluxtmp(MXSPEC,8,MXLAYA)
       dimension tarray2(2)
       integer subd(ncol,nrow), subdvec(MX1D)	!BNM 9-23-09
+      real fp(MX1D),fm(MX1D),dep(MX1D)
+      real c1d_save(MX1D),c1d_sum,c1d_sum2
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -213,8 +215,39 @@ c
               call hadvbot(nn,dtuse,dx(j),c1d,v1d,m1d,flxarr,flux1,
      &                                   flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
+              if (j.eq.161.and.ispc.eq.480 ) then
+                print *,'Layer ',k
+                !print *,'XYADVEC: Before ppm c1d(60,61,62) = ',c1d(60),c1d(61),c1d(62)
+                c1d_sum= 0.0
+                do i = 1,ncol
+                c1d_save(i) = c1d(i)
+                c1d_sum = c1d_sum + c1d(i)
+                enddo
+              endif
               call hadvppm(nn,dtuse,dx(j),c1d,v1d,m1d,flxarr,flux1,
-     &                               flux2,saflux,fc1,fc2,subdvec)
+     &                               flux2,saflux,fc1,fc2,subdvec,fp,fm)
+              if (j.eq.161.and.ispc.eq.480 ) then
+                print *,'XYADVEC: After ppm c1d(60,61,62) = ',c1d(60),c1d(61),c1d(62)
+                print *,'  fp60 fp61 fm61 fm62 = ',fp(60),fp(61),fm(61),fm(62)
+                print *,'  vel60 vel61 m1d = ',v1d(60),v1d(61), m1d(61)
+                print *,'xyadvec: Before    After'
+                c1d_sum2 = 0.0
+                do i = 1,ncol
+                  print *,'  ',i,')',c1d_save(i),'  ',c1d(i)
+                  c1d_sum2 = c1d_sum2 + c1d(i)
+                  if (c1d(i).lt.0.and.abs(c1d(i)).lt.c1d_save(i)/30) then
+                    !BNM Added this routine to skip over problems with x-advection
+                    !at high altitudes and fast wind speeds
+                    if (fp(i).gt.0) then
+                      fp(i) = fp(i) + c1d(i)
+                    elseif (fm(i).gt.0) then
+                      fm(i) = fm(i) + c1d(i)
+                    endif
+                    c1d(i) = 0.   !End code added by BNM
+                  endif
+                enddo
+                print *,'   sum:  ',c1d_sum,'   ',c1d_sum2
+              endif
             endif
 c
 c======================== DDM Begin =======================
@@ -450,7 +483,7 @@ c
      &                                 flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
               call hadvppm(nn,dtuse,dy,c1d,v1d,m1d,flxarr,flux1,
-     &                                 flux2,saflux,fc1,fc2,subdvec)
+     &                           flux2,saflux,fc1,fc2,subdvec,fp,fm)
             endif
 c
 c======================== DDM Begin =======================

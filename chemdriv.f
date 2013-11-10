@@ -99,12 +99,14 @@ c
       real      cold(MXTRSP), cnew(MXTRSP), dtchem
 
 C BNM 	VARIABLES FOR SUMMING MASSES
-      real dconcchem(ncol,nrow,nlay,nspec), dconcpart(ncol,nrow,nlay,nspec)
+      real dconcchem(MXCOLA,MXROWA,MXLAYA,MXSPEC), dconcpart(MXCOLA,MXROWA,MXLAYA,MXSPEC)
       real conca(ncol,nrow,nlay,nspec), concb(ncol,nrow,nlay,nspec)
       real masschem(nspec*14), masspart(nspec*14)
       real dxmass(nrow), dymass, dzmass(ncol,nrow,nlay)
-      real concbnmNO2, rrxn(MXRXN), rOH(80), rOHtot	!debugging
-      integer subd(ncol,nrow)
+      real concbnmNO2, rrxn(MXRXN), rOH(80), rOHtot 
+      real bnmroh(100,ncol,nrow,nlay)    !debugging
+      integer subd(ncol,nrow), ioh
+            
       real chemtime_0, chemtime, aertime
 
 c
@@ -626,6 +628,9 @@ CBNM ADD UP ALL OH SINKS
             rOH(78) = rOH(78) + rrxn(243)
             rOH(79) = rOH(79) + rrxn(244)
             rOH(80) = rOH(80) + rrxn(245)
+            do ioh = 1,80
+              bnmroh(ioh,i,j,k) = rOH(ioh)
+            enddo
 CBNM
 C BNM		Account for just contribution from partitioning
 
@@ -844,25 +849,25 @@ cbk            endif
   90    continue    !row
 
 c BNM
-       print *,'Layer: ',k
-       !print *,'  O3 = ',O3check/97/90
-       !print *,'  H2O = ',H2Ocheck/97/90
-       !print *,'  j - O3->O+O2 = ',rkO3O/97/90
-       !print *,'  rate - O3->O+O2 = ',rO3O/97/90
-       !print *,'  j - O3->O1D+O2 = ',rkO3O1D/97/90
-       !print *,'  rate - O3->O1D+O2 = ',rO3O1D/97/90
-       !print *,'  k - O1D+H2O->2OH = ',rkO1DH2O/97/90
-       !print *,'  rate - O1D+H2O->2OH = ',rO1DH2O/97/90
-       !print *,'  j - O1D+M->O = ',rkO1DM/97/90
-       !print *,'  rate - O1D+M->O = ',rO1DM/97/90
-       !rOHtot = 0
-       !do i = 1,80
-       !  rOHtot = rOHtot + rOH(i)
-       !enddo
-       !print '(A8,E12.5)','rOHtot =',rOHtot
-       !   do i = 1,80
-       !  print '(A7, i2,A2,E12.5))','  rOH: ',i,') ',rOH(i)
-       !enddo
+c       print *,'Layer: ',k
+c       print *,'  O3 = ',O3check/ncol/nrow
+c       print *,'  H2O = ',H2Ocheck/ncol/nrow
+c       print *,'  j - O3->O+O2 = ',rkO3O/ncol/nrow
+c       print *,'  rate - O3->O+O2 = ',rO3O/ncol/nrow
+c       print *,'  j - O3->O1D+O2 = ',rkO3O1D/ncol/nrow
+c       print *,'  rate - O3->O1D+O2 = ',rO3O1D/ncol/nrow
+c       print *,'  k - O1D+H2O->2OH = ',rkO1DH2O/ncol/nrow
+c       print *,'  rate - O1D+H2O->2OH = ',rO1DH2O/ncol/nrow
+c       print *,'  j - O1D+M->O = ',rkO1DM/ncol/nrow
+c       print *,'  rate - O1D+M->O = ',rO1DM/ncol/nrow
+c       rOHtot = 0
+c       do i = 1,80
+c         rOHtot = rOHtot + rOH(i)
+c       enddo
+c       print '(A8,E12.5)','rOHtot =',rOHtot
+c       do i = 1,80
+c         print '(A7, i2,A2,E12.5))','  rOH: ',i,') ',rOH(i)
+c       enddo
 c BNM
 
 c
@@ -895,23 +900,14 @@ c  Trap.f subroutine (1 write statement vs 90*97*14 write statements
 c-----------------write OH Tsimpidi------------------------
 c      call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
        do irads = 1,nrads
-	   do k = 1,MXLAY1
-          if (l3davg.or.k.eq.1) then
-c            print *, 'l3davg = ',l3davg
-c            print *,'Trap Time: ',dtchem
-c	    print *,'Time Time: ',time
-c            print *,'Grid cell: i=',ichm,' j=',jchm,' k=',kchm
-c            print *,'iavg = ',iavg
-            write(iavg+(k-1)*(1+nrads)+irads) time,((bnmradcnc(irads,i,j,k),i=1,MXCOL1),j=1,MXROW1)
-c	     print *,'bnmradcnc(OH,Pit) = ', bnmradcnc(1,55,61,k)
-c	     print *,'bnmradcnc(NO3,Pit) = ', bnmradcnc(2,55,61,k)
-c	     print *,'bnmradcnc(HO2,Pit) = ', bnmradcnc(3,55,61,k)
-
-
-c            print *, 'Writing to file unit: ',iavg+(k-1)*(1+nrads)+irads, '  for radical ',crads(irads)
-          endif
-        enddo
+         do k = 1,MXLAY1
+           if (l3davg.or.k.eq.1) then
+             write(iavg+(k-1)*(1+nrads)+irads) time,((bnmradcnc(irads,i,j,k),i=1,MXCOL1),j=1,MXROW1)
+           endif
+         enddo
        enddo
+       write(iroh) time,
+     &       ((((bnmroh(ioh,i,j,k),i=1,ncol),j=1,nrow),k=1,nlay),ioh=1,80)
 c----------------------------------------------------------
 
 

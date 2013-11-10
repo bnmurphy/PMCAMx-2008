@@ -240,7 +240,10 @@ c
         endif
 c             
         do k = 1,nlay
-          if (rr(k).le.0.) then 
+          if (rr(k).le.0.and.k.ge.10) then    !BNM added as a workaround
+             rr(k) = 0.1E-13                  !for high-altitude low concentrations
+          endif
+          if (rr(k).le.0.and.k.lt.10) then
             write(iout,'(//,a)') 'ERROR in VRTSLV:'
             write(iout,*) 'Negative concentration ',
      &                    'when doing advection in z-direction'

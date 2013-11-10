@@ -11,13 +11,13 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       implicit none
 
-      integer subd(97,90)    !Columns,Rows or x,y
+      integer subd(150,162)    !Columns,Rows or x,y
       integer i,j,x,y,a
 
 C     INITIALIZE SUBD
-      do i = 1,97
-        do j = 1,90
-          subd(i,j) = 0
+      do i = 1,150
+        do j = 1,162
+          subd(i,j) = 1
         enddo
       enddo
 
@@ -26,19 +26,19 @@ C     WESTERN BOUNDARY
         subd(8,j) = 1
       enddo
       do j = 30,9,-1
-        x = 8-(j-30)
-        y = j
-        subd(x,y) = 1
+	x = 8-(j-30)
+	y = j
+	subd(x,y) = 1
       enddo
 
 C     NORTHERN BOUNDARY
       do i = 8,90
-        subd(i,78) = 1
+	subd(i,78) = 1
       enddo
 
 C     ATLANTIC BOUNDARY
       do j = 66,78
-        subd(90,j) = 1
+	subd(90,j) = 1
       enddo
       do j = 65,20,-1
 	x = 90+int(j/3-65/3)

@@ -68,6 +68,7 @@ c
       real fpc(MX1D),fmc(MX1D)
       real*8 flux1,flux2
       integer subd(ncol,nrow), subdvec(MX1D)
+      real fp(MX1D),fm(MX1D)
 c
 c========================= Process Analysis Begin ==============================
 c-----These are not used here, but are needed to give the correct
@@ -135,7 +136,7 @@ c
      &                                flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
               call hadvppm(nn,dtuse,dx(j),c1d,v1d,m1d,flxarr,flux1,
-     &                                    flux2,saflux,fc1,fc2,subdvec)
+     &                            flux2,saflux,fc1,fc2,subdvec,fp,fm)
             endif
 c
             l = 0
@@ -184,7 +185,7 @@ c
      &                               flux2,saflux,fpc,fmc,fc1,fc2)
             elseif( iadvct .eq. 3) then
               call hadvppm(nn,dtuse,dy,c1d,v1d,m1d,flxarr,flux1,
-     &                               flux2,saflux,fc1,fc2,subdvec)
+     &                         flux2,saflux,fc1,fc2,subdvec,fp,fm)
             endif
 c
             l = 0
