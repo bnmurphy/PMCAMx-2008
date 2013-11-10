@@ -328,8 +328,10 @@ ckf
 c        Nitrogen mass balance (convert n2o5 to nitrate)
 c
 ckf
-         n2o5nit = cncrad(3)*prs*101325*62./8.314/tempk
-	 cncrad(3) = 0.0
+         !n2o5nit = cncrad(3)*prs*101325*62./8.314/tempk
+         !cncrad(3) = 0.0
+         n2o5nit = cncrad(kN2O5)*prs*101325*62./8.314/tempk
+         cncrad(kN2O5) = 0.0
 ckf
 
 ckf        
@@ -339,12 +341,13 @@ ckf
 	 
 ckf
          nitbef = 0.0
-	 do i =1, nsect
-	   nitbef = nitbef+aerosol(i,nan)*14./62.
-	 enddo
-	 nitbef = nitbef+(14*prs/(8.314e-5*tempk))*(gas(ngn)+gas(nghno2)+gas(ngno3)+gas(ngno)
-     & 		  +gas(ngno2)+gas(ngpan))    
-	 nitbef = nitbef+(2*(cncrad(3)*prs*101325*108.011/8.314/tempk)*14./108.01) 
+         do i =1, nsect
+           nitbef = nitbef+aerosol(i,nan)*14./62.
+         enddo
+         nitbef = nitbef+(14*prs/(8.314e-5*tempk))*(gas(ngn)+gas(nghno2)+gas(ngno3)+gas(ngno)
+     &            +gas(ngno2)+gas(ngpan))    
+         !nitbef = nitbef+(2*(cncrad(3)*prs*101325*108.011/8.314/tempk)*14./108.01) 
+         nitbef = nitbef+(2*(cncrad(kN2O5)*prs*101325*108.011/8.314/tempk)*14./108.01) 
 c
 c
          call aqchem(gas,aerosol,rhumid,prs,tempk,lwc_c,t0_min,t1_min,
