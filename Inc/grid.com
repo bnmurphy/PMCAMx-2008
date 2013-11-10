@@ -24,19 +24,28 @@ c     iuzon   -- UTM zone
 c     itzon   -- time zone (5=EST,8=PST,0=UTC)
 c     ngrid   -- total number of grids in simulation
 c     nnest   -- number of fine grid nests in simulation
-c     polelon -- longitude of Polar Stereographic projection pole (degrees)
-c     polelat -- latitude of Polar Stereographic projection pole (degrees)
 c     xlonc   -- longitude of center of Lambert Conformal projection (degrees)
 c     ylatc   -- latitude of center of Lambert Conformal projection (degrees)
 c     tlat1   -- 1st true latitude of Lamber Conformal projection (degrees)
 c     tlat2   -- 2nd true latitude of Lamber Conformal projection (degrees)
+
+C*****Polar stereographic projection:
+C*****Modifications by Pavan Nandan Racherla (pavan_nandan_racherla@alumni.cmu.edu)
+C*****Updated October 13 2008
+C     psp_stdlon   -- "standard longitude" of the PSP
+C     psp_truelat1 -- "1st true latitude" of the PSP
+C     psp_lon1     -- "longitude" of the "southwest corner" of the outermost domain 
+C     psp_lat1     -- "latitude" of the "southwest corner" of the outermost domain
+C*****Pavan: end of my modifications here
+
 c-----------------------------------------------------------------------
 c
       common /grdsz/  ncol(MXGRID),nrow(MXGRID),nlay(MXGRID),
      &                deltax(MXROWA,MXGRID), deltay(MXGRID)
 c
       common /grdinp/ xorg,yorg,delx,dely,iuzon,itzon,ngrid,nnest,
-     &                polelon,polelat,xlonc,ylatc,tlat1,tlat2
+     &                psp_stdlon, psp_truelat1, psp_lon1, psp_lat1,
+     &                xlonc,ylatc,tlat1,tlat2
 c
 c-----------------------------------------------------------------------
 c     Variables for defining the grid nests:

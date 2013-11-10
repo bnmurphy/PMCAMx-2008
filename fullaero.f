@@ -151,10 +151,8 @@ c       to move this conversion inside aqueous module.  tmg (04/12/04)
         data fdist /0.0, 0.0, 0.0, 0.0, 0.0, 0.41, 0.38, 0.17, 0.04, 0.0/
       endif
 c
-
       if ( lwc_c.ge.aqcwmin .and. tempk.ge.aqtamin .and. laq ) then
        if ( chaq.eq.'RADM' ) then
-
         pres_pa = 100. * press
         dt_sec  = dtaer * 3600.
         cw_kgm3 = lwc_c / 1000.
@@ -406,7 +404,6 @@ c
       endif
 c     RADM or VSRM -> call AER even if the aqueous module is called
 c     OVSR         -> call SOAP alone if the aqueous module is called
-
       if (laero) then
         if ( chaq.eq.'OVSR' .and. modeaero.eq.1 ) then
           modeaero = 1
@@ -414,8 +411,6 @@ c     OVSR         -> call SOAP alone if the aqueous module is called
           modeaero = 2
         endif
       endif
-
-
 c
 c     if neither aqchem nor aerchem is called we don't call soap
 c     - should we??? 
@@ -531,10 +526,7 @@ c
           call newdist(t1,q) ! size distribution mapping
           call step(nsec,q) ! calculate water in each section
         else                        ! call SOAP + AER
-
-c          print *, 'Executing aerchem: modeaero = ',modeaero  !BNM
-	  call aerchem(chaero,q,t0,t1,lfrst,ierr)
-	  
+          call aerchem(chaero,q,t0,t1,lfrst,ierr)
         endif
 c
 c     map q back to con 

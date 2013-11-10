@@ -133,7 +133,7 @@ c
             write(iunit) nseg,(ispec(n,l),n=1,10),
      &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
 	  else    !write to layered .avrg file
-            write(iunit+(k-1)) nseg,(ispec(n,l),n=1,10),
+            write(iunit+(k-1)*(1+nrads)) nseg,(ispec(n,l),n=1,10),
      &                 ((cncfld(i,j,k,l),i=1,nox),j=1,noy)
 	  endif
         enddo

@@ -46,33 +46,44 @@ c
       integer   MXCOL7,  MXROW7,  MXLAY7 
       integer   MXCOL8,  MXROW8,  MXLAY8 
       integer   MXCOL9,  MXROW9,  MXLAY9 
-      integer   MXCOL10, MXROW10, MXLAY10 
+      integer   MXCOL10, MXROW10, MXLAY10
+      integer   MXCOL11, MXROW11, MXLAY11
+
 c
-      parameter ( MXCOL1  =  70, MXROW1  =  70, MXLAY1  =16 )
-      parameter ( MXCOL2  =   0, MXROW2  =   0, MXLAY2  = 0 )
-      parameter ( MXCOL3  =   0, MXROW3  =   0, MXLAY3  = 0 )
-      parameter ( MXCOL4  =   0, MXROW4  =   0, MXLAY4  = 0 )
-      parameter ( MXCOL5  =   0, MXROW5  =   0, MXLAY5  = 0 )
-      parameter ( MXCOL6  =   0, MXROW6  =   0, MXLAY6  = 0 )
-      parameter ( MXCOL7  =   0, MXROW7  =   0, MXLAY7  = 0 )
-      parameter ( MXCOL8  =   0, MXROW8  =   0, MXLAY8  = 0 )
-      parameter ( MXCOL9  =   0, MXROW9  =   0, MXLAY9  = 0 )
-      parameter ( MXCOL10 =   0, MXROW10 =   0, MXLAY10 = 0 )
-c
+      parameter ( MXCOL1  = 150, MXROW1  = 162, MXLAY1  = 14)
+      parameter ( MXCOL2  =   0, MXROW2  =   0, MXLAY2  =  0)
+      parameter ( MXCOL3  =   0, MXROW3  =   0, MXLAY3  =  0)
+      parameter ( MXCOL4  =   0, MXROW4  =   0, MXLAY4  =  0)
+      parameter ( MXCOL5  =   0, MXROW5  =   0, MXLAY5  =  0)
+      parameter ( MXCOL6  =   0, MXROW6  =   0, MXLAY6  =  0)
+      parameter ( MXCOL7  =   0, MXROW7  =   0, MXLAY7  =  0)
+      parameter ( MXCOL8  =   0, MXROW8  =   0, MXLAY8  =  0)
+      parameter ( MXCOL9  =   0, MXROW9  =   0, MXLAY9  =  0)
+      parameter ( MXCOL10 =   0, MXROW10 =   0, MXLAY10 =  0)
+      parameter ( MXCOL11 =   0, MXROW11 =   0, MXLAY11 =  0)
+
+C******Pavan: these for the (12 X 12 km) Athens, Marseilles, Paris, Ruhr, & London domains.
+c      parameter ( MXCOL2  =  24, MXROW2  =  24, MXLAY2  = 14)
+c      parameter ( MXCOL3  =  24, MXROW3  =  24, MXLAY3  = 14)
+c      parameter ( MXCOL4  =  24, MXROW4  =  24, MXLAY4  = 14)
+c      parameter ( MXCOL5  =  24, MXROW5  =  24, MXLAY5  = 14)
+c      parameter ( MXCOL6  =  24, MXROW6  =  24, MXLAY6  = 14)
+C
+
       integer   MXCOLA
       integer   MXROWA
       integer   MXLAYA
 c
-      parameter ( MXCOLA  =  70, MXROWA  =  70, MXLAYA  = 16)
+      parameter ( MXCOLA  = 150, MXROWA  = 162, MXLAYA  = 14)
 c
       integer   MX1D
       integer   MXCHDRN
       integer   MXGRID
       integer   MXSECT
 c
-      parameter ( MX1D    = 160 )
+      parameter ( MX1D    = 162 )
       parameter ( MXCHDRN =   3 )
-      parameter ( MXGRID  =  10 )
+      parameter ( MXGRID  =  12 )
       parameter ( MXSECT  =  10 )
 c
 c-----------------------------------------------------------------------
@@ -112,10 +123,11 @@ c
       parameter ( MXPHT1  =     6 )
       parameter ( MXPHT2  =    24 )
       parameter ( NTEMPR  =   101 )
-      parameter ( TEMPLO  = 100.0 ) ! 220 for July
+      parameter ( TEMPLO  = 120.0 )
       parameter ( TEMPHI  = 320.0 )
       parameter ( NPRESR  =    10 )
-      parameter ( PRESLO  = 100.0 ) ! 326 for July
+c cf      parameter ( PRESLO  = 126.0 )
+      parameter ( PRESLO  = 80.0 )      !Modified by cfountoukis
       parameter ( PRESHI  = 1100. )
       parameter ( MXRXN   =   237 )
       parameter ( NSPNAM  =   520 )

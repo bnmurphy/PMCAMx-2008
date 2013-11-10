@@ -1,7 +1,7 @@
       subroutine soap(ntot,caer,cgas,tempk,convfac,
      &                iout,igrdchm,ichm,jchm,kchm,lppm,
      &                cpre,mwpre,csatT)
-c BNM-122308      implicit none
+      implicit none
 c
 c**********************************************************************
 c                                                                     * 
@@ -132,15 +132,6 @@ c
       logical     lppm
 
       real        cpx, bb, cc, xend, fend, xmid, fmid, dx
-c BNM - declaring variables
-      dimension tarray2(2)
-
-c      Declare Variables for Hvap look-up table
-      integer tempcnt, icstar, ctemp, iter
-      real csat1, csat2
-
-c BNM - done declaring variables
-
 c
 c***********************************************************************
 c
@@ -168,74 +159,10 @@ c
 c
 c CHANGE SATURATION CONCENTRATIONS ACCORDING TO CURRENT TEMPERATURE
 c
-
-c BNM - timing
-c	tcpu = dtime(tarray2)
-c	print *,'Begining time for Hvap = ',tarray2(1)
-c BNM
-
-ccc Traditional Hvap calculation, Clausius Clapeyron ccc
       do i=1,ntot
          csatT(i)=csat(i)*(cstemp(i)/tempk)*exp((deltah(i)/8.314)
      &                *(1/cstemp(i)-1/tempk))
       enddo     
-
-ccccccc  ------- New Hvap Look-Up Table -------- cccccccccc
-c      print *,'Makes it to Hvap calc', igrdchm
-
-ccc Using Look-up Table Compiled by Scott Epstein  ccc
-c    Set Variables
-c	   ntemp = 231
-c          ncstar = 109
-
-cc   Search for T (seach through all T's)
-cc	Identify index that is upper-bound on values
-cc        eg. if tempk=298.3, return index for temp=298.5
-c      if (tempk.lt.200) then
-c	ctemp = 1
-c      elseif (tempk.gt.315) then
-c        ctemp = ntemp
-c      else
-c	do tempcnt = 1,ntemp
-c	    if (dhtemp(tempcnt).ge.tempk) then
-c		ctemp = tempcnt
-c		goto 300
-c	    endif
-c	enddo
-c      endif
-c 300  continue
-c
-cc    Iterate on deltah and Cstar to get Cstemp
-cc	Search for Cstar index
-c	    do i = 1,ntot
-c	    	csat1 = csat(i)
-c		csat2 = 0
-c		iter = 0
-c		do while (abs(log10(csat1)-log10(csat2)).ge.0.1.and.iter.le.20)
-c		    iter = iter + 1
-c		    csat2 = csat1
-c		    do icstar = 1,ncstar
-c			if (dhcstar(icstar).ge.log10(csat1)) then
-c			    if (i.le.20) then
-c				deltah(i) = poadhvap(ctemp,icstar)*1000
-c			    else
-c				deltah(i) = soadhvap(ctemp,icstar)*1000
-c				if (deltah(i).lt.8) deltah(i) = 8
-c			    endif
-c			    csat1=csat(i)*(cstemp(i)/tempk)*exp((deltah(i)/8.314)
-c     &						*(1/cstemp(i)-1/tempk))
-c			    goto 301
-c			endif
-c		    enddo
-c 301		    continue
-c		enddo
-c
-c		csatT(i) = csat1
-c	    enddo
-
-ccccc ----------- End New Hvap Look-Up Table --------------
-
-
 c
 c CALCULATE AEROSOL-PHASE CONCENTRATION (CAER) AND GAS-PHASE 
 c CONCENTRATION (CGAS) FOR NON-SOLUTION-FORMING COMPOUNDS
@@ -292,16 +219,14 @@ c Find the solution using a bi-section method (approach from max)
 c
       xend = 0.0
       do i = 1, nsol
-        xend = xend + sctot(i)/smw(i)  !BNM density correction
+        xend = xend + sctot(i)/smw(i)
       enddo
       xend = xend + cpx
       call spfcn (nsol,sctot,scsat,scaer,smw,cpx,xend,fend)
       if (abs(fend).le.xtol*xend) goto 99
       if (fend.gt.0.0) then
         write (iout,'(//,a)') ' ERROR in SOAP:'
-        write (iout,'(/,a)') ' ERROR: positive end point. '
-        write (iout,'(/,a,e15.6)') ' fend = ',fend
-        write (iout,'(/,a,e15.6)') ' xtol*xend = ',xtol*xend
+        write (iout,'(/,a)') ' ERROR: positive end point'
         goto 50
       endif
       dx = xend - cpx

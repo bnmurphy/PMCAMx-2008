@@ -71,7 +71,6 @@ c
       include 'grid.com'
       include 'pigsty.com'
       include 'flags.com'
-      include 'soap.com'
 c
 c======================== Source Apportion Begin =======================
 c

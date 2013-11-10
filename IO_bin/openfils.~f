@@ -146,9 +146,9 @@ c	  endif
           action = 'Opening output AVERAGE file for coarse grid.'
           
 c--------not binary Tsimpidi----------
-c        notbin = 'OH'
-c        open(unit=31,file=filroot(1:ii+5)//notbin,form='FORMATTED',
-c     &                                       status='UNKNOWN',ERR=7005)
+        notbin = 'OH'
+        open(unit=31,file=filroot(1:ii+5)//notbin,form='FORMATTED',
+     &                                       status='UNKNOWN',ERR=7005)
 c------------cc-------------------
 
           
@@ -159,6 +159,7 @@ c------------cc-------------------
           write(iout,9002) '   File: ',filroot(1:)
 	  iavg = iavg + 1
 c
+c ccc BNM --- End opening Radical species output files --- ccc
 
 	end do
 	iavg = nfils

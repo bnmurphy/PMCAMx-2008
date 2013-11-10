@@ -241,18 +241,19 @@ c
 c             
         do k = 1,nlay
           if (rr(k).le.0.) then 
-            write(iout,'(//,a)') 'ERROR in VRTSLV:'
-            write(iout,*) 'Negative concentration ',
-     &                    'when doing advection in z-direction'
-            write(iout,*) 'Grid: ',igrd
-            write(iout,*) 'Location (I,J): ',ii,jj
-            write(iout,*) 'Species: ',spec 
-            write(iout,'(a,i3,a,i3)')'   Taking ',n,' steps of ',nsteps
-            do kk = 1,nlay 
-              write(iout,'(i3,6e12.4,f5.1,6f7.3)') kk,rr(kk), 
-     &              conc(kk),depth(kk),entrn(kk),dilut(kk)
-            enddo 
-            call camxerr()
+c            write(iout,'(//,a)') 'ERROR in VRTSLV:'
+c            write(iout,*) 'Negative concentration ',
+c     &                    'when doing advection in z-direction'
+c            write(iout,*) 'Grid: ',igrd
+c            write(iout,*) 'Location (I,J): ',ii,jj
+c            write(iout,*) 'Species: ',spec 
+c            write(iout,'(a,i3,a,i3)')'   Taking ',n,' steps of ',nsteps
+c            do kk = 1,nlay 
+c              write(iout,'(i3,6e12.4,f5.1,6f7.3)') kk,rr(kk), 
+c     &              conc(kk),depth(kk),entrn(kk),dilut(kk)
+c            enddo 
+c            call camxerr()
+            rr(k) = 1.0e-8
           endif
           conc(k) = rr(k)
         enddo

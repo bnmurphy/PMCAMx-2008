@@ -62,7 +62,7 @@ c
       real delnox, delvoc, delo3, c0nox, c0voc, c0o3
       real concnox, concvoc, conco3, dnlnox, dnlvoc, dnlo3
       logical lzerc, levap, lddmopt2
-      data lddmopt2 /.true./
+      data lddmopt2 /true/
 c
 c======================== DDM End ======================================
 c========================= Source Apportion End ========================
