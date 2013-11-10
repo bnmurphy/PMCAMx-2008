@@ -40,6 +40,8 @@ c
 c
 c========================= Process Analysis End =====================================
 c
+      real chemtime_0, chemtime, aertime
+
 c
 c-----Entry point
 c
@@ -55,6 +57,10 @@ c
 	  masschem(l) = 0
 	  masspart(l) = 0
 	enddo
+ 
+        chemtime_0 = 0
+        chemtime = 0
+        aertime = 0
 
         call chemdriv(igrd,ncol(igrd),nrow(igrd),nlay(igrd),
      &                deltat(igrd),itzon,idfin(iptr2d(igrd)),
@@ -67,11 +73,20 @@ c
      &                ldark(iptr2d(igrd)),l3davg,
      $                iptr2d(igrd),
      &                ipsa3d(igrd),ipacl_3d(iptr3d(igrd)),
-     &		      masschem,masspart, deltax(1,igrd),		!<- BNM 6/30/09
-     &		      deltay(igrd), depth(iptr3d(igrd)) )		!<- BNM 6/2/09
-        tcpu = dtime(tarray2)
-        write(*,'(a,f10.3)') '   CPU = ', tarray2(1)
-        write(iout,'(a,f10.3)') '   CPU = ', tarray2(1)
+     &                masschem,masspart, deltax(1,igrd),      !<- BNM 6/30/09
+     &                deltay(igrd), depth(iptr3d(igrd)),      !<- BNM 6/2/09
+     &                chemtime_0, chemtime, aertime)
+        !tcpu = dtime(tarray2)
+        !write(*,'(a,f10.3)') '   CPU = ', tarray2(1)
+        !write(iout,'(a,f10.3)') '   CPU = ', tarray2(1)
+        write(*,'(a,f10.3)') '   CPU = ', chemtime_0+chemtime+aertime
+        write(iout,'(a,f10.3)') '   CPU = ', chemtime_0+chemtime+aertime
+        write(*,'(a,f10.3)') '   Chemistry = ', chemtime
+        write(iout,'(a,f10.3)') '   Chemistry = ', chemtime
+        write(*,'(a,f10.3)') '   Aerosols = ', aertime
+        write(iout,'(a,f10.3)') '   Aerosols = ', aertime
+
+
         call flush(6)
         call flush(iout)
       endif

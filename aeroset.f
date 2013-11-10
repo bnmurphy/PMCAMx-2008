@@ -124,11 +124,12 @@ c     set moving diameters to logarithmic mean of fixed section diameters (tmg,0
       enddo
 c
       kso2_c   = kso2
-      kh2o2_c  = kh2o2
       if (idmech.eq.6) then
-      kform_c  = kform
+        kform_c  = kform
+        kh2o2_c  = kh2o2
       elseif (idmech.eq.5) then
         kform_c  = khcho
+        kh2o2_c  = kho2h
       endif
       khono_c  = khono
       ko3_c    = ko3
