@@ -91,7 +91,7 @@ c
       real cnco3(MX1D), cncvoc(MX1D), cncnox(MX1D)
       real c1d0(MX1D),fpc(MX1D),fmc(MX1D)
       real sen1d(MX1D,MXTRSP)
-      real*8 fluxes(nspc*14,13),flux1,flux2
+      real*8 fluxes(nspc*nlay,13),flux1,flux2
       real*8 fluxtmp(MXSPEC,8,MXLAYA)
       dimension tarray2(2)
       integer subd(ncol,nrow), subdvec(MX1D)	!BNM 9-23-09
@@ -624,7 +624,7 @@ c
       do i=1,nspc
         do j=1,8
           do k=1,nlay
-            fluxes(k+(i-1)*14,j) = fluxes(k+(i-1)*14,j) + fluxtmp(i,j,k)
+            fluxes(k+(i-1)*nlay,j) = fluxes(k+(i-1)*nlay,j) + fluxtmp(i,j,k)
           enddo
         enddo
       enddo

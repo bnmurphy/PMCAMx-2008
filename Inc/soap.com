@@ -59,6 +59,6 @@ c
       real dhtemp(ntemp), dhcstar(ncstar)
       real poadhvap(ntemp,ncstar), soadhvap(ntemp,ncstar)
 c
-      common /Hvap/ dhtemp, dhcstart, poadhvap, soadhvap
+      common /Hvap/ dhtemp, dhcstar, poadhvap, soadhvap
 c
 c----------------------------------------------------------------------

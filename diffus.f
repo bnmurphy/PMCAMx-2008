@@ -94,7 +94,7 @@ c
      &          ro1d(MXLAYA)
       real cnc(MXCOLA,MXROWA),sns(MXCOLA,MXROWA,MXTRSP),
      &     rho(MXCOLA,MXROWA)
-      real*8 fluxes(nspc*14,13),fluxbot
+      real*8 fluxes(nspc*nlay,13),fluxbot
       character*20 strz, strxy
 
       integer subd(ncol,nrow)	!BNM 9-23-09
@@ -195,7 +195,7 @@ c
               conc(i,j,k,ispc) = c1d(k)
             enddo
             fluxbot = -vdep(i,j,ispc)*conc(i,j,1,ispc)
-            fluxes(1+(ispc-1)*14,11) = fluxes(1+(ispc-1)*14,11) 
+            fluxes(1+(ispc-1)*nlay,11) = fluxes(1+(ispc-1)*nlay,11) 
      &			+ fluxbot*dx(j)*dy*deltat * subd(i,j)  	!i=col, j=row
 		!Keep Dry Deposition at Flux 11
             do ll = 1,navspc

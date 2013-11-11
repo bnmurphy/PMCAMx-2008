@@ -99,7 +99,7 @@ c
         call massum(ip,nspec,ncol(ip),nrow(ip),nlay(ip),deltax(1,ip),
      &              deltay(ip),depth(iptr3d(ip)),conc(iptr4d(ip)),
      &              xmass(1,ip),subxmass(1,ip))
-        do l = 1,nspec*14 
+        do l = 1,nspec*MXLAY1 
           xmsfin(l,ip) = xmsfin(l,ip) + xmass(l,ip) - xmstmp(l,ip) 
         enddo
       endif

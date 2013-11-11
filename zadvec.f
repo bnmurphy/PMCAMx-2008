@@ -92,7 +92,7 @@ c
       integer idfin(ncol,nrow)
       real c1d(MXLAYA+1),d1d(MXLAYA),ent1d(MXLAYA),dil1d(MXLAYA)
       real sen1d((MXLAYA+1)*MXTRSP)
-      real*8 fluxes(nspc*14,13),fluxtop
+      real*8 fluxes(nspc*nlay,13),fluxtop
       logical losat
       integer subd(ncol,nrow)		!BNM 9-23-09
 c
@@ -207,9 +207,9 @@ c
             enddo
 c
             if (fluxtop.lt.0) then
-              fluxes(14+(ispc-1)*14,9)  = fluxes(14+(ispc-1)*14,9) - fluxtop*dx(j)*dy*deltat*subd(i,j)
+              fluxes(nlay+(ispc-1)*nlay,9)  = fluxes(nlay+(ispc-1)*nlay,9) - fluxtop*dx(j)*dy*deltat*subd(i,j)
             else
-              fluxes(14+(ispc-1)*14,10) = fluxes(14+(ispc-1)*14,10) - fluxtop*dx(j)*dy*deltat*subd(i,j)
+              fluxes(nlay+(ispc-1)*nlay,10) = fluxes(nlay+(ispc-1)*nlay,10) - fluxtop*dx(j)*dy*deltat*subd(i,j)
             endif
 c
 c================================DDM Begin=============================

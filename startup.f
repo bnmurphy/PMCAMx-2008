@@ -98,7 +98,7 @@ c     integer begdate,inpdate,emsdate,wrtdate,enddate,hazdate,ozndate,
       integer   cbdate,cedate
       logical   lexist,lbot,lfound, lpig
 
-      character*2 clay(14)	! BNM array for naming multi-level mass files
+      character*2 clay(20)	! BNM array for naming multi-level mass files
 c
       data inp /3/
       data ctlfil /'CAMx.in'/
@@ -167,9 +167,11 @@ c
       open(unit=idiag,file=filroot(1:ii+5),status='UNKNOWN',ERR=7000)
 c
 c------------BNM Adding Multi-layer Mass Output Files-----------------
-      data clay /'01','02','03','04','05','06','07','08','09','10',
-     &		 '11','12','13','14' /
-      do ilay = 1,14      
+
+        data clay /'01','02','03','04','05','06','07','08','09','10',
+     &		 '11','12','13','14','15','16','17','18','19','20' /
+      
+      do ilay = 1,MXLAY1      
       	filroot(ii+1:ii+7) = '.mass'//clay(ilay)
       	imass = 8 + ilay
       	open(unit=imass,file=filroot(1:ii+7),status='UNKNOWN',ERR=7000)

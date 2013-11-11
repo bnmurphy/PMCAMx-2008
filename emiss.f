@@ -74,7 +74,7 @@ c
 c
 c========================= Process Analysis End =====================================
 c
-      real*8 armass(nspec),ptmass(nspec*14),dmass  	!<---multilayer mass BNM
+      real*8 armass(nspec),ptmass(nspec*nlay),dmass  	!<---multilayer mass BNM
       integer subd(ncol,nrow)
       dimension larmap(narspc),lptmap(nptspc),idsrc(nsrc),isrc(nsrc),
      &          jsrc(nsrc),pttrace(MXPTSRC,nspec),
@@ -187,7 +187,7 @@ c
             vol = dx(j)*dy*depth(i,j,k)/(mapscl(i,j)**2)
             dmass = pttrace(n,lpt)*deltat*1e6
             dconc = REAL(dmass)/vol
-            ptmass((l-1)*14 + k) = ptmass((l-1)*14 + k) + dmass*subd(i,j)
+            ptmass((l-1)*nlay + k) = ptmass((l-1)*nlay + k) + dmass*subd(i,j)
             conc(i,j,k,l) = conc(i,j,k,l) + dconc
 c
 c======================== Process Analysis Begin ====================================

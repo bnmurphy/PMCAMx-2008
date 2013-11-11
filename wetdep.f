@@ -81,7 +81,7 @@ c
      &     pwc(ncol,nrow,nlay),depth(ncol,nrow,nlay)
       integer idfin(ncol,nrow)
       real conc(ncol,nrow,nlay,nspcs),depfld(ncol,nrow,3*nspcs)
-      real*8 fluxes(nspcs*14,13)
+      real*8 fluxes(nspcs*nlay,13)
       real c0(MXSPEC),rr(MXLAYA),volrat(MXLAYA),tmass(MXSPEC)
       real tmassi(MXSPEC,MXLAYA), tmassb(MXSPEC,MXLAYA), tsplit(MXSPEC), tdiff(MXSPEC)
       integer subd(ncol,nrow)
@@ -581,7 +581,7 @@ c
             do l = 1,nspec
               conc(i,j,kbot,l) = conc(i,j,kbot,l) + tmass(l)/cellvol
               tmass(l) = 0.
-	      do k = 1,14
+	      do k = 1,nlay
 	        tmassi(l,k)=0
 	        tmassb(l,k)=0
 	      enddo
@@ -596,10 +596,10 @@ c		tsplit(l) = 0
 
 C BNM 	     Toggle which flux to put mass loss into depending
 C		on whether or not a cloud is present
-c		fluxes(1+(l-1)*14,12) = fluxes(1+(l-1)*14,12) - tmass(l)  !Total Cloud Loss
-	      do k = 1,14
-		fluxes(k+(l-1)*14,12) = fluxes(k+(l-1)*14,12) - tmassi(l,k)*subd(i,j)  !In-Cloud Loss
-		fluxes(k+(l-1)*14,13) = fluxes(k+(l-1)*14,13) - tmassb(l,k)*subd(i,j)  !Below-Cloud Loss
+c		fluxes(1+(l-1)*nlay,12) = fluxes(1+(l-1)*nlay,12) - tmass(l)  !Total Cloud Loss
+	      do k = 1,nlay
+		fluxes(k+(l-1)*nlay,12) = fluxes(k+(l-1)*nlay,12) - tmassi(l,k)*subd(i,j)  !In-Cloud Loss
+		fluxes(k+(l-1)*nlay,13) = fluxes(k+(l-1)*nlay,13) - tmassb(l,k)*subd(i,j)  !Below-Cloud Loss
 CDEBUG
 c		tsplit(l) = tsplit(l) + tmassi(l,k) + tmassb(l,k)
 

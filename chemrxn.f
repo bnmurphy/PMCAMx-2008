@@ -32,7 +32,7 @@ c
       include 'filunit.com'
       include 'chmstry.com'
 
-      real masschem(nspec*14), masspart(nspec*14)
+      real masschem(nspec*nlay(igrd)), masspart(nspec*nlay(igrd))
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -53,7 +53,7 @@ c
         write(*,'(a20,$)') 'chemdriv ......'
         write(iout,'(a20,$)') 'chemdriv ......'
 
- 	do l = 1,nspec*14
+ 	do l = 1,nspec*nlay(igrd)
 	  masschem(l) = 0
 	  masspart(l) = 0
 	enddo
@@ -95,11 +95,12 @@ c
      &            deltax(1,igrd),deltay(igrd),depth(iptr3d(igrd)),
      &            conc(iptr4d(igrd)),xmass(1,igrd), subxmass(1,igrd))
 
+
 C    SUM UP BUDGET ANALYSIS ARRAYS
 C	XMSCHEM - total chemistry + partitioning
 C	XMSJUSTCHEM - just change due to chemistry
 C	XMSPART - change due to partitioning
-      do l = 1,nspec*14 
+      do l = 1,nspec*nlay(igrd) 
         xmschem(l,igrd) = xmschem(l,igrd) + subxmass(l,igrd) - 
      &                    subxmstmp(l,igrd)
 	xmsjustchem(l,igrd) = xmsjustchem(l,igrd) + masschem(l)

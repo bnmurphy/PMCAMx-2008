@@ -99,9 +99,9 @@ c
       real      cold(MXTRSP), cnew(MXTRSP), dtchem
 
 C BNM 	VARIABLES FOR SUMMING MASSES
-      real dconcchem(MXCOLA,MXROWA,MXLAYA,MXSPEC), dconcpart(MXCOLA,MXROWA,MXLAYA,MXSPEC)
-      real conca(ncol,nrow,nlay,nspec), concb(ncol,nrow,nlay,nspec)
-      real masschem(nspec*14), masspart(nspec*14)
+      real*4 dconcchem(ncol,nrow,nlay,nspec), dconcpart(ncol,nrow,nlay,nspec)
+      real*4 conca(nspec), concb(nspec)
+      real masschem(nspec*nlay), masspart(nspec*nlay)
       real dxmass(nrow), dymass, dzmass(ncol,nrow,nlay)
       real concbnmNO2, rrxn(MXRXN), rOH(80), rOHtot 
       real bnmroh(100,ncol,nrow,nlay)    !debugging
@@ -144,7 +144,7 @@ c
       external ierxn6, ierate6, iejac6, ieslow6
 c
       logical l3davg,ldark(ncol,nrow),laero_upd
-      real con(MXSPEC+1),crad(MXRADCL),avgrad(MXRADCL)
+      real*4 con(MXSPEC+1),crad(MXRADCL),avgrad(MXRADCL)
       real fcloud(ncol,nrow,nlay),cldtrns(ncol,nrow,nlay),
      &     water(ncol,nrow,nlay),tempk(ncol,nrow,nlay),
      &     press(ncol,nrow,nlay),height(ncol,nrow,nlay),
@@ -152,6 +152,8 @@ c
      &     cellat(ncol,nrow),cellon(ncol,nrow),
      &     cncrad(ncol,nrow,nlay,MXRADCL)
       integer idfin(ncol,nrow)
+      real*4 convfac
+      
 c
 c-----Entry point
 c
@@ -444,7 +446,7 @@ c		print *
 c		print *,'CHEMDRIV: dtchem=',dtchem
 
 		  do ispc = 1,nspec
-			conca(i,j,k,ispc) = conc(i,j,k,ispc)
+			conca(ispc) = con(ispc)
 		  enddo
 C END <- BNM 
 
@@ -494,14 +496,14 @@ c        print *,'CHEMDRIV: Con(coo1,After chem)=',con(KCOO1)
 
            	  do ispc = 1,ngas
 			dconcchem(i,j,k,ispc) = amax1(bdnl(ispc),con(ispc))*convfac
-     &				- conca(i,j,k,ispc)
-			concb(i,j,k,ispc) = amax1(bdnl(ispc),con(ispc))*convfac
+     &				- conca(ispc)
+			concb(ispc) = amax1(bdnl(ispc),con(ispc))*convfac
             	  enddo
             	  if (ngas.lt.nspec) then
               	    do ispc = ngas+1,nspec
                 	dconcchem(i,j,k,ispc) = amax1(con(ispc),bdnl(ispc))
-     &				- conca(i,j,k,ispc)
-			concb(i,j,k,ispc) = amax1(bdnl(ispc),con(ispc))
+     &				- conca(ispc)
+			concb(ispc) = amax1(bdnl(ispc),con(ispc))
               	    enddo
             	  endif
 CDEBUG
@@ -641,12 +643,12 @@ c		print *,'CHEMDRIV: after aero dtchem1=',dtchem1
 
            	  do ispc = 1,ngas
 			dconcpart(i,j,k,ispc) = amax1(bdnl(ispc),con(ispc))*convfac
-     &				- concb(i,j,k,ispc)
+     &				- concb(ispc)
             	  enddo
             	  if (ngas.lt.nspec) then
               	    do ispc = ngas+1,nspec
                 	dconcpart(i,j,k,ispc) = amax1(con(ispc),bdnl(ispc))
-     &				- concb(i,j,k,ispc)
+     &				- concb(ispc)
               	    enddo
             	  endif
 C END <- BNM
@@ -862,10 +864,10 @@ c       print *,'  j - O1D+M->O = ',rkO1DM/ncol/nrow
 c       print *,'  rate - O1D+M->O = ',rO1DM/ncol/nrow
 c       rOHtot = 0
 c       do i = 1,80
-c         rOHtot = rOHtot + rOH(i)
-c       enddo
+c		   rOHtot = rOHtot + rOH(i)
+c	   enddo
 c       print '(A8,E12.5)','rOHtot =',rOHtot
-c       do i = 1,80
+c	   do i = 1,80
 c         print '(A7, i2,A2,E12.5))','  rOH: ',i,') ',rOH(i)
 c       enddo
 c BNM
@@ -882,9 +884,9 @@ C	ALL ROWS, COLUMNS, AND LAYERS
 	    do k = 1,nlay
 	    do j = 2,nrow-1
 	    do i = ibeg(j),iend(j)
-	        masschem(k+(ispc-1)*14) = masschem(k+(ispc-1)*14) 
+	        masschem(k+(ispc-1)*nlay) = masschem(k+(ispc-1)*nlay) 
      &			+ dconcchem(i,j,k,ispc)*dxmass(j)*dymass*dzmass(i,j,k)*subd(i,j)
-	        masspart(k+(ispc-1)*14) = masspart(k+(ispc-1)*14) 
+	        masspart(k+(ispc-1)*nlay) = masspart(k+(ispc-1)*nlay) 
      &			+ dconcpart(i,j,k,ispc)*dxmass(j)*dymass*dzmass(i,j,k)*subd(i,j)
 	    enddo
 	    enddo
@@ -895,7 +897,7 @@ C END <- BNM
 
 c BNM cccc ------------- Write Radicals Murphy -------------- cccc
 c Write these radicals once every time step instead of within the
-c  Trap.f subroutine (1 write statement vs 90*97*14 write statements
+c  Trap.f subroutine (1 write statement vs 90*97*nlay write statements
 
 c-----------------write OH Tsimpidi------------------------
 c      call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
