@@ -16,4 +16,4 @@ echo ' The executable will be called: '$2
 echo ' '
 echo '----------------------------------------------------'
 echo ' '
-sleep 3
+

@@ -1,0 +1,16 @@
+#! /bin/bash
+#
+#SBATCH -N 1
+#SBATCH --ntasks-per-node=1
+#SBATCH -t 20:00:00
+#SBATCH -J PMCAMx
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=benjamin.murphy@itm.su.se
+#SBATCH -v 
+
+
+        # The >& means pipeline standard error
+	./CAMx_daily_EastUS 193 12 --verbose >&CRM_LOG.$$ log.$$ 
+
+#end
+
