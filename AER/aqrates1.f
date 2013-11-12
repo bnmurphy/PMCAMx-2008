@@ -112,7 +112,7 @@ c
 c CALCULATION OF GCON VECTOR (GAS-PHASE CONCENTRATIONS IN MOLE/L)
 c
       do 5 i=1,22
-      gcon(i) = spres(i)*1.e-6/(0.08206*temp)
+        gcon(i) = spres(i)*1.e-6/(0.08206*temp)
 5     continue
 c
 c     ** RADIUS AND LWC FOR THE SECTION
@@ -142,11 +142,11 @@ c     LOADING OF THE MAIN AQUEOUS CONCENTRATIONS  (in M)
 c
       con(1) = yaq(6)*1000./(wmol(1)*wlm)   ! S(IV)
       if (con(1) .lt. 1.e-20) con(1)=1.e-20
-      con(2) = yaq(11)*1000./(wmol(2)*wlm)   ! S(VI)
-      con(3) = 0.                                ! N(III) (DETERMINED LATER)
-      con(4) = yaq(8)*1000./(wmol(4)*wlm)   ! N(V)
-      con(5) = 0.                                ! CO2 (DETERMINED LATER)
-      con(6) = yaq(7)*1000./(wmol(6)*wlm)      ! H2O2
+        con(2) = yaq(11)*1000./(wmol(2)*wlm)   ! S(VI)
+        con(3) = 0.                                ! N(III) (DETERMINED LATER)
+        con(4) = yaq(8)*1000./(wmol(4)*wlm)   ! N(V)
+        con(5) = 0.                                ! CO2 (DETERMINED LATER)
+        con(6) = yaq(7)*1000./(wmol(6)*wlm)      ! H2O2
       if (con(6) .lt. 1.e-20) con(6)=1.e-20
       con(7) = akhen(7)*spres(7)*1.e-6           ! HCHO
       con(8) = 0.                                ! HCOOH (DETERMINED LATER)
@@ -225,10 +225,13 @@ c
          diag(j) = one
  51   CONTINUE      
 c
-c     CALL HYBRID
-      call hybrd(state,numfunc,x,fvec,xtol,par,maxfev,ml,mu,epsfcn,diag,
-     *                 mode,factor,nprint,info,nfev,fjac,ldfjac,r,lr,
-     *                 qtf,wa1,wa2,wa3,wa4,302)
+c     CALL HYBRID (BNM Commented this call since 
+c                  the HYBRD subroutine is missing 2-24-11)
+      !call hybrd(state,numfunc,x,fvec,xtol,par,maxfev,ml,mu,epsfcn,diag,
+      !*                 mode,factor,nprint,info,nfev,fjac,ldfjac,r,lr,
+      !*                 qtf,wa1,wa2,wa3,wa4,302)
+      !End-BNM
+
 c      if (info .ne. 1) write(6,*)'INFO = ', info
      
 c     hybrd error control

@@ -48,7 +48,7 @@ c
       integer   MXCOL9,  MXROW9,  MXLAY9 
       integer   MXCOL10, MXROW10, MXLAY10 
 c
-      parameter ( MXCOL1  =  97, MXROW1  =  90, MXLAY1  =14 )
+      parameter ( MXCOL1  = 150, MXROW1  = 162, MXLAY1  =14 )
       parameter ( MXCOL2  =   0, MXROW2  =   0, MXLAY2  = 0 )
       parameter ( MXCOL3  =   0, MXROW3  =   0, MXLAY3  = 0 )
       parameter ( MXCOL4  =   0, MXROW4  =   0, MXLAY4  = 0 )
@@ -63,14 +63,14 @@ c
       integer   MXROWA
       integer   MXLAYA
 c
-      parameter ( MXCOLA  =  97, MXROWA  =  90, MXLAYA  = 14)
+      parameter ( MXCOLA  = 150, MXROWA  = 162, MXLAYA  = 14)
 c
       integer   MX1D
       integer   MXCHDRN
       integer   MXGRID
       integer   MXSECT
 c
-      parameter ( MX1D    = 160 )
+      parameter ( MX1D    = 180 )
       parameter ( MXCHDRN =   3 )
       parameter ( MXGRID  =  10 )
       parameter ( MXSECT  =  10 )
@@ -107,7 +107,7 @@ c
       integer   NSPNAM
       integer   NRADNM
 c
-      parameter ( MXSPEC  =   520 )
+      parameter ( MXSPEC  =   592 ) ! BNM changed from 520 when added NTSOA
       parameter ( MXRADCL =    18 )
       parameter ( MXPHT1  =     6 )
       parameter ( MXPHT2  =    24 )
@@ -115,10 +115,10 @@ c
       parameter ( TEMPLO  = 100.0 ) ! 220 for July
       parameter ( TEMPHI  = 320.0 )
       parameter ( NPRESR  =    10 )
-      parameter ( PRESLO  = 100.0 ) ! 326 for July
+      parameter ( PRESLO  = 50.0 ) ! 326 for July
       parameter ( PRESHI  = 1100. )
-      parameter ( MXRXN   =   237 )
-      parameter ( NSPNAM  =   520 )
+      parameter ( MXRXN   =   245 )
+      parameter ( NSPNAM  =   592 ) ! BNM changed from 520 when added NTSOA
       parameter ( NRADNM  =    26 )
 c
 c-----------------------------------------------------------------------

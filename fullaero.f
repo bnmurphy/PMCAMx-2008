@@ -107,7 +107,6 @@ cbk        countcell=countcell+1    ! tmg (12/05/02)
 	 write(*,*) 'No Aerosol Species !!'
 	 return
       endif
-c
       modeaero = 0
 c
       ng = nsec*nsp
@@ -153,6 +152,8 @@ c       to move this conversion inside aqueous module.  tmg (04/12/04)
 c
       if ( lwc_c.ge.aqcwmin .and. tempk.ge.aqtamin .and. laq ) then
        if ( chaq.eq.'RADM' ) then
+
+
         pres_pa = 100. * press
         dt_sec  = dtaer * 3600.
         cw_kgm3 = lwc_c / 1000.
@@ -259,8 +260,10 @@ c     adjust mass to avoid negative concentration sections
      &        = amax1( (1.-s_neg/s_pos)*con(r_idx(n)+(ksec-1)), 0.0 )
           enddo
         enddo
-c     END of RADM
-       else
+
+C	END OF RADM!
+
+       else		! CALL AQCHEM
         do k=1,ngas_aq
           gas(k)=0.0
         enddo
@@ -324,8 +327,10 @@ ckf
 c        Nitrogen mass balance (convert n2o5 to nitrate)
 c
 ckf
-         n2o5nit = cncrad(3)*prs*101325*62./8.314/tempk
-	 cncrad(3) = 0.0
+         !n2o5nit = cncrad(3)*prs*101325*62./8.314/tempk
+         !cncrad(3) = 0.0
+         n2o5nit = cncrad(kN2O5)*prs*101325*62./8.314/tempk
+         cncrad(kN2O5) = 0.0
 ckf
 
 ckf        
@@ -335,12 +340,13 @@ ckf
 	 
 ckf
          nitbef = 0.0
-	 do i =1, nsect
-	 nitbef = nitbef+aerosol(i,nan)*14./62.
-	 enddo
-	 nitbef = nitbef+(14*prs/(8.314e-5*tempk))*(gas(ngn)+gas(nghno2)+gas(ngno3)+gas(ngno)
-     & +gas(ngno2)+gas(ngpan))    
-	 nitbef = nitbef+(2*(cncrad(3)*prs*101325*108.011/8.314/tempk)*14./108.01) 
+         do i =1, nsect
+           nitbef = nitbef+aerosol(i,nan)*14./62.
+         enddo
+         nitbef = nitbef+(14*prs/(8.314e-5*tempk))*(gas(ngn)+gas(nghno2)+gas(ngno3)+gas(ngno)
+     &            +gas(ngno2)+gas(ngpan))    
+         !nitbef = nitbef+(2*(cncrad(3)*prs*101325*108.011/8.314/tempk)*14./108.01) 
+         nitbef = nitbef+(2*(cncrad(kN2O5)*prs*101325*108.011/8.314/tempk)*14./108.01) 
 c
 c
          call aqchem(gas,aerosol,rhumid,prs,tempk,lwc_c,t0_min,t1_min,
@@ -350,10 +356,10 @@ ckf     &
 ckf
          nitaf = 0.0
 	 do i =1, nsect
-	 nitaf = nitaf+aerosol(i,nan)*14./62.
+	   nitaf = nitaf+aerosol(i,nan)*14./62.
 	 enddo
 	 nitaf = nitaf+(14*prs/(8.314e-5*tempk))*(gas(ngn)+gas(nghno2)+gas(ngno3)+gas(ngno)
-     & +gas(ngno2)+gas(ngpan))    
+     & 		 +gas(ngno2)+gas(ngpan))    
 	 nitbal = nitaf/nitbef
 	 
 c	 write(*,*) nitbal
@@ -399,9 +405,12 @@ c
           con(kpec_c+(knsec-1))  = aerosol(knsec,nae)
           con(kcrst_c+(knsec-1)) = aerosol(knsec,nar)
         enddo
-       endif
+
+       endif		!RADM or AQCHEM
        modeaero = 1
-      endif
+      endif		!AQUEOUS CHEMISTRY CALLED
+
+
 c     RADM or VSRM -> call AER even if the aqueous module is called
 c     OVSR         -> call SOAP alone if the aqueous module is called
       if (laero) then
@@ -411,6 +420,7 @@ c     OVSR         -> call SOAP alone if the aqueous module is called
           modeaero = 2
         endif
       endif
+
 c
 c     if neither aqchem nor aerchem is called we don't call soap
 c     - should we??? 
@@ -421,7 +431,7 @@ c
         enddo
 c
 c     map con to q [ugr]  gas in ppm
-c
+c     BNM 07/21/09 MADE SEVERAL CHANGES TO ADD NTSOA TO THE FULLAERO MODULE
         do knsec=1,nsec
           q((knsec-1)*nsp+kcl+1)=con(kapo1_c+(knsec-1))
           q((knsec-1)*nsp+kcl+2)=con(kapo2_c+(knsec-1))
@@ -431,36 +441,42 @@ c
           q((knsec-1)*nsp+kcl+6)=con(kapo6_c+(knsec-1))
           q((knsec-1)*nsp+kcl+7)=con(kapo7_c+(knsec-1))
           q((knsec-1)*nsp+kcl+8)=con(kapo8_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+9)=con(kapo9_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+10)=con(kapo10_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+11)=con(kaoo1_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+12)=con(kaoo2_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+13)=con(kaoo3_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+14)=con(kaoo4_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+15)=con(kaoo5_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+16)=con(kaoo6_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+17)=con(kaoo7_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+18)=con(kaoo8_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+19)=con(kaoo9_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+20)=con(kaoo10_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+21)=con(kabs1_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+22)=con(kabs2_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+23)=con(kabs3_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+24)=con(kabs4_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+25)=con(kaas1_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+26)=con(kaas2_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+27)=con(kaas3_c+(knsec-1))
-          q((knsec-1)*nsp+kcl+28)=con(kaas4_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+9)=con(kaoo1_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+10)=con(kaoo2_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+11)=con(kaoo3_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+12)=con(kaoo4_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+13)=con(kaoo5_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+14)=con(kaoo6_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+15)=con(kaoo7_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+16)=con(kaoo8_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+17)=con(kabs1_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+18)=con(kabs2_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+19)=con(kabs3_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+20)=con(kabs4_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+21)=con(kabs5_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+22)=con(kaas1_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+23)=con(kaas2_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+24)=con(kaas3_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+25)=con(kaas4_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+26)=con(kaas5_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+27)=con(kans1_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+28)=con(kans2_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+29)=con(kans3_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+30)=con(kans4_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+31)=con(kans5_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+32)=con(kans6_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+33)=con(kans7_c+(knsec-1))
+          q((knsec-1)*nsp+kcl+34)=con(kans8_c+(knsec-1))
 c
-          q((knsec-1)*nsp+kso4)=con(kpso4_c+(knsec-1)) / 96.  * 98.
-          q((knsec-1)*nsp+kcl)=con(kpcl_c+(knsec-1))   / 35.5 * 36.5
-          q((knsec-1)*nsp+kno3)=con(kpno3_c+(knsec-1)) / 62.  * 63.
-          q((knsec-1)*nsp+kna)=con(kna_c+(knsec-1))
-          q((knsec-1)*nsp+knh4)=con(kpnh4_c+(knsec-1)) / 18.  * 17.
-          q((knsec-1)*nsp+kh2o)=con(kph2o_c+(knsec-1))
-          q((knsec-1)*nsp+kec)=con(kpec_c+(knsec-1))
-          q((knsec-1)*nsp+kpom)=con(kpoc_c+(knsec-1))
-          q((knsec-1)*nsp+kcrus)=con(kcrst_c+(knsec-1))
+          q((knsec-1)*nsp+kso4) = con(kpso4_c+(knsec-1)) / 96.  * 98.
+          q((knsec-1)*nsp+kcl)  = con(kpcl_c+(knsec-1))   / 35.5 * 36.5
+          q((knsec-1)*nsp+kno3) = con(kpno3_c+(knsec-1)) / 62.  * 63.
+          q((knsec-1)*nsp+kna)  = con(kna_c+(knsec-1))
+          q((knsec-1)*nsp+knh4) = con(kpnh4_c+(knsec-1)) / 18.  * 17.
+          q((knsec-1)*nsp+kh2o) = con(kph2o_c+(knsec-1))
+          q((knsec-1)*nsp+kec)  = con(kpec_c+(knsec-1))
+          q((knsec-1)*nsp+kpom) = con(kpoc_c+(knsec-1))
+          q((knsec-1)*nsp+kcrus)= con(kcrst_c+(knsec-1))
         enddo
 c
 cbk   SOAP has been merged with inorganic aerosol module - bkoo (03/09/03)
@@ -481,8 +497,6 @@ c     now organic gases are given in ppm - bkoo (08/25/03)
         q(naer+icpo6)   = con(kcpo6_c)
         q(naer+icpo7)   = con(kcpo7_c)
         q(naer+icpo8)   = con(kcpo8_c)
-        q(naer+icpo9)   = con(kcpo9_c)
-        q(naer+icpo10)   = con(kcpo10_c)
         q(naer+icoo1)   = con(kcoo1_c)
         q(naer+icoo2)   = con(kcoo2_c)
         q(naer+icoo3)   = con(kcoo3_c)
@@ -491,16 +505,24 @@ c     now organic gases are given in ppm - bkoo (08/25/03)
         q(naer+icoo6)   = con(kcoo6_c)
         q(naer+icoo7)   = con(kcoo7_c)
         q(naer+icoo8)   = con(kcoo8_c)
-        q(naer+icoo9)   = con(kcoo9_c)
-        q(naer+icoo10)   = con(kcoo10_c)
         q(naer+icbs1)   = con(kcbs1_c)
         q(naer+icbs2)   = con(kcbs2_c)
         q(naer+icbs3)   = con(kcbs3_c)
         q(naer+icbs4)   = con(kcbs4_c)
+        q(naer+icbs5)   = con(kcbs5_c)
         q(naer+icas1)   = con(kcas1_c)
         q(naer+icas2)   = con(kcas2_c)
         q(naer+icas3)   = con(kcas3_c)
         q(naer+icas4)   = con(kcas4_c)
+        q(naer+icas5)   = con(kcas5_c)
+        q(naer+icns1)   = con(kcns1_c)
+        q(naer+icns2)   = con(kcns2_c)
+        q(naer+icns3)   = con(kcns3_c)
+        q(naer+icns4)   = con(kcns4_c)
+        q(naer+icns5)   = con(kcns5_c)
+        q(naer+icns6)   = con(kcns6_c)
+        q(naer+icns7)   = con(kcns7_c)
+        q(naer+icns8)   = con(kcns8_c)
 cbk        endif
 c
         q(naer+ih2so4) = con(kh2so4_c)
@@ -508,6 +530,7 @@ c
         q(naer+ihno3)  = con(khno3_c)
         q(naer+ihcl)   = con(khcl_c)
 c
+
         if (modeaero.eq.1) then     ! call SOAP only
           do i=1,nsec
             qt(i)=0.d0
@@ -526,10 +549,12 @@ c
           call newdist(t1,q) ! size distribution mapping
           call step(nsec,q) ! calculate water in each section
         else                        ! call SOAP + AER
-          call aerchem(chaero,q,t0,t1,lfrst,ierr)
+
+	  call aerchem(chaero,q,t0,t1,lfrst,ierr)
         endif
+
 c
-c     map q back to con 
+c       MAP Q BACK TO CON
 c
         do knsec=1,nsec
           con(kapo1_c+(knsec-1))=q((knsec-1)*nsp+kcl+1)
@@ -540,26 +565,32 @@ c
           con(kapo6_c+(knsec-1))=q((knsec-1)*nsp+kcl+6)
           con(kapo7_c+(knsec-1))=q((knsec-1)*nsp+kcl+7)
           con(kapo8_c+(knsec-1))=q((knsec-1)*nsp+kcl+8)
-          con(kapo9_c+(knsec-1))=q((knsec-1)*nsp+kcl+9)
-          con(kapo10_c+(knsec-1))=q((knsec-1)*nsp+kcl+10)
-          con(kaoo1_c+(knsec-1))=q((knsec-1)*nsp+kcl+11)
-          con(kaoo2_c+(knsec-1))=q((knsec-1)*nsp+kcl+12)
-          con(kaoo3_c+(knsec-1))=q((knsec-1)*nsp+kcl+13)
-          con(kaoo4_c+(knsec-1))=q((knsec-1)*nsp+kcl+14)
-          con(kaoo5_c+(knsec-1))=q((knsec-1)*nsp+kcl+15)
-          con(kaoo6_c+(knsec-1))=q((knsec-1)*nsp+kcl+16)
-          con(kaoo7_c+(knsec-1))=q((knsec-1)*nsp+kcl+17)
-          con(kaoo8_c+(knsec-1))=q((knsec-1)*nsp+kcl+18)
-          con(kaoo9_c+(knsec-1))=q((knsec-1)*nsp+kcl+19)
-          con(kaoo10_c+(knsec-1))=q((knsec-1)*nsp+kcl+20)
-          con(kabs1_c+(knsec-1))=q((knsec-1)*nsp+kcl+21)
-          con(kabs2_c+(knsec-1))=q((knsec-1)*nsp+kcl+22)
-          con(kabs3_c+(knsec-1))=q((knsec-1)*nsp+kcl+23)
-          con(kabs4_c+(knsec-1))=q((knsec-1)*nsp+kcl+24)
-          con(kaas1_c+(knsec-1))=q((knsec-1)*nsp+kcl+25)
-          con(kaas2_c+(knsec-1))=q((knsec-1)*nsp+kcl+26)
-          con(kaas3_c+(knsec-1))=q((knsec-1)*nsp+kcl+27)
-          con(kaas4_c+(knsec-1))=q((knsec-1)*nsp+kcl+28)
+          con(kaoo1_c+(knsec-1))=q((knsec-1)*nsp+kcl+9)
+          con(kaoo2_c+(knsec-1))=q((knsec-1)*nsp+kcl+10)
+          con(kaoo3_c+(knsec-1))=q((knsec-1)*nsp+kcl+11)
+          con(kaoo4_c+(knsec-1))=q((knsec-1)*nsp+kcl+12)
+          con(kaoo5_c+(knsec-1))=q((knsec-1)*nsp+kcl+13)
+          con(kaoo6_c+(knsec-1))=q((knsec-1)*nsp+kcl+14)
+          con(kaoo7_c+(knsec-1))=q((knsec-1)*nsp+kcl+15)
+          con(kaoo8_c+(knsec-1))=q((knsec-1)*nsp+kcl+16)
+          con(kabs1_c+(knsec-1))=q((knsec-1)*nsp+kcl+17)
+          con(kabs2_c+(knsec-1))=q((knsec-1)*nsp+kcl+18)
+          con(kabs3_c+(knsec-1))=q((knsec-1)*nsp+kcl+19)
+          con(kabs4_c+(knsec-1))=q((knsec-1)*nsp+kcl+20)
+          con(kabs5_c+(knsec-1))=q((knsec-1)*nsp+kcl+21)
+          con(kaas1_c+(knsec-1))=q((knsec-1)*nsp+kcl+22)
+          con(kaas2_c+(knsec-1))=q((knsec-1)*nsp+kcl+23)
+          con(kaas3_c+(knsec-1))=q((knsec-1)*nsp+kcl+24)
+          con(kaas4_c+(knsec-1))=q((knsec-1)*nsp+kcl+25)
+          con(kaas5_c+(knsec-1))=q((knsec-1)*nsp+kcl+26)
+          con(kans1_c+(knsec-1))=q((knsec-1)*nsp+kcl+27)
+          con(kans2_c+(knsec-1))=q((knsec-1)*nsp+kcl+28)
+          con(kans3_c+(knsec-1))=q((knsec-1)*nsp+kcl+29)
+          con(kans4_c+(knsec-1))=q((knsec-1)*nsp+kcl+30)
+          con(kans5_c+(knsec-1))=q((knsec-1)*nsp+kcl+31)
+          con(kans6_c+(knsec-1))=q((knsec-1)*nsp+kcl+32)
+          con(kans7_c+(knsec-1))=q((knsec-1)*nsp+kcl+33)
+          con(kans8_c+(knsec-1))=q((knsec-1)*nsp+kcl+34)
 c
           con(kpso4_c+(knsec-1))=q((knsec-1)*nsp+kso4) * 96.  / 98.
           con(kpcl_c +(knsec-1))=q((knsec-1)*nsp+kcl)  * 35.5 / 36.5
@@ -582,8 +613,6 @@ cbk      if (.not.lsoap) then
         con(kcpo6_c) = q(naer+icpo6)
         con(kcpo7_c) = q(naer+icpo7)
         con(kcpo8_c) = q(naer+icpo8)
-        con(kcpo9_c) = q(naer+icpo9)
-        con(kcpo10_c) = q(naer+icpo10)
         con(kcoo1_c) = q(naer+icoo1)
         con(kcoo2_c) = q(naer+icoo2)
         con(kcoo3_c) = q(naer+icoo3)
@@ -592,16 +621,24 @@ cbk      if (.not.lsoap) then
         con(kcoo6_c) = q(naer+icoo6)
         con(kcoo7_c) = q(naer+icoo7)
         con(kcoo8_c) = q(naer+icoo8)
-        con(kcoo9_c) = q(naer+icoo9)
-        con(kcoo10_c) = q(naer+icoo10)
         con(kcbs1_c) = q(naer+icbs1)
         con(kcbs2_c) = q(naer+icbs2)
         con(kcbs3_c) = q(naer+icbs3)
         con(kcbs4_c) = q(naer+icbs4)
+        con(kcbs5_c) = q(naer+icbs5)
         con(kcas1_c) = q(naer+icas1)
         con(kcas2_c) = q(naer+icas2)
         con(kcas3_c) = q(naer+icas3)
         con(kcas4_c) = q(naer+icas4)
+        con(kcas5_c) = q(naer+icas5)
+        con(kcns1_c) = q(naer+icns1)
+        con(kcns2_c) = q(naer+icns2)
+        con(kcns3_c) = q(naer+icns3)
+        con(kcns4_c) = q(naer+icns4)
+        con(kcns5_c) = q(naer+icns5)
+        con(kcns6_c) = q(naer+icns6)
+        con(kcns7_c) = q(naer+icns7)
+        con(kcns8_c) = q(naer+icns8)
 
 cbk      endif
         con(kh2so4_c)=q(naer+ih2so4)
@@ -610,11 +647,19 @@ cbk      endif
         con(khcl_c)  =q(naer+ihcl)
 c
       endif
+
+cbk      endif
+        con(kh2so4_c)=q(naer+ih2so4)
+        con(knh3_c)  =q(naer+inh3)
+        con(khno3_c) =q(naer+ihno3)
+        con(khcl_c)  =q(naer+ihcl)
+
 c
 c      if ( .not. lsoap .or. .not.lcond ) then
 cbk   SOAP has been merged with inorganic aerosol module - bkoo (03/09/03)
 cbk      if ( .not. lsoap ) then
       lfrst = .false.
+
       return
 cbk      endif
       end

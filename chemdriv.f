@@ -1,7 +1,9 @@
       subroutine chemdriv(igrd,ncol,nrow,nlay,dt,itzon,idfin,fcloud,
      &                    cldtrns,water,tempk,press,height,cwc,conc,
      &                    cncrad,cellat,cellon,ldark,l3davg,
-     &                    iptr2d,iptrsa,ipa_cel)
+     &                    iptr2d,iptrsa,ipa_cel, masschem,masspart, 	!<- BNM 6/2/09
+     &                    dxmass, dymass, dzmass,     !<-BNM 6/30/09
+     &                    chemtime_0, chemtime, aertime )
 c
 c-----CAMx v4.02 030709
 c
@@ -94,7 +96,19 @@ c
       integer   ispc
       real      delo3, delno, delno2, delvoc, delh22, delhn3
       real      modo3, modnox, modvoc, o3old, o3new
-      real      cold(MXTRSP), cnew(MXTRSP)
+      real      cold(MXTRSP), cnew(MXTRSP), dtchem
+
+C BNM 	VARIABLES FOR SUMMING MASSES
+      real dconcchem(ncol,nrow,nlay,nspec), dconcpart(ncol,nrow,nlay,nspec)
+      real conca(nspec), concb(nspec)
+      real masschem(nspec*nlay), masspart(nspec*nlay)
+      real dxmass(nrow), dymass, dzmass(ncol,nrow,nlay)
+      real concbnmNO2, rrxn(MXRXN), rOH(80), rOHtot 
+      real bnmroh(100,ncol,nrow,nlay)    !debugging
+      integer subd(ncol,nrow), ioh
+            
+      real chemtime_0, chemtime, aertime
+
 c
 c========================= Source Apportion End ========================
 c
@@ -138,12 +152,14 @@ c
      &     cellat(ncol,nrow),cellon(ncol,nrow),
      &     cncrad(ncol,nrow,nlay,MXRADCL)
       integer idfin(ncol,nrow)
+      
 c
 c-----Entry point
 c
 
       call flush(6)
       call flush(iout)
+      call subdomain(subd)
 c
       dtchem = dt/3600.
       con(nspec+1) = 0.
@@ -166,9 +182,29 @@ c     aero_dt  : actual time interval for each grid (hr) (accumulated dtchem)
       endif
       endif                 ! bkoo_dbg
 c
+
       igrdchm = igrd
+
+      tcpu = dtime(tarray2)
+      chemtime_0 = tarray2(1)
+      
       do 91 k = 1,nlay
 c
+CBNM INITIALIZE OH PRODUCTION DEBUG VARS
+            rkO3O = 0
+            rkO3O1D = 0
+            rkO1DH2O = 0
+            rkO1DM = 0
+            rO3O = 0
+            rO3O1D = 0
+            rO1DH2O = 0
+            rO1DM = 0
+            O3check = 0
+            H2Ocheck = 0
+			do i = 1,80
+				rOH(i) = 0
+		    enddo
+CBNM
 c$omp parallel default(shared)
 c$omp&  private(i,j,l,is,ispc,i1,i2,con,
 c$omp&  crad,ij,iozon,ihaze,ialb,hght,iabov,ctrns,fcld,
@@ -180,6 +216,7 @@ c$omp&  copyin(/ijkgrd/)
 c
 c$omp do schedule(dynamic)
 c
+
         do 90 j = 2,nrow-1
           i1 = 2
           i2 = ncol-1
@@ -192,6 +229,7 @@ c
             ichm = i
             jchm = j
             kchm = k
+
 c
 c-----skip chemistry if fine grid exists in this cell
 c
@@ -392,22 +430,230 @@ c
      &             lirr)
                  call aerochem(water(i,j,k),tcell,pcell,cwc(i,j,k),con,
      &                                  convfac,dtchem,ldoipr,ipa_idx)
-               elseif (idmech.eq.5) then
+
+               elseif (idmech.eq.5) then  !Used for SAPRC/VBS Version
                  if (ldark(i,j)) then
                    nflag=1.0d0
                  else
                    nflag=1.0d0
                  endif
+
+C BNM		Split Budget Contributions from Chemistry and Partitioning
+
+CDEBUG
+c		print *
+c		print *,'CHEMDRIV: dtchem=',dtchem
+
+		  do ispc = 1,nspec
+			conca(ispc) = con(ispc)
+		  enddo
+C END <- BNM 
+
+c
+CDEBUGBNM  PRINT OPOG Concentration
+c        concbnmNO2 = 0.0
+c        concbnmNO = 0.0
+c        do k2 = 1,nlay
+c        do i2 = 1,ncol
+c         do j2 = 1,nrow
+c          concbnmNO2 = concbnmNO2 + conc(i2,j2,k2,KCOO1)
+c          concbnmNO = concbnmNO + conc(i2,j2,k2,KCOO2)
+c         enddo
+c        enddo
+c        enddo
+c        print *,'CHEMDRIV: Ccoo1(Before chem)=',concbnmNO2
+c        print *,'CHEMDRIV: Ccoo2(Before chem)=',concbnmNO
+c        print *,'CHEMDRIV: Con(coo1,Before chem)=',con(KCOO1)
+
                  call trap(rxnrate5,radslvr5,ratejac5,rateslo5,dtchem,
      &             ldark(i,j),water(i,j,k),atm,O2,CH4,H2,con,crad,
      &             avgrad,tcell,
      &             sddm,nddmsp,ngas,ddmjac5,lddm,nirrrxn,titrt,rrxn_irr,
      &             lirr)
+=======
+     &             lirr,rrxn)
+
+
+                 tcpu = dtime(tarray2)
+                 chemtime = chemtime + tarray2(1)
+                 
+C END <- BNM 
+
+C BNM		Account for just contribution from chemistry
+CDEBUGBNM  PRINT OPOG Concentration
+c        concbnmNO2 = 0.0
+c        concbnmNO = 0.0
+c        do k2 = 1,nlay
+c        do i2 = 1,ncol
+c         do j2 = 1,nrow
+c          concbnmNO2 = concbnmNO2 + conc(i2,j2,k2,KCOO1)
+c          concbnmNO = concbnmNO + conc(i2,j2,k2,KCOO2)
+c         enddo
+c        enddo
+c        enddo
+c        print *,'CHEMDRIV: Ccoo1(After chem)=',concbnmNO2
+c        print *,'CHEMDRIV: Ccoo2(After chem)=',concbnmNO
+c        print *,'CHEMDRIV: Con(coo1,After chem)=',con(KCOO1)
+
+           	  do ispc = 1,ngas
+			dconcchem(i,j,k,ispc) = amax1(bdnl(ispc),con(ispc))*convfac
+     &				- conca(ispc)
+			concb(ispc) = amax1(bdnl(ispc),con(ispc))*convfac
+            	  enddo
+            	  if (ngas.lt.nspec) then
+              	    do ispc = ngas+1,nspec
+                	dconcchem(i,j,k,ispc) = amax1(con(ispc),bdnl(ispc))
+     &				- conca(ispc)
+			concb(ispc) = amax1(bdnl(ispc),con(ispc))
+              	    enddo
+            	  endif
+CDEBUG
+c		print *,'CHEMDRIV: dtchem before aero=',dtchem
+		dtchem1 = dtchem
+C END <- BNM
+
                  if ( laero_upd )
      &           call fullaero(water(i,j,k),tcell,pcell,cwc(i,j,k),
      &                         MXSPEC,MXRADCL,NSPEC,NGAS,
      &                         con,crad,convfac,time,aero_dt(igrd),
      &                         i,j,k,height)
+
+                 tcpu = dtime(tarray2)
+                 aertime = aertime + tarray2(1)
+                 
+
+C END <- BNM 
+CDEBUGBNM  PRINT OPOG Concentration
+c        concbnmNO2 = 0.0
+c        concbnmNO = 0.0
+c        do k2 = 1,nlay
+c        do i2 = 1,ncol
+c         do j2 = 1,nrow
+c          concbnmNO2 = concbnmNO2 + conc(i2,j2,k2,KCOO1)
+c          concbnmNO = concbnmNO + conc(i2,j2,k2,KCOO2)
+c         enddo
+c        enddo
+c        enddo
+c        print *,'CHEMDRIV: Ccoo1(After aero)=',concbnmNO2
+c        print *,'CHEMDRIV: Ccoo2(After aero)=',concbnmNO
+c        print *,'CHEMDRIV: Con(coo1,After aero)=',con(KCOO1)
+c	print *
+
+CBNM PRINT PHOTOLYSIS RXNS AND O1D SINK TO TRACK OH PRODUCTION
+            rkO3O = rkO31 + rk(17)
+            rkO3O1D = rkO3O1D + rk(18)
+            rkO1DH2O = rkO1DH2O + rk(19)
+            rkO1DM = rkO1DM + rk(20)
+            rO3O = rO31 + rrxn(17)
+            rO3O1D = rO3O1D + rrxn(18)
+            rO1DH2O = rO1DH2O + rrxn(19)
+            rO1DM = rO1DM + rrxn(20)
+			O3check = O3check + con(kO3)
+			H2Ocheck = H2Ocheck + water(i,j,k)
+CBNM ADD UP ALL OH SINKS
+            rOH(1) = rOH(1) + rrxn(21)
+            rOH(2) = rOH(2) + rrxn(24)
+            rOH(3) = rOH(3) + rrxn(25)
+            rOH(4) = rOH(4) + rrxn(26)
+            rOH(5) = rOH(5) + rrxn(27)
+            rOH(6) = rOH(6) + rrxn(29)
+            rOH(7) = rOH(7) + rrxn(30)
+            rOH(8) = rOH(8) + rrxn(35)
+            rOH(9) = rOH(9) + rrxn(42)
+            rOH(10) = rOH(10) + rrxn(43)
+            rOH(11) = rOH(11) + rrxn(44)
+            rOH(12) = rOH(12) + rrxn(45)
+            rOH(13) = rOH(13) + rrxn(125)
+            rOH(14) = rOH(14) + rrxn(130)
+            rOH(15) = rOH(15) + rrxn(133)
+            rOH(16) = rOH(16) + rrxn(136)
+            rOH(17) = rOH(17) + rrxn(138)
+            rOH(18) = rOH(18) + rrxn(140)
+            rOH(19) = rOH(19) + rrxn(141)
+            rOH(20) = rOH(20) + rrxn(143)
+            rOH(21) = rOH(21) + rrxn(147)
+            rOH(22) = rOH(22) + rrxn(150)
+            rOH(23) = rOH(23) + rrxn(153)
+            rOH(24) = rOH(24) + rrxn(155)
+            rOH(25) = rOH(25) + rrxn(158)
+            rOH(26) = rOH(26) + rrxn(161)
+            rOH(27) = rOH(27) + rrxn(166)
+            rOH(28) = rOH(28) + rrxn(170)
+            rOH(29) = rOH(29) + rrxn(174)
+            rOH(30) = rOH(30) + rrxn(176)
+            rOH(31) = rOH(31) + rrxn(178)
+            rOH(32) = rOH(32) + rrxn(180)
+            rOH(33) = rOH(33) + rrxn(182)
+            rOH(34) = rOH(34) + rrxn(184)
+            rOH(35) = rOH(35) + rrxn(185)
+            rOH(36) = rOH(36) + rrxn(189)
+            rOH(37) = rOH(37) + rrxn(193)
+            rOH(38) = rOH(38) + rrxn(197)
+            rOH(39) = rOH(39) + rrxn(198)
+            rOH(40) = rOH(40) + rrxn(199)
+            rOH(41) = rOH(41) + rrxn(200)
+            rOH(42) = rOH(42) + rrxn(201)
+            rOH(43) = rOH(43) + rrxn(202)
+            rOH(44) = rOH(44) + rrxn(203)
+            rOH(45) = rOH(45) + rrxn(204)
+            rOH(46) = rOH(46) + rrxn(208)
+            rOH(47) = rOH(47) + rrxn(212)
+            rOH(48) = rOH(48) + rrxn(213)
+            rOH(49) = rOH(49) + rrxn(214)
+            rOH(50) = rOH(50) + rrxn(215)
+            rOH(51) = rOH(51) + rrxn(216)
+            rOH(52) = rOH(52) + rrxn(217)
+            rOH(53) = rOH(53) + rrxn(218)
+            rOH(54) = rOH(54) + rrxn(219)
+            rOH(55) = rOH(55) + rrxn(220)
+            rOH(56) = rOH(56) + rrxn(221)
+            rOH(57) = rOH(57) + rrxn(222)
+            rOH(58) = rOH(58) + rrxn(223)
+            rOH(59) = rOH(59) + rrxn(224)
+            rOH(60) = rOH(60) + rrxn(225)
+            rOH(61) = rOH(61) + rrxn(226)
+            rOH(62) = rOH(62) + rrxn(227)
+            rOH(63) = rOH(63) + rrxn(228)
+            rOH(64) = rOH(64) + rrxn(229)
+            rOH(65) = rOH(65) + rrxn(230)
+            rOH(66) = rOH(66) + rrxn(231)
+            rOH(67) = rOH(67) + rrxn(232)
+            rOH(68) = rOH(68) + rrxn(233)
+            rOH(69) = rOH(69) + rrxn(234)
+            rOH(70) = rOH(70) + rrxn(235)
+            rOH(71) = rOH(71) + rrxn(236)
+            rOH(72) = rOH(72) + rrxn(237)
+            rOH(73) = rOH(73) + rrxn(238)
+            rOH(74) = rOH(74) + rrxn(239)
+            rOH(75) = rOH(75) + rrxn(240)
+            rOH(76) = rOH(76) + rrxn(241)
+            rOH(77) = rOH(77) + rrxn(242)
+            rOH(78) = rOH(78) + rrxn(243)
+            rOH(79) = rOH(79) + rrxn(244)
+            rOH(80) = rOH(80) + rrxn(245)
+            do ioh = 1,80
+              bnmroh(ioh,i,j,k) = rOH(ioh)
+            enddo
+CBNM
+C BNM		Account for just contribution from partitioning
+
+CDEBUG
+c		print *,'CHEMDRIV: after aero dtchem=',dtchem
+c		print *,'CHEMDRIV: after aero dtchem1=',dtchem1
+		dtchem = dtchem1
+
+           	  do ispc = 1,ngas
+			dconcpart(i,j,k,ispc) = amax1(bdnl(ispc),con(ispc))*convfac
+     &				- concb(ispc)
+            	  enddo
+            	  if (ngas.lt.nspec) then
+              	    do ispc = ngas+1,nspec
+                	dconcpart(i,j,k,ispc) = amax1(con(ispc),bdnl(ispc))
+     &				- concb(ispc)
+              	    enddo
+            	  endif
+C END <- BNM
+
                elseif (idmech.eq.6) then
                  if (ldark(i,j)) then
                    nflag=1.0d0
@@ -465,6 +711,7 @@ c
             do l=1,nrad
               cncrad(i,j,k,l) = amax1(crad(l),bdlrad)
             enddo
+
 c
 c======================== Source Apportion Begin =======================
 c
@@ -600,6 +847,29 @@ cbk            endif
                 conc(i,j,k,is) = amax1(con(is),bdnl(is))
               enddo
             endif
+
+  89      continue  !col
+  90    continue    !row
+
+c BNM
+c       print *,'Layer: ',k
+c       print *,'  O3 = ',O3check/ncol/nrow
+c       print *,'  H2O = ',H2Ocheck/ncol/nrow
+c       print *,'  j - O3->O+O2 = ',rkO3O/ncol/nrow
+c       print *,'  rate - O3->O+O2 = ',rO3O/ncol/nrow
+c       print *,'  j - O3->O1D+O2 = ',rkO3O1D/ncol/nrow
+c       print *,'  rate - O3->O1D+O2 = ',rO3O1D/ncol/nrow
+c       print *,'  k - O1D+H2O->2OH = ',rkO1DH2O/ncol/nrow
+c       print *,'  rate - O1D+H2O->2OH = ',rO1DH2O/ncol/nrow
+c       print *,'  j - O1D+M->O = ',rkO1DM/ncol/nrow
+c       print *,'  rate - O1D+M->O = ',rO1DM/ncol/nrow
+c       rOHtot = 0
+c       do i = 1,80
+c		   rOHtot = rOHtot + rOH(i)
+c	   enddo
+c       print '(A8,E12.5)','rOHtot =',rOHtot
+c	   do i = 1,80
+c         print '(A7, i2,A2,E12.5))','  rOH: ',i,') ',rOH(i)
 c
   89      continue
   90    continue
@@ -608,6 +878,48 @@ c$omp end parallel
 c
   91  continue
 c
+=======
+
+C BNM 	ADD UP MASS CONTRIBUTIONS OF CHEMISTRY AND PARTITIONOING FROM
+C	ALL ROWS, COLUMNS, AND LAYERS
+	do ispc = 1,nspec
+	    do k = 1,nlay
+	    do j = 2,nrow-1
+	    do i = ibeg(j),iend(j)
+	        masschem(k+(ispc-1)*nlay) = masschem(k+(ispc-1)*nlay) 
+     &			+ dconcchem(i,j,k,ispc)*dxmass(j)*dymass*dzmass(i,j,k)*subd(i,j)
+	        masspart(k+(ispc-1)*nlay) = masspart(k+(ispc-1)*nlay) 
+     &			+ dconcpart(i,j,k,ispc)*dxmass(j)*dymass*dzmass(i,j,k)*subd(i,j)
+	    enddo
+	    enddo
+	    enddo
+	enddo
+C END <- BNM
+
+
+c BNM cccc ------------- Write Radicals Murphy -------------- cccc
+c Write these radicals once every time step instead of within the
+c  Trap.f subroutine (1 write statement vs 90*97*nlay write statements
+
+c-----------------write OH Tsimpidi------------------------
+c      call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)
+       do irads = 1,nrads
+         do k = 1,MXLAY1
+           if (l3davg.or.k.eq.1) then
+             write(iavg+(k-1)*(1+nrads)+irads) time,((bnmradcnc(irads,i,j,k),i=1,MXCOL1),j=1,MXROW1)
+           endif
+         enddo
+       enddo
+       write(iroh) time,
+     &       ((((bnmroh(ioh,i,j,k),i=1,ncol),j=1,nrow),k=1,nlay),ioh=1,80)
+c----------------------------------------------------------
+
+
+
+
+c BNM cccc -------------------------------------------------
+
+
 c     if fullaero was called
 c     - reset aero_dt 
 c     - increase grd_time (& date_aer) by dtaero (or multiple of dtaero)
@@ -626,6 +938,6 @@ c     - increase grd_time (& date_aer) by dtaero (or multiple of dtaero)
         goto 92
       endif
   93  continue
-c
+
       return
       end

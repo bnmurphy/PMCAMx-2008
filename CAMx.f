@@ -205,9 +205,9 @@ c
             call wrtmass(igrd,date,time,0)
             call massum(igrd,nspec,ncol(igrd),nrow(igrd),nlay(igrd),
      &                  deltax(1,igrd),deltay(igrd),depth(iptr3d(igrd)),
-     &                  conc(iptr4d(igrd)),xmass0(1,igrd))
-            do l = 1,nspec
-              xmsold(l,igrd) = xmass0(l,igrd)
+     &                  conc(iptr4d(igrd)),xmass0(1,igrd),subxmass(1,igrd))
+            do l = 1,nspec*nlay(igrd)
+              xmsold(l,igrd) = subxmass(l,igrd)
             enddo
 c
 c --- initialize the mass summary array for PiG ---
@@ -703,6 +703,7 @@ c
 c
 c-----Compute PiG mass
 c
+
       if( ipigflg .EQ. IRONPIG .OR. ipigflg .EQ. GRESPIG ) then
         if( ipigflg .EQ. GRESPIG ) then
            call gresmscl(ngrid,time,date,idiag,pigdump)
@@ -716,6 +717,7 @@ c
       call average(.FALSE.,1,deltat(1)/2.0,ncol(1),nrow(1),
      &             nlay(1),nlay(1),navspc,nspec,lavmap,tempk(1),
      &             press(1),conc(1),avcnc(1),ipacl_3d(1))
+
 c
 c----- Add PiG masses to average
 c

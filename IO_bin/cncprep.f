@@ -109,7 +109,7 @@ c
 c
 c-----Read 2nd IC header record and check inputs
 c
-      read(iunit,ERR=7001) orgx,orgy,izone,utmx,utmy,dx,dy,nx,ny,nz
+      read(iunit,ERR=7002) orgx,orgy,izone,utmx,utmy,dx,dy,nx,ny,nz
       if (.NOT.llatlon) then
         dx = dx/1000.
         dy = dy/1000.
@@ -129,8 +129,8 @@ c
 c
 c-----Read 3rd & 4th IC header 
 c
-      read(iunit,ERR=7001) (idum,idum,idum,idum,n=1,iseg)
-      read(iunit,ERR=7001) ((icspec(n,l),n=1,10),l=1,nicspc)
+      read(iunit,ERR=7003) (idum,idum,idum,idum,n=1,iseg)
+      read(iunit,ERR=7004) ((icspec(n,l),n=1,10),l=1,nicspc)
 c
 c-----Map IC species to model species
 c
@@ -253,6 +253,21 @@ c
  7001 continue
       write(iout,'(//,a)') 'ERROR in CNCPREP:'
       write(iout,'(2A)',ERR=9999)'Reading the header of restart file ',
+     &                                  'for coarse grid.'      
+      call camxerr()
+ 7002 continue
+      write(iout,'(//,a)') 'ERROR in CNCPREP:'
+      write(iout,'(2A)',ERR=9999)'Reading the 2nd header of IC file ',
+     &                                  'for coarse grid.'      
+      call camxerr()
+ 7003 continue
+      write(iout,'(//,a)') 'ERROR in CNCPREP:'
+      write(iout,'(2A)',ERR=9999)'Reading the 3rd header of IC file ',
+     &                                  'for coarse grid.'      
+      call camxerr()
+ 7004 continue
+      write(iout,'(//,a)') 'ERROR in CNCPREP:'
+      write(iout,'(2A)',ERR=9999)'Reading the 4th header of IC file ',
      &                                  'for coarse grid.'      
       call camxerr()
 c

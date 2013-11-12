@@ -29,45 +29,50 @@ c  while internal inorganic species are the detailed species, handled by MADM
       parameter( KNO3=4 )       ! pointer for external aerosol nitrate
       parameter( KNH4=5 )       ! pointer for external aerosol ammonium
       parameter(  KCL=6 )       ! pointer for external aerosol chlorides
+c  
+c     BNM 07/21/09  CHANGED THESE POINTERS TO ADD NTSOA
+      parameter (KAPO1 = 7)!pointer for external FRESH POA
+      parameter (KAPO2 = 8)!pointer for external FRESH POA
+      parameter (KAPO3 = 9)!pointer for external FRESH POA
+      parameter (KAPO4 =10)!pointer for external FRESH POA
+      parameter (KAPO5 =11)!pointer for external FRESH POA
+      parameter (KAPO6 =12)!pointer for external FRESH POA
+      parameter (KAPO7 =13)!pointer for external FRESH POA
+      parameter (KAPO8 =14)!pointer for external FRESH POA
 c
-      parameter (KAPO1 = 7)!pointer for external ALK4 SOA #1
-      parameter (KAPO2 = 8)!pointer for external ALK4 SOA #2
-      parameter (KAPO3 = 9)!pointer for external ALK4 SOA #3
-      parameter (KAPO4 =10)!pointer for external ALK4 SOA #4
+      parameter (KA0O1 =15)!pointer for external OXIDIZED POA
+      parameter (KA0O2 =16)!pointer for external OXIDIZED POA
+      parameter (KAOO3 =17)!pointer for external OXIDIZED POA
+      parameter (KAOO4 =18)!pointer for external OXIDIZED POA
+      parameter (KAOO5 =19)!pointer for external OXIDIZED POA
+      parameter (KAOO6 =20)!pointer for external OXIDIZED POA
+      parameter (KAOO7 =21)!pointer for external OXIDIZED POA
+      parameter (KAOO8 =22)!pointer for external OXIDIZED POA
 c
-      parameter (KAPO5 =11)!pointer for external ALK5 SOA #1
-      parameter (KAPO6 =12)!pointer for external ALK5 SOA #2
-      parameter (KAPO7 =13)!pointer for external ALK5 SOA #3
-      parameter (KAPO8 =14)!pointer for external ALK5 SOA #4
+      parameter (KABS1 =23)!pointer for external BIOGENIC SOA
+      parameter (KABS2 =24)!pointer for external BIOGENIC SOA
+      parameter (KABS3 =25)!pointer for external BIOGENIC SOA
+      parameter (KABS4 =26)!pointer for external BIOGENIC SOA
+      parameter (KABS5 =27)!pointer for external BIOGENIC SOA
 c
-      parameter (KAPO9 =15)!pointer for external ARO1 SOA #1
-      parameter (KAPO10 =16)!pointer for external ARO1 SOA #2
-      parameter (KAOO1 =17)!pointer for external ARO1 SOA #3
-      parameter (KAOO2 =18)!pointer for external ARO1 SOA #4
+      parameter (KAAS1 =28)!pointer for external ANTHROPOGENIC SOA
+      parameter (KAAS2 =29)!pointer for external ANTHROPOGENIC SOA
+      parameter (KAAS3 =30)!pointer for external ANTHROPOGENIC SOA
+      parameter (KAAS4 =31)!pointer for external ANTHROPOGENIC SOA
+      parameter (KAAS5 =32)!pointer for external ANTHROPOGENIC SOA
 c
-      parameter (KAOO3 =19)!pointer for external ARO2 SOA #1
-      parameter (KAOO4 =20)!pointer for external ARO2 SOA #2
-      parameter (KAOO5 =21)!pointer for external ARO2 SOA #3
-      parameter (KAOO6 =22)!pointer for external ARO2 SOA #4
+      parameter (KANS1 =33)!pointer for external NON-TRADITIONAL SOA
+      parameter (KANS2 =34)!pointer for external NON-TRADITIONAL SOA
+      parameter (KANS3 =35)!pointer for external NON-TRADITIONAL SOA
+      parameter (KANS4 =36)!pointer for external NON-TRADITIONAL SOA
+      parameter (KANS5 =37)!pointer for external NON-TRADITIONAL SOA
+      parameter (KANS6 =38)!pointer for external NON-TRADITIONAL SOA
+      parameter (KANS7 =39)!pointer for external NON-TRADITIONAL SOA
+      parameter (KANS8 =40)!pointer for external NON-TRADITIONAL SOA
 c
-      parameter (KAOO7 =23)!pointer for external OLE1 SOA #1
-      parameter (KAOO8 =24)!pointer for external OLE1 SOA #2
-      parameter (KAOO9 =25)!pointer for external OLE1 SOA #3
-      parameter (KAOO10 =26)!pointer for external OLE1 SOA #4
-c
-      parameter (KABS1 =27)!pointer for external OLE2 SOA #1
-      parameter (KABS2 =28)!pointer for external OLE2 SOA #2
-      parameter (KABS3 =29)!pointer for external OLE2 SOA #3
-      parameter (KABS4 =30)!pointer for external OLE2 SOA #4
-c
-      parameter (KAAS1 =31)!pointer for external TERP SOA #1
-      parameter (KAAS2 =32)!pointer for external TERP SOA #2
-      parameter (KAAS3 =33)!pointer for external TERP SOA #3
-      parameter (KAAS4 =34)!pointer for external TERP SOA #4
-c
-      parameter (KPOM  =35)!pointer for external Primary Organic Aerosol
-      parameter (KEC  = 36)!pointer for external Elemental Carbon Aerosol
-      parameter (KCRUS =37)!pointer for external Crustal Aerosol 
+      parameter (KPOM  =41)!pointer for external Primary Organic Aerosol
+      parameter (KEC  = 42)!pointer for external Elemental Carbon Aerosol
+      parameter (KCRUS =43)!pointer for external Crustal Aerosol 
 
 c
 c
@@ -94,49 +99,54 @@ c     17 = NaHSO4
 c     18 = (NH4)3H(SO4)2
 c     19 = OH-                  ! bkoo (02/14/02)
 c
-       parameter(ninert=2)            ! Number inert aerosol species (EC & Crustal)
-       parameter(norg=29)              ! Number of organic aerosol species (Both primary and secondary)
-cbk       parameter(nsoap=4)             ! Number or secondary organic aerosol species
+       parameter(ninert=2)    	! Number inert aerosol species (EC & Crustal)
+       parameter(norg=35)       ! Number of organic aerosol species (Both primary and secondary) BNM 07/21/09
+cbk       parameter(nsoap=4)    ! Number or secondary organic aerosol species
 cbk       parameter(ngas=4+nsoap)        ! Number of gases of interest, 4 inorganic + nsoap
-       parameter(ngas=4+28) ! bkoo (03/09/03)
+       parameter(ngas=4+34) ! bkoo (03/09/03)  [4+CONDENSIBLE ORGS]
        parameter(INH3  =1)            ! Pointer of NH3 in the gas phase
        parameter(IHNO3 =2)            ! Pointer of HNO3 in the gas phase
        parameter(IH2SO4=3)            ! Pointer of H2SO4 in the gas phase
        parameter(IHCL  =4)            ! Pointer of HCl in the gas phase
-       parameter (ICPO1 = 5)!pointer for external ALK4 SOA #1
-       parameter (ICPO2 = 6)!pointer for external ALK4 SOA #2
-       parameter (ICPO3 = 7)!pointer for external ALK4 SOA #3
-       parameter (ICPO4 = 8)!pointer for external ALK4 SOA #4
 c
-       parameter (ICPO5 = 9)!pointer for external ALK5 SOA #1
-       parameter (ICPO6 =10)!pointer for external ALK5 SOA #2
-       parameter (ICPO7 =11)!pointer for external ALK5 SOA #3
-       parameter (ICPO8 =12)!pointer for external ALK5 SOA #4
+      parameter (ICPO1 = 5)!pointer for external FRESH POA
+      parameter (ICPO2 = 6)!pointer for external FRESH POA
+      parameter (ICPO3 = 7)!pointer for external FRESH POA
+      parameter (ICPO4 = 8)!pointer for external FRESH POA
+      parameter (ICPO5 = 9)!pointer for external FRESH POA
+      parameter (ICPO6 =10)!pointer for external FRESH POA
+      parameter (ICPO7 =11)!pointer for external FRESH POA
+      parameter (ICPO8 =12)!pointer for external FRESH POA
 c
-       parameter (ICPO9 =13)!pointer for external ARO1 SOA #1
-       parameter (ICPO10 =14)!pointer for external ARO1 SOA #2
-       parameter (ICOO1 =15)!pointer for external ARO1 SOA #3
-       parameter (ICOO2 =16)!pointer for external ARO1 SOA #4
+      parameter (ICOO1 =13)!pointer for external OXIDIZED POA
+      parameter (ICOO2 =14)!pointer for external OXIDIZED POA
+      parameter (ICOO3 =15)!pointer for external OXIDIZED POA
+      parameter (ICOO4 =16)!pointer for external OXIDIZED POA
+      parameter (ICOO5 =17)!pointer for external OXIDIZED POA
+      parameter (ICOO6 =18)!pointer for external OXIDIZED POA
+      parameter (ICOO7 =19)!pointer for external OXIDIZED POA
+      parameter (ICOO8 =20)!pointer for external OXIDIZED POA
 c
-       parameter (ICOO3 =17)!pointer for external ARO2 SOA #1
-       parameter (ICOO4 =18)!pointer for external ARO2 SOA #2
-       parameter (ICOO5 =19)!pointer for external ARO2 SOA #3
-       parameter (ICOO6 =20)!pointer for external ARO2 SOA #4
+      parameter (ICBS1 =21)!pointer for external BIOGENIC SOA
+      parameter (ICBS2 =22)!pointer for external BIOGENIC SOA
+      parameter (ICBS3 =23)!pointer for external BIOGENIC SOA
+      parameter (ICBS4 =24)!pointer for external BIOGENIC SOA
+      parameter (ICBS5 =25)!pointer for external BIOGENIC SOA
 c
-       parameter (ICOO7 =21)!pointer for external OLE1 SOA #1
-       parameter (ICOO8 =22)!pointer for external OLE1 SOA #2
-       parameter (ICOO9 =23)!pointer for external OLE1 SOA #3
-       parameter (ICOO10 =24)!pointer for external OLE1 SOA #4
+      parameter (ICAS1 =26)!pointer for external ANTHROPOGENIC SOA
+      parameter (ICAS2 =27)!pointer for external ANTHROPOGENIC SOA
+      parameter (ICAS3 =28)!pointer for external ANTHROPOGENIC SOA
+      parameter (ICAS4 =29)!pointer for external ANTHROPOGENIC SOA
+      parameter (ICAS5 =30)!pointer for external ANTHROPOGENIC SOA
 c
-       parameter (ICBS1 =25)!pointer for external OLE2 SOA #1
-       parameter (ICBS2 =26)!pointer for external OLE2 SOA #2
-       parameter (ICBS3 =27)!pointer for external OLE2 SOA #3
-       parameter (ICBS4 =28)!pointer for external OLE2 SOA #4
-c
-       parameter (ICAS1 =29)!pointer for external TERP SOA #1
-       parameter (ICAS2 =30)!pointer for external TERP SOA #2
-       parameter (ICAS3 =31)!pointer for external TERP SOA #3
-       parameter (ICAS4 =32)!pointer for external TERP SOA #4
+      parameter (ICNS1 =31)!pointer for external NON-TRADITIONAL SOA
+      parameter (ICNS2 =32)!pointer for external NON-TRADITIONAL SOA
+      parameter (ICNS3 =33)!pointer for external NON-TRADITIONAL SOA
+      parameter (ICNS4 =34)!pointer for external NON-TRADITIONAL SOA
+      parameter (ICNS5 =35)!pointer for external NON-TRADITIONAL SOA
+      parameter (ICNS6 =36)!pointer for external NON-TRADITIONAL SOA
+      parameter (ICNS7 =37)!pointer for external NON-TRADITIONAL SOA
+      parameter (ICNS8 =38)!pointer for external NON-TRADITIONAL SOA
 c
        parameter(nsp=nexti+norg+ninert)
        parameter(ntotal=nsec*nsp+ngas)

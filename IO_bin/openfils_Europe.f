@@ -40,7 +40,7 @@ c
       include 'ahomap.com'
       include 'grid.com'
       include 'flags.com'
-      
+
       character*2 clay(14)     !Added by BNM to carry naming for avrg layer output files
 c
 c======================== Source Apportion Begin =======================
@@ -63,7 +63,6 @@ c
       character*200 ctlfil, filroot, filtmp
       character*80  action
       character*20  cldhdr
-      character*4   notbin
       logical       lexist
       integer       nopen
 c
@@ -121,6 +120,7 @@ c
         nfils = nfils + 1
       endif
 c
+
 cBNM  -  add new more .avrg output files to take output from higher layers
 
       if (l3davg) then
@@ -132,7 +132,7 @@ cBNM  -  add new more .avrg output files to take output from higher layers
 	iavg = nfils
 	data clay /'01','02','03','04','05','06','07','08','09',
      &		   '10','11','12','13','14'/
-     
+
 	do ilayer = 1,nlayer
 c          if (l3davg) then
 		write(filroot(ii+1:),'(A)') '.avrg'//clay(ilayer)
@@ -144,28 +144,39 @@ c	  endif
           filtmp = filroot
           nopen = nopen + 1
           action = 'Opening output AVERAGE file for coarse grid.'
-          
-c--------not binary Tsimpidi----------
-c        notbin = 'OH'
-c        open(unit=31,file=filroot(1:ii+5)//notbin,form='FORMATTED',
-c     &                                       status='UNKNOWN',ERR=7005)
-c------------cc-------------------
-
-          
           open(unit=(iavg),file=filroot(1:ii+iifil),form='UNFORMATTED',
      &                                       status= 'UNKNOWN',ERR=7005)
           write(iout,9000)'Output AVERAGE file coarse grid      (unit):',
      &                                                          iavg
           write(iout,9002) '   File: ',filroot(1:)
-	  iavg = iavg + 1
-c
+          iavg = iavg + 1
 
-	end do
-	iavg = nfils
-        nfils = nfils + nlayer !*(1+nrads)     cf
+c ccc BNM --- Opening Radical Concentration Output Files ---- ccc
+          do irads = 1,nrads  
+            write(filroot(ii+iifil:),'(A)') '.'//crads(irads)
+            open(unit=(iavg),file=filroot(1:ii+11),form='UNFORMATTED',
+     &                       status= 'UNKNOWN',ERR=7005)
+            write(iout,9000)'Output AVERAGE file coarse grid   (unit):',
+     &                                                          iavg
+            write(iout,9002) ' File: ',filroot(1:)
+            iavg = iavg + 1
+            enddo
+
+c ccc BNM --- End opening Radical species output files --- ccc
+
+        end do
+        iavg = nfils
+        nfils = nfils + nlayer*(1+nrads)
 cBNM -- End Opening Multiple Layer output files.
-
-
+cBNM -- Open binary files for printing r(OH)
+        iroh = nfils
+        nfils = nfils + 1
+        write(filroot(ii+iifil:),'(A)') '.rOH'
+        open(unit=(iroh),file=filroot(1:ii+11),form='UNFORMATTED',
+     &                                   status= 'UNKNOWN',ERR=7005)
+        write(iout,9000)'Output AVERAGE file coarse grid   (unit):', iroh
+        write(iout,9002) ' File: ',filroot(1:)
+cBNM -- End r(OH) printing
 
         if (ngrid.gt.1) then
           write(filroot(ii+1:),'(A)') '.favrg'
@@ -410,7 +421,7 @@ c
         read(icld(1),ERR=7008) cldhdr
         call jstlft( cldhdr )
         call toupper( cldhdr )
-        if( cldhdr .EQ. 'CAMX_V4.3 CLOUD_RAIN' ) then
+        if( cldhdr .EQ. 'CAMX_V4.3 CLOUD_RAIN') then
           backspace(icld(1))
           read(icld(1),ERR=7008) cldhdr,nxcl,nycl,nzcl
           if (nxcl.ne.ncol(1) .or. nycl.ne.nrow(1) .or.
@@ -691,7 +702,7 @@ c
            backspace(icld(n))
            read(icld(n)) cldhdr,nxcl,nycl,nzcl
            if (nxcl.ne.ncol(n) .or. nycl.ne.nrow(n) .or.      
-     &                                         nzcl.ne.nlay(n)) then
+     &                              nzcl.ne.nlay(n)) then
              write(iout,'(//,a)') 'ERROR in OPENFILS:'
              write(iout,'(2A)')'Cloud file dimensions do not',
      &                         ' match nested grid.'

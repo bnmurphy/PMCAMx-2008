@@ -186,6 +186,7 @@ c
      &               lbiomap(MXSPEC,MXGRID),lmoblmap(MXSPEC,MXGRID),
      &               lspmap(MXSPEC,MXGRID),lavwrmap(MXSPEC,MXGRID)
 c
+c  BNM 07/21/09 CHANGED MANY OF THESE ARRAYS TO ADD NTSOA
       integer   kno   ,kno2  ,ko3  
       integer   kpan  ,kcres ,kpan2
       integer   kmpan ,kpbzn ,knphe
@@ -220,21 +221,21 @@ c
       integer   kterp ,ktol  ,kxn  ,kxyl 
       integer   kcpo1, kcpo2, kcpo3, kcpo4
       integer   kcpo5, kcpo6, kcpo7, kcpo8
-      integer   kcpo9, kcpo10
       integer   kcoo1, kcoo2, kcoo3, kcoo4
       integer   kcoo5, kcoo6, kcoo7, kcoo8
-      integer   kcoo9, kcoo10
-      integer   kcbs1, kcbs2, kcbs3, kcbs4
-      integer   kcas1, kcas2, kcas3, kcas4
+      integer   kcbs1, kcbs2, kcbs3, kcbs4, kcbs5
+      integer   kcas1, kcas2, kcas3, kcas4, kcas5
+      integer   kcns1, kcns2, kcns3, kcns4
+      integer   kcns5, kcns6, kcns7, kcns8
 c
       integer   kapo1, kapo2, kapo3, kapo4
       integer   kapo5, kapo6, kapo7, kapo8
-      integer   kapo9, kapo10
       integer   kaoo1, kaoo2, kaoo3, kaoo4
       integer   kaoo5, kaoo6, kaoo7, kaoo8
-      integer   kaoo9, kaoo10
-      integer   kabs1, kabs2, kabs3, kabs4
-      integer   kaas1, kaas2, kaas3, kaas4
+      integer   kabs1, kabs2, kabs3, kabs4, kabs5
+      integer   kaas1, kaas2, kaas3, kaas4, kaas5
+      integer   kans1, kans2, kans3, kans4
+      integer   kans5, kans6, kans7, kans8
 c
       integer   kapo1_1  ,kapo1_2  ,kapo1_3  ,kapo1_4  ,kapo1_5
       integer   kapo1_6  ,kapo1_7  ,kapo1_8  ,kapo1_9  ,kapo1_10
@@ -252,10 +253,6 @@ c
       integer   kapo7_6  ,kapo7_7  ,kapo7_8  ,kapo7_9  ,kapo7_10
       integer   kapo8_1  ,kapo8_2  ,kapo8_3  ,kapo8_4  ,kapo8_5
       integer   kapo8_6  ,kapo8_7  ,kapo8_8  ,kapo8_9  ,kapo8_10
-      integer   kapo9_1  ,kapo9_2  ,kapo9_3  ,kapo9_4  ,kapo9_5
-      integer   kapo9_6  ,kapo9_7  ,kapo9_8  ,kapo9_9  ,kapo9_10
-      integer   kapo10_1  ,kapo10_2  ,kapo10_3  ,kapo10_4  ,kapo10_5
-      integer   kapo10_6  ,kapo10_7  ,kapo10_8  ,kapo10_9  ,kapo10_10
 
       integer   kaoo1_1  ,kaoo1_2  ,kaoo1_3  ,kaoo1_4  ,kaoo1_5
       integer   kaoo1_6  ,kaoo1_7  ,kaoo1_8  ,kaoo1_9  ,kaoo1_10
@@ -273,10 +270,6 @@ c
       integer   kaoo7_6  ,kaoo7_7  ,kaoo7_8  ,kaoo7_9  ,kaoo7_10
       integer   kaoo8_1  ,kaoo8_2  ,kaoo8_3  ,kaoo8_4  ,kaoo8_5
       integer   kaoo8_6  ,kaoo8_7  ,kaoo8_8  ,kaoo8_9  ,kaoo8_10
-      integer   kaoo9_1  ,kaoo9_2  ,kaoo9_3  ,kaoo9_4  ,kaoo9_5
-      integer   kaoo9_6  ,kaoo9_7  ,kaoo9_8  ,kaoo9_9  ,kaoo9_10
-      integer   kaoo10_1  ,kaoo10_2  ,kaoo10_3  ,kaoo10_4  ,kaoo10_5
-      integer   kaoo10_6  ,kaoo10_7  ,kaoo10_8  ,kaoo10_9  ,kaoo10_10
 
       integer   kabs1_1  ,kabs1_2  ,kabs1_3  ,kabs1_4  ,kabs1_5
       integer   kabs1_6  ,kabs1_7  ,kabs1_8  ,kabs1_9  ,kabs1_10
@@ -286,6 +279,8 @@ c
       integer   kabs3_6  ,kabs3_7  ,kabs3_8  ,kabs3_9  ,kabs3_10
       integer   kabs4_1  ,kabs4_2  ,kabs4_3  ,kabs4_4  ,kabs4_5
       integer   kabs4_6  ,kabs4_7  ,kabs4_8  ,kabs4_9  ,kabs4_10
+      integer   kabs5_1  ,kabs5_2  ,kabs5_3  ,kabs5_4  ,kabs5_5
+      integer   kabs5_6  ,kabs5_7  ,kabs5_8  ,kabs5_9  ,kabs5_10
 
       integer   kaas1_1  ,kaas1_2  ,kaas1_3  ,kaas1_4  ,kaas1_5
       integer   kaas1_6  ,kaas1_7  ,kaas1_8  ,kaas1_9  ,kaas1_10
@@ -295,7 +290,25 @@ c
       integer   kaas3_6  ,kaas3_7  ,kaas3_8  ,kaas3_9  ,kaas3_10
       integer   kaas4_1  ,kaas4_2  ,kaas4_3  ,kaas4_4  ,kaas4_5
       integer   kaas4_6  ,kaas4_7  ,kaas4_8  ,kaas4_9  ,kaas4_10
+      integer   kaas5_1  ,kaas5_2  ,kaas5_3  ,kaas5_4  ,kaas5_5
+      integer   kaas5_6  ,kaas5_7  ,kaas5_8  ,kaas5_9  ,kaas5_10
 
+      integer   kans1_1  ,kans1_2  ,kans1_3  ,kans1_4  ,kans1_5
+      integer   kans1_6  ,kans1_7  ,kans1_8  ,kans1_9  ,kans1_10
+      integer   kans2_1  ,kans2_2  ,kans2_3  ,kans2_4  ,kans2_5
+      integer   kans2_6  ,kans2_7  ,kans2_8  ,kans2_9  ,kans2_10
+      integer   kans3_1  ,kans3_2  ,kans3_3  ,kans3_4  ,kans3_5
+      integer   kans3_6  ,kans3_7  ,kans3_8  ,kans3_9  ,kans3_10
+      integer   kans4_1  ,kans4_2  ,kans4_3  ,kans4_4  ,kans4_5
+      integer   kans4_6  ,kans4_7  ,kans4_8  ,kans4_9  ,kans4_10
+      integer   kans5_1  ,kans5_2  ,kans5_3  ,kans5_4  ,kans5_5
+      integer   kans5_6  ,kans5_7  ,kans5_8  ,kans5_9  ,kans5_10
+      integer   kans6_1  ,kans6_2  ,kans6_3  ,kans6_4  ,kans6_5
+      integer   kans6_6  ,kans6_7  ,kans6_8  ,kans6_9  ,kans6_10
+      integer   kans7_1  ,kans7_2  ,kans7_3  ,kans7_4  ,kans7_5
+      integer   kans7_6  ,kans7_7  ,kans7_8  ,kans7_9  ,kans7_10
+      integer   kans8_1  ,kans8_2  ,kans8_3  ,kans8_4  ,kans8_5
+      integer   kans8_6  ,kans8_7  ,kans8_8  ,kans8_9  ,kans8_10
 c
       integer   kpoc_1
       integer   kpoc_2   ,kpoc_3   ,kpoc_4
@@ -338,177 +351,208 @@ c
      &            (kmap(19),kalk4), (kmap(20),kalk5), (kmap(21),karo1),
      &            (kmap(22),karo2), (kmap(23),kbacl), (kmap(24),kbald),
      &            (kmap(25),kbcl1), (kmap(26),kbcl2), (kmap(27),kbuta),
-     &            (kmap(28),kccho), (kmap(29),kccrs), (kmap(30),kcpo1),
-     &            (kmap(31),kcpo2), (kmap(32),kcpo3), (kmap(33),kcpo4),
-     &            (kmap(34),kcpo5), (kmap(35),kcpo6), (kmap(36),kcpo7),
-     &            (kmap(37),kcpo8), (kmap(38),kcpo9), (kmap(39),kcpo10),
-     &            (kmap(40),kcoo1), (kmap(41),kcoo2), (kmap(42),kcoo3),
-     &            (kmap(43),kcoo4), (kmap(44),kcoo5), (kmap(45),kcoo6),
-     &            (kmap(46),kcoo7), (kmap(47),kcoo8), (kmap(48),kcoo9),
-     &            (kmap(49),kcoo10), (kmap(50),kcbs1), (kmap(51),kcbs2),
-     &            (kmap(52),kcbs3), (kmap(53),kcbs4), (kmap(54),kcas1),
-     &            (kmap(55),kcas2), (kmap(56),kcas3), (kmap(57),kcas4),
+     &            (kmap(28),kccho), (kmap(29),kccrs), 
+     &		  (kmap(30),kcpo1), (kmap(31),kcpo2), (kmap(32),kcpo3), 
+     &		  (kmap(33),kcpo4), (kmap(34),kcpo5), (kmap(35),kcpo6), 
+     &		  (kmap(36),kcpo7), (kmap(37),kcpo8),
+     &            (kmap(38),kcoo1), (kmap(39),kcoo2), (kmap(40),kcoo3),
+     &            (kmap(41),kcoo4), (kmap(42),kcoo5), (kmap(43),kcoo6),
+     &            (kmap(44),kcoo7), (kmap(45),kcoo8),
+     &            (kmap(46),kcbs1), (kmap(47),kcbs2), (kmap(48),kcbs3), 
+     &		  (kmap(49),kcbs4), (kmap(50),kcbs5),
+     &		  (kmap(51),kcas1), (kmap(52),kcas2), (kmap(53),kcas3), 
+     &		  (kmap(54),kcas4), (kmap(55),kcas5),
+     &            (kmap(56),kcns1), (kmap(57),kcns2), (kmap(58),kcns3),
+     &            (kmap(59),kcns4), (kmap(60),kcns5), (kmap(61),kcns6),
+     &            (kmap(62),kcns7), (kmap(63),kcns8),
 c
-     &           (kmap(58),kcl2 ), (kmap(59),kco  ), (kmap(60),kco2h),
-     &           (kmap(61),kco3h), (kmap(62),kcooh), (kmap(63),kcprm),
-     &           (kmap(64),kdcb1), (kmap(65),keth ), (kmap(66),kethe),
-     &           (kmap(67),ketoh), (kmap(68),kfcrs), (kmap(69),kfmcl),
-     &           (kmap(70),kform), (kmap(71),kfprm), (kmap(72),kgly ),
-     &           (kmap(73),kh2o2), (kmap(74),khc2h), (kmap(75),khcho),
-     &           (kmap(76),khcl ), (kmap(77),khono), (kmap(78),khno3),
-     &           (kmap(79),kho2h), (kmap(80),khocl), (kmap(81),kicl1),
-     &           (kmap(82),kicl2), (kmap(83),kisop), (kmap(84),kispd),
-     &           (kmap(85),kmek ),(kmap(86),kmeoh),(kmap(87),kmeth),
-     &           (kmap(88),kmgly),(kmap(89),kmvk ),(kmap(90),kna  ),
-     &           (kmap(91),knh3 ),(kmap(92),kntr ),(kmap(93),knxoy),
-     &           (kmap(94),kole ),(kmap(95),kole1),(kmap(96),kole2),
-     &           (kmap(97),kbpin),(kmap(98),klimo),(kmap(99),kmono),
-     &           (kmap(100),ksesq),(kmap(101),kopen),(kmap(102),kpar ),
-     &           (kmap(103),kpcl ),(kmap(104),kpec ),(kmap(105),kphen),
-     &           (kmap(106),kpna ),(kmap(107),kpnh4),(kmap(108),kpno3),
-     &           (kmap(109),kpoa ),(kmap(110),kprod),(kmap(111),kpso4),
-     &           (kmap(112),krc2h),(kmap(113),krc3h),(kmap(114),krcho),
-     &           (kmap(115),krooh),(kmap(116),kso2 ),(kmap(117),kapo1),
-     &           (kmap(118),kapo2),(kmap(119),kapo3),(kmap(120),kapo4),
-     &           (kmap(121),kapo5),(kmap(122),kapo6),(kmap(123),kapo7),
-     &           (kmap(124),kapo8),(kmap(125),kapo9),(kmap(126),kapo10),
-     &           (kmap(127),kaoo1),(kmap(128),kaoo2),(kmap(129),kaoo3),
-     &           (kmap(130),kaoo4),(kmap(131),kaoo5),(kmap(132),kaoo6),
-     &           (kmap(133),kaoo7),(kmap(134),kaoo8),(kmap(135),kaoo9),
-     &           (kmap(136),kaoo10),(kmap(137),kabs1),(kmap(138),kabs2),
-     &           (kmap(139),kabs3),(kmap(140),kabs4),(kmap(141),kaas1),
-     &           (kmap(142),kaas2),(kmap(143),kaas3),(kmap(144),kaas4),
-     &           (kmap(145),ksulf),(kmap(146),kterp),
-     &           (kmap(147),ktol ),(kmap(148),kxn  ),(kmap(149),kxyl ), 
+     &           (kmap(64),kcl2 ), (kmap(65),kco  ), (kmap(66),kco2h),
+     &           (kmap(67),kco3h), (kmap(68),kcooh), (kmap(69),kcprm),
+     &           (kmap(70),kdcb1), (kmap(71),keth ), (kmap(72),kethe),
+     &           (kmap(73),ketoh), (kmap(74),kfcrs), (kmap(75),kfmcl),
+     &           (kmap(76),kform), (kmap(77),kfprm), (kmap(78),kgly ),
+     &           (kmap(79),kh2o2), (kmap(80),khc2h), (kmap(81),khcho),
+     &           (kmap(82),khcl ), (kmap(83),khono), (kmap(84),khno3),
+     &           (kmap(85),kho2h), (kmap(86),khocl), (kmap(87),kicl1),
+     &           (kmap(88),kicl2), (kmap(89),kisop), (kmap(90),kispd),
+     &           (kmap(91),kmek ), (kmap(92),kmeoh), (kmap(93),kmeth),
+     &           (kmap(94),kmgly), (kmap(95),kmvk ), (kmap(96),kna  ),
+     &           (kmap(97),knh3 ), (kmap(98),kntr ), (kmap(99),knxoy),
+     &           (kmap(100),kole ),(kmap(101),kole1),(kmap(102),kole2),
+     &           (kmap(103),kbpin),(kmap(104),klimo),(kmap(105),kmono),
+     &           (kmap(106),ksesq),(kmap(107),kopen),(kmap(108),kpar ),
+     &           (kmap(109),kpcl ),(kmap(110),kpec ),(kmap(111),kphen),
+     &           (kmap(112),kpna ),(kmap(113),kpnh4),(kmap(114),kpno3),
+     &           (kmap(115),kpoa ),(kmap(116),kprod),(kmap(117),kpso4),
+     &           (kmap(118),krc2h),(kmap(119),krc3h),(kmap(120),krcho),
+     &           (kmap(121),krooh),(kmap(122),kso2 ),
+     &		 (kmap(123),kapo1),(kmap(124),kapo2),(kmap(125),kapo3),
+     &           (kmap(126),kapo4),(kmap(127),kapo5),(kmap(128),kapo6),
+     &		 (kmap(129),kapo7),(kmap(130),kapo8),
+     &           (kmap(131),kaoo1),(kmap(132),kaoo2),(kmap(133),kaoo3),
+     &           (kmap(134),kaoo4),(kmap(135),kaoo5),(kmap(136),kaoo6),
+     &           (kmap(137),kaoo7),(kmap(138),kaoo8),
+     &           (kmap(139),kabs1),(kmap(140),kabs2),(kmap(141),kabs3), 
+     &		 (kmap(142),kabs4),(kmap(143),kabs5),
+     &		 (kmap(144),kaas1),(kmap(145),kaas2),(kmap(146),kaas3),
+     &		 (kmap(147),kaas4),(kmap(148),kaas5),
+     &		 (kmap(149),kans1),(kmap(150),kans2),(kmap(151),kans3),
+     &           (kmap(152),kans4),(kmap(153),kans5),(kmap(154),kans6),
+     &		 (kmap(155),kans7),(kmap(156),kans8),
+     &           (kmap(157),ksulf), (kmap(158),kterp),
+     &           (kmap(159),ktol ), (kmap(160),kxn  ),(kmap(161),kxyl ), 
 c
-     &(kmap(150),kapo1_1 ),(kmap(151),kapo1_2 ),(kmap(152),kapo1_3 ),
-     &(kmap(153),kapo1_4 ),(kmap(154),kapo1_5 ),(kmap(155),kapo1_6 ),
-     &(kmap(156),kapo1_7 ),(kmap(157),kapo1_8 ),(kmap(158),kapo1_9 ),
-     &(kmap(159),kapo1_10 ),(kmap(160),kapo2_1 ),(kmap(161),kapo2_2 ),
-     &(kmap(162),kapo2_3 ),(kmap(163),kapo2_4 ),(kmap(164),kapo2_5 ),
-     &(kmap(165),kapo2_6 ),(kmap(166),kapo2_7 ),(kmap(167),kapo2_8 ),
-     &(kmap(168),kapo2_9 ),(kmap(169),kapo2_10 ),(kmap(170),kapo3_1 ),
-     &(kmap(171),kapo3_2 ),(kmap(172),kapo3_3 ),(kmap(173),kapo3_4 ),
-     &(kmap(174),kapo3_5 ),(kmap(175),kapo3_6 ),(kmap(176),kapo3_7 ),
-     &(kmap(177),kapo3_8 ),(kmap(178),kapo3_9 ),(kmap(179),kapo3_10 ),
-     &(kmap(180),kapo4_1 ),(kmap(181),kapo4_2 ),(kmap(182),kapo4_3 ),
-     &(kmap(183),kapo4_4 ),(kmap(184),kapo4_5 ),(kmap(185),kapo4_6 ),
-     &(kmap(186),kapo4_7 ),(kmap(187),kapo4_8 ),(kmap(188),kapo4_9 ),
-     &(kmap(189),kapo4_10 ),(kmap(190),kapo5_1 ),(kmap(191),kapo5_2 ),
-     &(kmap(192),kapo5_3 ),(kmap(193),kapo5_4 ),(kmap(194),kapo5_5 ),
-     &(kmap(195),kapo5_6 ),(kmap(196),kapo5_7 ),(kmap(197),kapo5_8 ),
-     &(kmap(198),kapo5_9 ),(kmap(199),kapo5_10 ),(kmap(200),kapo6_1 ),
-     &(kmap(201),kapo6_2 ),(kmap(202),kapo6_3 ),(kmap(203),kapo6_4 ),
-     &(kmap(204),kapo6_5 ),(kmap(205),kapo6_6 ),(kmap(206),kapo6_7 ),
-     &(kmap(207),kapo6_8 ),(kmap(208),kapo6_9 ),(kmap(209),kapo6_10 ),
-     &(kmap(210),kapo7_1 ),(kmap(211),kapo7_2 ),(kmap(212),kapo7_3 ),
-     &(kmap(213),kapo7_4 ),(kmap(214),kapo7_5 ),(kmap(215),kapo7_6 ),
-     &(kmap(216),kapo7_7 ),(kmap(217),kapo7_8 ),(kmap(218),kapo7_9 ),
-     &(kmap(219),kapo7_10 ),(kmap(220),kapo8_1 ),(kmap(221),kapo8_2 ),
-     &(kmap(222),kapo8_3 ),(kmap(223),kapo8_4 ),(kmap(224),kapo8_5 ),
-     &(kmap(225),kapo8_6 ),(kmap(226),kapo8_7 ),(kmap(227),kapo8_8 ),
-     &(kmap(228),kapo8_9 ),(kmap(229),kapo8_10 ),(kmap(230),kapo9_1 ),
-     &(kmap(231),kapo9_2 ),(kmap(232),kapo9_3 ),(kmap(233),kapo9_4 ),
-     &(kmap(234),kapo9_5 ),(kmap(235),kapo9_6 ),(kmap(236),kapo9_7 ),
-     &(kmap(237),kapo9_8 ),(kmap(238),kapo9_9 ),(kmap(239),kapo9_10 ),
-     &(kmap(240),kapo10_1 ),(kmap(241),kapo10_2 ),(kmap(242),kapo10_3 ),
-     &(kmap(243),kapo10_4 ),(kmap(244),kapo10_5 ),(kmap(245),kapo10_6 ),
-     &(kmap(246),kapo10_7 ),(kmap(247),kapo10_8 ),(kmap(248),kapo10_9 ),
-     &(kmap(249),kapo10_10 ),(kmap(250),kaoo1_1 ),(kmap(251),kaoo1_2 ),
-     &(kmap(252),kaoo1_3 ),(kmap(253),kaoo1_4 ),(kmap(254),kaoo1_5 ),
-     &(kmap(255),kaoo1_6 ),(kmap(256),kaoo1_7 ),(kmap(257),kaoo1_8 ),
-     &(kmap(258),kaoo1_9 ),(kmap(259),kaoo1_10 ),(kmap(260),kaoo2_1 ),
-     &(kmap(261),kaoo2_2 ),(kmap(262),kaoo2_3 ),(kmap(263),kaoo2_4 ),
-     &(kmap(264),kaoo2_5 ),(kmap(265),kaoo2_6 ),(kmap(266),kaoo2_7 ),
-     &(kmap(267),kaoo2_8 ),(kmap(268),kaoo2_9 ),(kmap(269),kaoo2_10 ),
-     &(kmap(270),kaoo3_1 ),(kmap(271),kaoo3_2 ),(kmap(272),kaoo3_3 ),
-     &(kmap(273),kaoo3_4 ),(kmap(274),kaoo3_5 ),(kmap(275),kaoo3_6 ),
-     &(kmap(276),kaoo3_7 ),(kmap(277),kaoo3_8 ),(kmap(278),kaoo3_9 ),
-     &(kmap(279),kaoo3_10 ),(kmap(280),kaoo4_1 ),(kmap(281),kaoo4_2 ),
-     &(kmap(282),kaoo4_3 ),(kmap(283),kaoo4_4 ),(kmap(284),kaoo4_5 ),
-     &(kmap(285),kaoo4_6 ),(kmap(286),kaoo4_7 ),(kmap(287),kaoo4_8 ),
-     &(kmap(288),kaoo4_9 ),(kmap(289),kaoo4_10 ),(kmap(290),kaoo5_1 ),
-     &(kmap(291),kaoo5_2 ),(kmap(292),kaoo5_3 ),(kmap(293),kaoo5_4 ),
-     &(kmap(294),kaoo5_5 ),(kmap(295),kaoo5_6 ),(kmap(296),kaoo5_7 ),
-     &(kmap(297),kaoo5_8 ),(kmap(298),kaoo5_9 ),(kmap(299),kaoo5_10 ),
-     &(kmap(300),kaoo6_1 ),(kmap(301),kaoo6_2 ),(kmap(302),kaoo6_3 ),
-     &(kmap(303),kaoo6_4 ),(kmap(304),kaoo6_5 ),(kmap(305),kaoo6_6 ),
-     &(kmap(306),kaoo6_7 ),(kmap(307),kaoo6_8 ),(kmap(308),kaoo6_9 ),
-     &(kmap(309),kaoo6_10 ),(kmap(310),kaoo7_1 ),(kmap(311),kaoo7_2 ),
-     &(kmap(312),kaoo7_3 ),(kmap(313),kaoo7_4 ),(kmap(314),kaoo7_5 ),
-     &(kmap(315),kaoo7_6 ),(kmap(316),kaoo7_7 ),(kmap(317),kaoo7_8 ),
-     &(kmap(318),kaoo7_9 ),(kmap(319),kaoo7_10 ),(kmap(320),kaoo8_1 ),
-     &(kmap(321),kaoo8_2 ),(kmap(322),kaoo8_3 ),(kmap(323),kaoo8_4 ),
-     &(kmap(324),kaoo8_5 ),(kmap(325),kaoo8_6 ),(kmap(326),kaoo8_7 ),
-     &(kmap(327),kaoo8_8 ),(kmap(328),kaoo8_9 ),(kmap(329),kaoo8_10 ),
-     &(kmap(330),kaoo9_1 ),(kmap(331),kaoo9_2 ),(kmap(332),kaoo9_3 ),
-     &(kmap(333),kaoo9_4 ),(kmap(334),kaoo9_5 ),(kmap(335),kaoo9_6 ),
-     &(kmap(336),kaoo9_7 ),(kmap(337),kaoo9_8 ),(kmap(338),kaoo9_9 ),
-     &(kmap(339),kaoo9_10 ),(kmap(340),kaoo10_1 ),(kmap(341),kaoo10_2 ),
-     &(kmap(342),kaoo10_3 ),(kmap(343),kaoo10_4 ),(kmap(344),kaoo10_5 ),
-     &(kmap(345),kaoo10_6 ),(kmap(346),kaoo10_7 ),(kmap(347),kaoo10_8 ),
-     &(kmap(348),kaoo10_9 ),(kmap(349),kaoo10_10 ),(kmap(350),kabs1_1 ),
-     &(kmap(351),kabs1_2 ),(kmap(352),kabs1_3 ),(kmap(353),kabs1_4 ),
-     &(kmap(354),kabs1_5 ),(kmap(355),kabs1_6 ),(kmap(356),kabs1_7 ),
-     &(kmap(357),kabs1_8 ),(kmap(358),kabs1_9 ),(kmap(359),kabs1_10 ),
-     &(kmap(360),kabs2_1 ),(kmap(361),kabs2_2 ),(kmap(362),kabs2_3 ),
-     &(kmap(363),kabs2_4 ),(kmap(364),kabs2_5 ),(kmap(365),kabs2_6 ),
-     &(kmap(366),kabs2_7 ),(kmap(367),kabs2_8 ),(kmap(368),kabs2_9 ),
-     &(kmap(369),kabs2_10 ),(kmap(370),kabs3_1 ),(kmap(371),kabs3_2 ),
-     &(kmap(372),kabs3_3 ),(kmap(373),kabs3_4 ),(kmap(374),kabs3_5 ),
-     &(kmap(375),kabs3_6 ),(kmap(376),kabs3_7 ),(kmap(377),kabs3_8 ),
-     &(kmap(378),kabs3_9 ),(kmap(379),kabs3_10 ),(kmap(380),kabs4_1 ),
-     &(kmap(381),kabs4_2 ),(kmap(382),kabs4_3 ),(kmap(383),kabs4_4 ),
-     &(kmap(384),kabs4_5 ),(kmap(385),kabs4_6 ),(kmap(386),kabs4_7 ),
-     &(kmap(387),kabs4_8 ),(kmap(388),kabs4_9 ),(kmap(389),kabs4_10 ),
-     &(kmap(390),kaas1_1 ),(kmap(391),kaas1_2 ),(kmap(392),kaas1_3 ),
-     &(kmap(393),kaas1_4 ),(kmap(394),kaas1_5 ),(kmap(395),kaas1_6 ),
-     &(kmap(396),kaas1_7 ),(kmap(397),kaas1_8 ),(kmap(398),kaas1_9 ),
-     &(kmap(399),kaas1_10 ),(kmap(400),kaas2_1 ),(kmap(401),kaas2_2 ),
-     &(kmap(402),kaas2_3 ),(kmap(403),kaas2_4 ),(kmap(404),kaas2_5 ),
-     &(kmap(405),kaas2_6 ),(kmap(406),kaas2_7 ),(kmap(407),kaas2_8 ),
-     &(kmap(408),kaas2_9 ),(kmap(409),kaas2_10 ),(kmap(410),kaas3_1 ),
-     &(kmap(411),kaas3_2 ),(kmap(412),kaas3_3 ),(kmap(413),kaas3_4 ),
-     &(kmap(414),kaas3_5 ),(kmap(415),kaas3_6 ),(kmap(416),kaas3_7 ),
-     &(kmap(417),kaas3_8 ),(kmap(418),kaas3_9 ),(kmap(419),kaas3_10 ),
-     &(kmap(420),kaas4_1 ),(kmap(421),kaas4_2 ),(kmap(422),kaas4_3 ),
-     &(kmap(423),kaas4_4 ),(kmap(424),kaas4_5 ),(kmap(425),kaas4_6 ),
-     &(kmap(426),kaas4_7 ),(kmap(427),kaas4_8 ),(kmap(428),kaas4_9 ),
-     &(kmap(429),kaas4_10 ),
+     &(kmap(162),kapo1_1 ), (kmap(163),kapo1_2 ), (kmap(164),kapo1_3 ),
+     &(kmap(165),kapo1_4 ), (kmap(166),kapo1_5 ), (kmap(167),kapo1_6 ),
+     &(kmap(168),kapo1_7 ), (kmap(169),kapo1_8 ), (kmap(170),kapo1_9 ),
+     &(kmap(171),kapo1_10 ),(kmap(172),kapo2_1 ), (kmap(173),kapo2_2 ),
+     &(kmap(174),kapo2_3 ), (kmap(175),kapo2_4 ), (kmap(176),kapo2_5 ),
+     &(kmap(177),kapo2_6 ), (kmap(178),kapo2_7 ), (kmap(179),kapo2_8 ),
+     &(kmap(180),kapo2_9 ), (kmap(181),kapo2_10 ),(kmap(182),kapo3_1 ),
+     &(kmap(183),kapo3_2 ), (kmap(184),kapo3_3 ), (kmap(185),kapo3_4 ),
+     &(kmap(186),kapo3_5 ), (kmap(187),kapo3_6 ), (kmap(188),kapo3_7 ),
+     &(kmap(189),kapo3_8 ), (kmap(190),kapo3_9 ), (kmap(191),kapo3_10 ),
+     &(kmap(192),kapo4_1 ), (kmap(193),kapo4_2 ), (kmap(194),kapo4_3 ),
+     &(kmap(195),kapo4_4 ), (kmap(196),kapo4_5 ), (kmap(197),kapo4_6 ),
+     &(kmap(198),kapo4_7 ), (kmap(199),kapo4_8 ), (kmap(200),kapo4_9 ),
+     &(kmap(201),kapo4_10 ),(kmap(202),kapo5_1 ), (kmap(203),kapo5_2 ),
+     &(kmap(204),kapo5_3 ), (kmap(205),kapo5_4 ), (kmap(206),kapo5_5 ),
+     &(kmap(207),kapo5_6 ), (kmap(208),kapo5_7 ), (kmap(209),kapo5_8 ),
+     &(kmap(210),kapo5_9 ), (kmap(211),kapo5_10 ),(kmap(212),kapo6_1 ),
+     &(kmap(213),kapo6_2 ), (kmap(214),kapo6_3 ), (kmap(215),kapo6_4 ),
+     &(kmap(216),kapo6_5 ), (kmap(217),kapo6_6 ), (kmap(218),kapo6_7 ),
+     &(kmap(219),kapo6_8 ), (kmap(220),kapo6_9 ), (kmap(221),kapo6_10 ),
+     &(kmap(222),kapo7_1 ), (kmap(223),kapo7_2 ), (kmap(224),kapo7_3 ),
+     &(kmap(225),kapo7_4 ), (kmap(226),kapo7_5 ), (kmap(227),kapo7_6 ),
+     &(kmap(228),kapo7_7 ), (kmap(229),kapo7_8 ), (kmap(230),kapo7_9 ),
+     &(kmap(231),kapo7_10 ),(kmap(232),kapo8_1 ), (kmap(233),kapo8_2 ),
+     &(kmap(234),kapo8_3 ), (kmap(235),kapo8_4 ), (kmap(236),kapo8_5 ),
+     &(kmap(237),kapo8_6 ), (kmap(238),kapo8_7 ), (kmap(239),kapo8_8 ),
+     &(kmap(240),kapo8_9 ), (kmap(241),kapo8_10 ),
+     &(kmap(242),kaoo1_1 ), (kmap(243),kaoo1_2 ),
+     &(kmap(244),kaoo1_3 ), (kmap(245),kaoo1_4 ), (kmap(246),kaoo1_5 ),
+     &(kmap(247),kaoo1_6 ), (kmap(248),kaoo1_7 ), (kmap(249),kaoo1_8 ),
+     &(kmap(250),kaoo1_9 ), (kmap(251),kaoo1_10 ),(kmap(252),kaoo2_1 ),
+     &(kmap(253),kaoo2_2 ), (kmap(254),kaoo2_3 ), (kmap(255),kaoo2_4 ),
+     &(kmap(256),kaoo2_5 ), (kmap(257),kaoo2_6 ), (kmap(258),kaoo2_7 ),
+     &(kmap(259),kaoo2_8 ), (kmap(260),kaoo2_9 ), (kmap(261),kaoo2_10 ),
+     &(kmap(262),kaoo3_1 ), (kmap(263),kaoo3_2 ), (kmap(264),kaoo3_3 ),
+     &(kmap(265),kaoo3_4 ), (kmap(266),kaoo3_5 ), (kmap(267),kaoo3_6 ),
+     &(kmap(268),kaoo3_7 ), (kmap(269),kaoo3_8 ), (kmap(270),kaoo3_9 ),
+     &(kmap(271),kaoo3_10 ),(kmap(272),kaoo4_1 ), (kmap(273),kaoo4_2 ),
+     &(kmap(274),kaoo4_3 ), (kmap(275),kaoo4_4 ), (kmap(276),kaoo4_5 ),
+     &(kmap(277),kaoo4_6 ), (kmap(278),kaoo4_7 ), (kmap(279),kaoo4_8 ),
+     &(kmap(280),kaoo4_9 ), (kmap(281),kaoo4_10 ),(kmap(282),kaoo5_1 ),
+     &(kmap(283),kaoo5_2 ), (kmap(284),kaoo5_3 ), (kmap(285),kaoo5_4 ),
+     &(kmap(286),kaoo5_5 ), (kmap(287),kaoo5_6 ), (kmap(288),kaoo5_7 ),
+     &(kmap(289),kaoo5_8 ), (kmap(290),kaoo5_9 ), (kmap(291),kaoo5_10 ),
+     &(kmap(292),kaoo6_1 ), (kmap(293),kaoo6_2 ), (kmap(294),kaoo6_3 ),
+     &(kmap(295),kaoo6_4 ), (kmap(296),kaoo6_5 ), (kmap(297),kaoo6_6 ),
+     &(kmap(298),kaoo6_7 ), (kmap(299),kaoo6_8 ), (kmap(300),kaoo6_9 ),
+     &(kmap(301),kaoo6_10 ),(kmap(302),kaoo7_1 ), (kmap(303),kaoo7_2 ),
+     &(kmap(304),kaoo7_3 ), (kmap(305),kaoo7_4 ), (kmap(306),kaoo7_5 ),
+     &(kmap(307),kaoo7_6 ), (kmap(308),kaoo7_7 ), (kmap(309),kaoo7_8 ),
+     &(kmap(310),kaoo7_9 ), (kmap(311),kaoo7_10 ),(kmap(312),kaoo8_1 ),
+     &(kmap(313),kaoo8_2 ), (kmap(314),kaoo8_3 ), (kmap(315),kaoo8_4 ),
+     &(kmap(316),kaoo8_5 ), (kmap(317),kaoo8_6 ), (kmap(318),kaoo8_7 ),
+     &(kmap(319),kaoo8_8 ), (kmap(320),kaoo8_9 ), (kmap(321),kaoo8_10 ),
+     &(kmap(322),kabs1_1 ),
+     &(kmap(323),kabs1_2 ), (kmap(324),kabs1_3 ), (kmap(325),kabs1_4 ),
+     &(kmap(326),kabs1_5 ), (kmap(327),kabs1_6 ), (kmap(328),kabs1_7 ),
+     &(kmap(329),kabs1_8 ), (kmap(330),kabs1_9 ), (kmap(331),kabs1_10 ),
+     &(kmap(332),kabs2_1 ), (kmap(333),kabs2_2 ), (kmap(334),kabs2_3 ),
+     &(kmap(335),kabs2_4 ), (kmap(336),kabs2_5 ), (kmap(337),kabs2_6 ),
+     &(kmap(338),kabs2_7 ), (kmap(339),kabs2_8 ), (kmap(340),kabs2_9 ),
+     &(kmap(341),kabs2_10 ),(kmap(342),kabs3_1 ), (kmap(343),kabs3_2 ),
+     &(kmap(344),kabs3_3 ), (kmap(345),kabs3_4 ), (kmap(346),kabs3_5 ),
+     &(kmap(347),kabs3_6 ), (kmap(348),kabs3_7 ), (kmap(349),kabs3_8 ),
+     &(kmap(350),kabs3_9 ), (kmap(351),kabs3_10 ),(kmap(352),kabs4_1 ),
+     &(kmap(353),kabs4_2 ), (kmap(354),kabs4_3 ), (kmap(355),kabs4_4 ),
+     &(kmap(356),kabs4_5 ), (kmap(357),kabs4_6 ), (kmap(358),kabs4_7 ),
+     &(kmap(359),kabs4_8 ), (kmap(360),kabs4_9 ), (kmap(361),kabs4_10 ),
+     &(kmap(362),kabs5_1 ),
+     &(kmap(363),kabs5_2 ), (kmap(364),kabs5_3 ), (kmap(365),kabs5_4 ),
+     &(kmap(366),kabs5_5 ), (kmap(367),kabs5_6 ), (kmap(368),kabs5_7 ),
+     &(kmap(369),kabs5_8 ), (kmap(370),kabs5_9 ), (kmap(371),kabs5_10 ),
+     &(kmap(372),kaas1_1 ), (kmap(373),kaas1_2 ), (kmap(374),kaas1_3 ),
+     &(kmap(375),kaas1_4 ), (kmap(376),kaas1_5 ), (kmap(377),kaas1_6 ),
+     &(kmap(378),kaas1_7 ), (kmap(379),kaas1_8 ), (kmap(380),kaas1_9 ),
+     &(kmap(381),kaas1_10 ),(kmap(382),kaas2_1 ), (kmap(383),kaas2_2 ),
+     &(kmap(384),kaas2_3 ), (kmap(385),kaas2_4 ), (kmap(386),kaas2_5 ),
+     &(kmap(387),kaas2_6 ), (kmap(388),kaas2_7 ), (kmap(389),kaas2_8 ),
+     &(kmap(390),kaas2_9 ), (kmap(391),kaas2_10 ),(kmap(392),kaas3_1 ),
+     &(kmap(393),kaas3_2 ), (kmap(394),kaas3_3 ), (kmap(395),kaas3_4 ),
+     &(kmap(396),kaas3_5 ), (kmap(397),kaas3_6 ), (kmap(398),kaas3_7 ),
+     &(kmap(399),kaas3_8 ), (kmap(400),kaas3_9 ), (kmap(401),kaas3_10 ),
+     &(kmap(402),kaas4_1 ), (kmap(403),kaas4_2 ), (kmap(404),kaas4_3 ),
+     &(kmap(405),kaas4_4 ), (kmap(406),kaas4_5 ), (kmap(407),kaas4_6 ),
+     &(kmap(408),kaas4_7 ), (kmap(409),kaas4_8 ), (kmap(410),kaas4_9 ),
+     &(kmap(411),kaas4_10 ),
+     &(kmap(412),kaas5_1 ), (kmap(413),kaas5_2 ), (kmap(414),kaas5_3 ),
+     &(kmap(415),kaas5_4 ), (kmap(416),kaas5_5 ), (kmap(417),kaas5_6 ),
+     &(kmap(418),kaas5_7 ), (kmap(419),kaas5_8 ), (kmap(420),kaas5_9 ),
+     &(kmap(421),kaas5_10 ),
+     &(kmap(422),kans1_1 ), (kmap(423),kans1_2 ), (kmap(424),kans1_3 ),
+     &(kmap(425),kans1_4 ), (kmap(426),kans1_5 ), (kmap(427),kans1_6 ),
+     &(kmap(428),kans1_7 ), (kmap(429),kans1_8 ), (kmap(430),kans1_9 ),
+     &(kmap(431),kans1_10 ),(kmap(432),kans2_1 ), (kmap(433),kans2_2 ),
+     &(kmap(434),kans2_3 ), (kmap(435),kans2_4 ), (kmap(436),kans2_5 ),
+     &(kmap(437),kans2_6 ), (kmap(438),kans2_7 ), (kmap(439),kans2_8 ),
+     &(kmap(440),kans2_9 ), (kmap(441),kans2_10 ),(kmap(442),kans3_1 ),
+     &(kmap(443),kans3_2 ), (kmap(444),kans3_3 ), (kmap(445),kans3_4 ),
+     &(kmap(446),kans3_5 ), (kmap(447),kans3_6 ), (kmap(448),kans3_7 ),
+     &(kmap(449),kans3_8 ), (kmap(450),kans3_9 ), (kmap(451),kans3_10 ),
+     &(kmap(452),kans4_1 ), (kmap(453),kans4_2 ), (kmap(454),kans4_3 ),
+     &(kmap(455),kans4_4 ), (kmap(456),kans4_5 ), (kmap(457),kans4_6 ),
+     &(kmap(458),kans4_7 ), (kmap(459),kans4_8 ), (kmap(460),kans4_9 ),
+     &(kmap(461),kans4_10 ),(kmap(462),kans5_1 ), (kmap(463),kans5_2 ),
+     &(kmap(464),kans5_3 ), (kmap(465),kans5_4 ), (kmap(466),kans5_5 ),
+     &(kmap(467),kans5_6 ), (kmap(468),kans5_7 ), (kmap(469),kans5_8 ),
+     &(kmap(470),kans5_9 ), (kmap(471),kans5_10 ),(kmap(472),kans6_1 ),
+     &(kmap(473),kans6_2 ), (kmap(474),kans6_3 ), (kmap(475),kans6_4 ),
+     &(kmap(476),kans6_5 ), (kmap(477),kans6_6 ), (kmap(478),kans6_7 ),
+     &(kmap(479),kans6_8 ), (kmap(480),kans6_9 ), (kmap(481),kans6_10 ),
+     &(kmap(482),kans7_1 ), (kmap(483),kans7_2 ), (kmap(484),kans7_3 ),
+     &(kmap(485),kans7_4 ), (kmap(486),kans7_5 ), (kmap(487),kans7_6 ),
+     &(kmap(488),kans7_7 ), (kmap(489),kans7_8 ), (kmap(490),kans7_9 ),
+     &(kmap(491),kans7_10 ),(kmap(492),kans8_1 ), (kmap(493),kans8_2 ),
+     &(kmap(494),kans8_3 ), (kmap(495),kans8_4 ), (kmap(496),kans8_5 ),
+     &(kmap(497),kans8_6 ), (kmap(498),kans8_7 ), (kmap(499),kans8_8 ),
+     &(kmap(500),kans8_9 ), (kmap(501),kans8_10 ),
 
 c   scf
 
-     &(kmap(430),kpoc_1  ),
-     &(kmap(431),kpoc_2  ),(kmap(432),kpoc_3  ),(kmap(433),kpoc_4  ),
-     &(kmap(434),kpoc_5  ),(kmap(435),kpoc_6  ),(kmap(436),kpoc_7  ),
-     &(kmap(437),kpoc_8  ),(kmap(438),kpoc_9  ),(kmap(439),kpoc_10 ),
-     &(kmap(440),kpec_1  ),(kmap(441),kpec_2  ),(kmap(442),kpec_3  ),
-     &(kmap(443),kpec_4  ),(kmap(444),kpec_5  ),(kmap(445),kpec_6  ),
-     &(kmap(446),kpec_7  ),(kmap(447),kpec_8  ),(kmap(448),kpec_9  ),
-     &(kmap(449),kpec_10 ),(kmap(450),kcrust_1),(kmap(451),kcrust_2),
-     &(kmap(452),kcrust_3),(kmap(453),kcrust_4),(kmap(454),kcrust_5),
-     &(kmap(455),kcrust_6),(kmap(456),kcrust_7),(kmap(457),kcrust_8),
-     &(kmap(458),kcrust_9),(kmap(459),kcrust_10),(kmap(460),kph2o_1),
-     &(kmap(461),kph2o_2 ),(kmap(462),kph2o_3 ),(kmap(463),kph2o_4 ),
-     &(kmap(464),kph2o_5 ),(kmap(465),kph2o_6 ),(kmap(466),kph2o_7 ),
-     &(kmap(467),kph2o_8 ),(kmap(468),kph2o_9 ),(kmap(469),kph2o_10),
-     &(kmap(470),kpcl_1  ),(kmap(471),kpcl_2  ),(kmap(472),kpcl_3  ),
-     &(kmap(473),kpcl_4  ),(kmap(474),kpcl_5  ),(kmap(475),kpcl_6  ),
-     &(kmap(476),kpcl_7  ),(kmap(477),kpcl_8  ),(kmap(478),kpcl_9  ),
-     &(kmap(479),kpcl_10 ),(kmap(480),kna_1   ),(kmap(481),kna_2   ),
-     &(kmap(482),kna_3   ),(kmap(483),kna_4   ),(kmap(484),kna_5   ),
-     &(kmap(485),kna_6   ),(kmap(486),kna_7   ),(kmap(487),kna_8   ),
-     &(kmap(488),kna_9   ),(kmap(489),kna_10  ),(kmap(490),kpnh4_1 ),
-     &(kmap(491),kpnh4_2 ),(kmap(492),kpnh4_3 ),(kmap(493),kpnh4_4 ),
-     &(kmap(494),kpnh4_5 ),(kmap(495),kpnh4_6 ),(kmap(496),kpnh4_7 ),
-     &(kmap(497),kpnh4_8 ),(kmap(498),kpnh4_9 ),(kmap(499),kpnh4_10),
-     &(kmap(500),kpno3_1 ),(kmap(501),kpno3_2 ),(kmap(502),kpno3_3 ),
-     &(kmap(503),kpno3_4 ),(kmap(504),kpno3_5 ),(kmap(505),kpno3_6 ),
-     &(kmap(506),kpno3_7 ),(kmap(507),kpno3_8 ),(kmap(508),kpno3_9 ),
-     &(kmap(509),kpno3_10),(kmap(510),kpso4_1 ),(kmap(511),kpso4_2 ),
-     &(kmap(512),kpso4_3 ),(kmap(513),kpso4_4 ),(kmap(514),kpso4_5 ),
-     &(kmap(515),kpso4_6 ),(kmap(516),kpso4_7 ),(kmap(517),kpso4_8 ),
-     &(kmap(518),kpso4_9 ),(kmap(519),kpso4_10),(kmap(520),kph2o   )
+     &(kmap(502),kpoc_1  ),
+     &(kmap(503),kpoc_2  ),(kmap(504),kpoc_3  ), (kmap(505),kpoc_4  ),
+     &(kmap(506),kpoc_5  ),(kmap(507),kpoc_6  ), (kmap(508),kpoc_7  ),
+     &(kmap(509),kpoc_8  ),(kmap(510),kpoc_9  ), (kmap(511),kpoc_10 ),
+     &(kmap(512),kpec_1  ),(kmap(513),kpec_2  ), (kmap(514),kpec_3  ),
+     &(kmap(515),kpec_4  ),(kmap(516),kpec_5  ), (kmap(517),kpec_6  ),
+     &(kmap(518),kpec_7  ),(kmap(519),kpec_8  ), (kmap(520),kpec_9  ),
+     &(kmap(521),kpec_10 ),(kmap(522),kcrust_1), (kmap(523),kcrust_2),
+     &(kmap(524),kcrust_3),(kmap(525),kcrust_4), (kmap(526),kcrust_5),
+     &(kmap(527),kcrust_6),(kmap(528),kcrust_7), (kmap(529),kcrust_8),
+     &(kmap(530),kcrust_9),(kmap(531),kcrust_10),(kmap(532),kph2o_1),
+     &(kmap(533),kph2o_2 ),(kmap(534),kph2o_3 ), (kmap(535),kph2o_4 ),
+     &(kmap(536),kph2o_5 ),(kmap(537),kph2o_6 ), (kmap(538),kph2o_7 ),
+     &(kmap(539),kph2o_8 ),(kmap(540),kph2o_9 ), (kmap(541),kph2o_10),
+     &(kmap(542),kpcl_1  ),(kmap(543),kpcl_2  ), (kmap(544),kpcl_3  ),
+     &(kmap(545),kpcl_4  ),(kmap(546),kpcl_5  ), (kmap(547),kpcl_6  ),
+     &(kmap(548),kpcl_7  ),(kmap(549),kpcl_8  ), (kmap(550),kpcl_9  ),
+     &(kmap(551),kpcl_10 ),(kmap(552),kna_1   ), (kmap(553),kna_2   ),
+     &(kmap(554),kna_3   ),(kmap(555),kna_4   ), (kmap(556),kna_5   ),
+     &(kmap(557),kna_6   ),(kmap(558),kna_7   ), (kmap(559),kna_8   ),
+     &(kmap(560),kna_9   ),(kmap(561),kna_10  ), (kmap(562),kpnh4_1 ),
+     &(kmap(563),kpnh4_2 ),(kmap(564),kpnh4_3 ), (kmap(565),kpnh4_4 ),
+     &(kmap(566),kpnh4_5 ),(kmap(567),kpnh4_6 ), (kmap(568),kpnh4_7 ),
+     &(kmap(569),kpnh4_8 ),(kmap(570),kpnh4_9 ), (kmap(571),kpnh4_10),
+     &(kmap(572),kpno3_1 ),(kmap(573),kpno3_2 ), (kmap(574),kpno3_3 ),
+     &(kmap(575),kpno3_4 ),(kmap(576),kpno3_5 ), (kmap(577),kpno3_6 ),
+     &(kmap(578),kpno3_7 ),(kmap(579),kpno3_8 ), (kmap(580),kpno3_9 ),
+     &(kmap(581),kpno3_10),(kmap(582),kpso4_1 ), (kmap(583),kpso4_2 ),
+     &(kmap(584),kpso4_3 ),(kmap(585),kpso4_4 ), (kmap(586),kpso4_5 ),
+     &(kmap(587),kpso4_6 ),(kmap(588),kpso4_7 ), (kmap(589),kpso4_8 ),
+     &(kmap(590),kpso4_9 ),(kmap(591),kpso4_10), (kmap(592),kph2o   )
 c
       integer   ko1d  ,ko    ,kclo 
       integer   kcl   ,kn2o5 ,kno3 

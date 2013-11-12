@@ -53,6 +53,7 @@ c        depfld            2-D array of dry deposited mass (mol/ha, g/ha)
 c
 c     Routines Called:
 c        VDIFFIMP
+c	 SUBDOMAIN 	!BNM 9-23-09
 c
 c     Called by:
 c        EMISTRNS
@@ -93,11 +94,15 @@ c
      &          ro1d(MXLAYA)
       real cnc(MXCOLA,MXROWA),sns(MXCOLA,MXROWA,MXTRSP),
      &     rho(MXCOLA,MXROWA)
-      real*8 fluxes(nspc,11),fluxbot
+      real*8 fluxes(nspc*nlay,13),fluxbot
       character*20 strz, strxy
+
+      integer subd(ncol,nrow)	!BNM 9-23-09
 c
 c-----Entry point
 c
+      call subdomain(subd)
+
 c-----Vertical diffusion
 c
       write(*,'(a20,$)') strz
@@ -190,7 +195,9 @@ c
               conc(i,j,k,ispc) = c1d(k)
             enddo
             fluxbot = -vdep(i,j,ispc)*conc(i,j,1,ispc)
-            fluxes(ispc,11) = fluxes(ispc,11) + fluxbot*dx(j)*dy*deltat
+            fluxes(1+(ispc-1)*nlay,11) = fluxes(1+(ispc-1)*nlay,11) 
+     &			+ fluxbot*dx(j)*dy*deltat * subd(i,j)  	!i=col, j=row
+		!Keep Dry Deposition at Flux 11
             do ll = 1,navspc
               if (ispc .eq. lavmap(ll)) then
                 depfld(i,j,ll) = depfld(i,j,ll) - 1.e-2*fluxbot*deltat

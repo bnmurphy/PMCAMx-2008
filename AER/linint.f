@@ -76,11 +76,13 @@ c     sort by minimum diameter
             tempod=secsize(i)
             secsize(i)=secsize(i+1)
             secsize(i+1)=tempod
-            do kk=1,nsp
-               tempod=yx((i-1)*nsp+kk)
-               yx((i-1)*nsp+kk)=yx(i*nsp+kk)
-               yx(i*nsp+kk)=tempod
+            !BNM Changed nsp to ns
+            do kk=1,ns
+               tempod=yx((i-1)*ns+kk)
+               yx((i-1)*ns+kk)=yx(i*ns+kk)
+               yx(i*ns+kk)=tempod
             enddo
+            !Done Changing nsp -> ns
          endif
       enddo
 

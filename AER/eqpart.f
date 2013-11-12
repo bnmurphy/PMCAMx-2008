@@ -1,3 +1,4 @@
+      subroutine EQPART(t,q)
 c=========================================================================
 c  03/09/03: bkoo
 c            - modified to eliminate organics (eqparto now deals with organics)
@@ -53,7 +54,6 @@ C          THE FOLLOWING TWO DIMENSIONAL ARRAYS ARE NECESARY FOR THE
 C          LINKING OF THE WEIGHTING FACTORS FOR NH4, NO3 AND CL.
 C     FRQ(NSEC,nsp)   FRACTION OF DQ TRANSFERED TO EACH AEROSOL SECTION
 C
-      SUBROUTINE EQPART(t,q)
 
       include 'dynamic.inc'
       INCLUDE 'equaer.inc'                  ! ISORROPIA declarations
@@ -65,6 +65,7 @@ cbk      real*8 qsav(ntotal), DQsav(nsp), accom(nsp)
       real*8 qq, frq0(nsec,nexti) ! bkoo (10/07/03)
       logical done
 
+
       if(aerm.eq.'EQUI') then	
 c
 c     STEP 1/3: CALCULATE NUCLEATION RATE FOR THE WHOLE STEP
@@ -73,12 +74,16 @@ c
 c
 c     STEP 2/3: CALCULATE COAGULATION RATE FOR THE WHOLE STEP
 c
-       call coagul(q)
+c       call coagul(q)
+
+
 
 cbk       call step(nsec,q) ! tmg (10/22/02)
       endif
+
       call step(nsecx2,q) ! bkoo (03/07/03)
       call wdiameter(q) ! bkoo (03/09/03)
+
       call eqparto(t,q) ! bkoo (03/09/03)
 c
 C     STEP 1:  DETERMINE BULK EQUILIBRIUM
@@ -178,6 +183,13 @@ c     due to diferences between aerosol sectional vs. bulk composition
         q0(2)=q0(2)+q((isec-1)*nsp+knh4)    ! initial aerosol NH4
         q0(3)=q0(3)+q((isec-1)*nsp+kcl)     ! initial aerosol Cl
       enddo
+
+CDEBUG
+c        call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)                    ! bkoo_dbg
+c        print *,'EQPART: ISORROPIA RESULTS!'
+c        print '(A6,3I4,3(A8,E15.5))','Cell=',ichm,jchm,kchm,' DQ(KNH4)=',DQ(KNH4),' DQ(KNO3)=',DQ(KNO3),' DQ(KCL)=',DQ(KCL)
+
+
 C
 c   STEP 3: DETERMINE THE RELATIVE RATES OF MASS TRANSFER FOR EACH SECTION
 c       if we assume composition changes between size sections are not 
@@ -320,8 +332,15 @@ c
       else
         if(iter.gt.itmaxeq) then ! moved - bkoo (10/07/03)
          if(min(dq(KNO3),dq(KCL)).lt.-0.3) then                               ! bkoo_dbg
-         call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)                    ! bkoo_dbg
-         write(*,'(A8,2E15.5,4I4)')'EQUI-F: ',dq(KNO3),dq(KCL),ichm,jchm,kchm ! bkoo_dbg
+           call get_param(igrdchm,ichm,jchm,kchm,iout,idiag)                    ! bkoo_dbg
+           write(*,'(A8,2E15.5,4I4)')'EQUI-F: ',dq(KNO3),dq(KCL),ichm,jchm,kchm ! bkoo_dbg
+
+CDEBUGBNM
+c        print '(A15,10(I2,A1,E10.3,1x))','NEGCHK: q(NO3)= ',(i,')',q((i-1)*nsp+KNO3),i=1,10)
+c        print '(A15,10(I2,A1,E10.3,1x))','NEGCHK: q(NH4)= ',(i,')',q((i-1)*nsp+KNH4),i=1,10)
+c        print '(A15,10(I2,A1,E10.3,1x))','NEGCHK: q(SO4)= ',(i,')',q((i-1)*nsp+KSO4),i=1,10)
+c        print '(A15,10(I2,A1,E10.3,1x)/)','NEGCHK: q(CL)= ',(i,')',q((i-1)*nsp+KCL),i=1,10)
+
          endif                                                                ! bkoo_dbg
          goto 200
         endif

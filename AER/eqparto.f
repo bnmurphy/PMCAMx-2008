@@ -18,9 +18,10 @@ c=====================================================================
 
       parameter (itermax = 1000) ! comparable to ITMAXEQ in equaer.inc
 
-      real*8  q(ntotal),dq,accom,frq(nsec),frqtot,rlambda,frt
+      real*8  q(ntotal),dq,accom,frq(nsec),frqtot,rlambda,frt,t
       real    ctot(nsoap),caer(nsoap),cgas(nsoap),cpre,mwpre,tempk
       real    convfac
+
 
       integer iter
       logical prevsp
@@ -37,6 +38,7 @@ c=====================================================================
 
       ng = nsp*nsecx2                 ! gases
       prod=rgas*temp/(1.01325D5*pres) ! conversion from ppm to umoles/m3
+
       do i=1,nsoap
         cgas(i) = SNGL(q(ng+ICPO1-1+i) * gmw(ICPO1-1+i) / prod) ! ug/m3
         caer(i) = 0.0
@@ -84,7 +86,7 @@ c=====================================================================
         mxk = 0.d0 ! bkoo (11/14/02)
         do isec = 1,nsecx2
           frq(isec) = qn(isec)*
-     &        ( q(ng+ICPO1-1+isp)*gmw(ICPO1-1+isp)/prod                   ! bkoo (11/14/02)
+     &        ( q(ng+ICPO1-1+isp)*gmw(ICPO1-1+isp)/prod       ! bkoo (11/14/02)
      &        - q((isec-1)*nsp+KAPO1-1+isp)/emw(KAPO1-1+isp)/xsum(isec) ! bkoo (11/14/02)
      &        * csatT(isp) )*                                       ! bkoo (11/14/02)
      &        dsec(isec)/(1.d0+rlambda/(accom*dsec(isec)))

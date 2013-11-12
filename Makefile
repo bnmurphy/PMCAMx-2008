@@ -124,6 +124,7 @@ scavrat.o \
 setbc1d.o \
 setbc.o \
 startup.o \
+subdomain.o \
 timestep.o \
 timrates.o \
 toupper.o \
@@ -583,6 +584,8 @@ startup.o 		: startup.f                                            \
                         $(INC)/filunit.com $(INC)/chmstry.com                  \
                         $(INC)/ahomap.com $(INC)/grid.com $(INC)/pigsty.com    \
                         $(INC)/flags.com $(INC)/tracer.com $(INC)/procan.com
+
+subdomain.o		: subdomain.f
 
 timestep.o 		: timestep.f                                           \
                         $(INC)/camx.prm $(INC)/camx.com $(INC)/camxfld.com     \

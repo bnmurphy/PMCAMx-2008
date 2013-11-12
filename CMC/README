@@ -1,13 +1,6 @@
 rateslo5.f - SAPRC rates file currently in use
-rateslo5b.f - Base Case (ro=1.0 g/cm3), SOA aging turned off
-rateslo5c.f - ro=1.5 g/cm3, SOA aging off
-rateslo5d.f - ro=1.5 g/cm3, SOA aging turned ON
-
-rateslo5e.f - ro=1.5 g/cm3, noNO3, SOA aging off
-rateslo5g.f - ro=1.5 g/cm3, ASOA aging on, BSOA aging off
-rateslo5f.f - ro=1.5 g/cm3, ASOA aging on, BSOA aging off, Lea's new toluene yields
-rateslo5h.f - rho=1.0 (put density change into soap module). No rxns are commented (commenting done in rxnrate.f from now on). Lea's Toluene yields implemented.
-
+rateslo5a.f - All Aging rxns result in volatility decrease
+rateslo5b.f - Branching ratio employed
 
 rxnrate5a.f - all aging rxns turned on
 rxnrate5b.f - base case, BSOA aging turned off

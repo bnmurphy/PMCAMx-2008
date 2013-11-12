@@ -10,13 +10,13 @@ c 03/07/03 (bkoo) commented out initial call to step (not needed)
 c 03/09/03 (bkoo) call newdist regardless of lsoap
 c                 (SOAP has been merged with inorganic aerosol module)
 c=====================================================================+
-	subroutine aerchem(chaero,q,t0,t1,lfrst,ierr)
+      subroutine aerchem(chaero,q,t0,t1,lfrst,ierr)
 c
 c JUNE 1999 - modified by bkoo (linear interpolation)
 c
       include 'dynamic.inc'
       include 'dbg.inc'
-	
+
       real*8 q(ntotal),qtot1(nexti),qtot2(nexti)
       character*4 chaero
       logical lfrst
@@ -125,6 +125,9 @@ c     if HYBR failed try EQUI after restore q, dsec, qn & qtot0
         aerm='EQUI'
         goto 100
       endif
+CDEBUG
+c	print *,'AERCHEM: Before Interpolation. con(NO2)='
+
 c
 c     Linear Interpolation Routine
       do i=1,nexti

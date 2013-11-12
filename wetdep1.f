@@ -42,7 +42,7 @@ c        depfld              2-D array of wet deposited mass (mol/ha, g/ha)
 c                            and surface liquid concentrations (mol/l, g/l)
 c             
 c     Routines called: 
-c        SUBDOMAIN	!BNM 9-23-09
+c        none
 c             
 c     Called by: 
 c        EMISTRNS
@@ -62,7 +62,7 @@ c
       real delnox, delvoc, delo3, c0nox, c0voc, c0o3
       real concnox, concvoc, conco3, dnlnox, dnlvoc, dnlo3
       logical lzerc, levap, lddmopt2
-      data lddmopt2 /.true./
+      data lddmopt2 /true/
 c
 c======================== DDM End ======================================
 c========================= Source Apportion End ========================
@@ -81,10 +81,8 @@ c
      &     pwc(ncol,nrow,nlay),depth(ncol,nrow,nlay)
       integer idfin(ncol,nrow)
       real conc(ncol,nrow,nlay,nspcs),depfld(ncol,nrow,3*nspcs)
-      real*8 fluxes(nspcs*nlay,13)
+      real*8 fluxes(nspcs,11)
       real c0(MXSPEC),rr(MXLAYA),volrat(MXLAYA),tmass(MXSPEC)
-      real tmassi(MXSPEC,MXLAYA), tmassb(MXSPEC,MXLAYA), tsplit(MXSPEC), tdiff(MXSPEC)
-      integer subd(ncol,nrow)
       real delr(MXSPEC)
       logical lcloud,ltop,lfreez
 c
@@ -93,8 +91,6 @@ c
 c
 c-----Entry point
 c
-      call subdomain(subd)
-
 c-----Loop over rows and columns
 c
       do 10 j = 2,nrow-1 
@@ -109,14 +105,6 @@ c
         do 20 i = i1,i2
           icl = i
           if (idfin(i,j).gt.igrid) goto 20
-
-C-----Initialize In-Cloud and Below-Cloud Mass Gains
-	  do k = 1,nlay
-	    do l = 1,nspcs
-	      tmassi(l,k) = 0
-	      tmassb(l,k) = 0
-	    enddo
-	  enddo
 c
 c-----Scan column for layers containing precipitation bottom/top
 c
@@ -213,9 +201,6 @@ c
               delc = 0.
               delm = 0.
               if (ltop) tmass(l) = 0.
-	      tmassi(l,k) = 0	!BNM Split in-cloud and below deposition
-	      tmassb(l,k) = 0	!BNM "  "  "  "  "
-
               c0(l) = tmass(l) / rainvol
               convfac = densfac*(273./tempk(i,j,k))*(press(i,j,k)/1013.)
               cmin = bdnl(l)*convfac
@@ -380,20 +365,6 @@ c
               conc(i,j,k,l) = conc(i,j,k,l) - delc
               delm = delc*cellvol
               tmass(l) = tmass(l) + delm
-C---------------Split Mass Accounting of In-Cloud and Below-Cloud Deposition--(BNM)
-		if (lcloud) then
-		  tmassi(l,k) = delm
-		else
-		  tmassb(l,k) = delm
-		endif
-
-CDEBUG
-c		if (l.ge.30.and.l.le.40) then
-c		  print *,'WETDEP: Gas-phase.  layer= ',k,'  delm= ',delm
-c		  print *,'WETDEP:   tmass= ',tmass(l),'  lcloud= ',lcloud
-c		  print *,'WETDEP:   tmassi= ',tmassi(l,k),'  tmassb= ',tmassb(l,k)
-c		endif
-C-----------END BNM---------------
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -428,7 +399,7 @@ c-----Calculate scavenging for particulate species
 c
             if (naero .gt. 0) then
 c->   calculate wet diameter - bkoo (11/05/03)
-              if (kph2o.ne.nspec+1) then    	! mechanism 4
+              if (kph2o.ne.nspec+1) then ! mechanism 4
                 isempty = 1
                 qt = 0.0
                 roprta = 0.0
@@ -469,8 +440,7 @@ c->   calculate wet diameter - bkoo (11/05/03)
                     delr(l) = rcrs
                   endif
                 enddo
-
-              elseif (kph2o_1.ne.nspec+1) then 		! mechanism 6
+              elseif (kph2o_1.ne.nspec+1) then ! mechanism 6
                 kwtr = (kph2o_1 - ngas) / nsec + 1
                 if (nsec.eq.1) kwtr = kph2o_1 - ngas
                 do isec = 1, nsec
@@ -503,7 +473,6 @@ c->   calculate wet diameter - bkoo (11/05/03)
                     delr(l) = 1. - exp(-ascav*deltat)
                   enddo
                 enddo
-
               else
                 do l = ngas+1,nspec
                   psize = sqrt(dcut(l,1)*dcut(l,2))*1.e-6
@@ -519,9 +488,6 @@ c<-
                 delc = 0.
                 delm = 0.
                 if (ltop) tmass(l) = 0.
-		tmassi(l,k) = 0  	!BNM split in-cloud and below cloud deposition
-		tmassb(l,k) = 0		!BNM "   "   "   "
-
                 cmin = bdnl(l)
                 conc(i,j,k,l) = amax1(cmin,conc(i,j,k,l))
 cbk                psize = sqrt(dcut(l,1)*dcut(l,2))*1.e-6
@@ -540,20 +506,6 @@ c
                 conc(i,j,k,l) = conc(i,j,k,l) - delc
                 delm = delc*cellvol
                 tmass(l) = tmass(l) + delm
-C---------------Split Mass Accounting of In-Cloud and Below-Cloud Deposition--(BNM)
-		if (lcloud) then
-		  tmassi(l,k) = delm
-		else
-		  tmassb(l,k) = delm
-		endif
-CDEBUG
-c		if (l.ge.ngas+10.and.l.le.ngas+20) then
-c		  print *,'WETDEP: Ptcl-phase.  layer= ',k,'  delm= ',delm
-c		  print *,'WETDEP:   tmass= ',tmass(l),'  lcloud= ',lcloud
-c		  print *,'WETDEP:   tmassi= ',tmassi(l,k),'  tmassb= ',tmassb(l,k)
-c		endif
-C-----------END BNM---------------
-
 c
 c======================== Process Analysis Begin ====================================
 c
@@ -571,7 +523,7 @@ c
  50           continue
             endif
             ltop = .false.
- 30       continue    	!End Layer Loop (k)
+ 30       continue
 c
 c-----If rain evaporates before reaching the ground, return all mass back
 c     to layer KBOT
@@ -581,34 +533,13 @@ c
             do l = 1,nspec
               conc(i,j,kbot,l) = conc(i,j,kbot,l) + tmass(l)/cellvol
               tmass(l) = 0.
-	      do k = 1,nlay
-	        tmassi(l,k)=0
-	        tmassb(l,k)=0
-	      enddo
             enddo
 c
 c-----Otherwise rain reaches the ground, increment deposition flux arrays
 c
           else
             do l = 1,nspec
-CDEBUG
-c		tsplit(l) = 0
-
-C BNM 	     Toggle which flux to put mass loss into depending
-C		on whether or not a cloud is present
-c		fluxes(1+(l-1)*nlay,12) = fluxes(1+(l-1)*nlay,12) - tmass(l)  !Total Cloud Loss
-	      do k = 1,nlay
-		fluxes(k+(l-1)*nlay,12) = fluxes(k+(l-1)*nlay,12) - tmassi(l,k)*subd(i,j)  !In-Cloud Loss
-		fluxes(k+(l-1)*nlay,13) = fluxes(k+(l-1)*nlay,13) - tmassb(l,k)*subd(i,j)  !Below-Cloud Loss
-CDEBUG
-c		tsplit(l) = tsplit(l) + tmassi(l,k) + tmassb(l,k)
-
-	      enddo
-c		tdiff(l) = (tsplit(l)-tmass(l))/tmass(l) * 100
-CDEBUG
-c		print *,'WETDEP: Sum up column.' 
-c		print *,'WETDEP:   tmass= ',tmass(l),'   tsplit= ',tsplit(l),'   tdiff= ',tdiff(l)
-C END <- BNM
+              fluxes(l,11) = fluxes(l,11) - tmass(l)
               do ll = 1,navspc
                 if (l .eq. lavmap(ll)) then
                   depfld(i,j,navspc+ll) = depfld(i,j,navspc+ll) +
@@ -620,24 +551,10 @@ C END <- BNM
               enddo
  100          continue
             enddo
-
-CDEBUG
-c		print *,'WETDEP: Sum up column.' 
-c		print *,'WETDEP:   tmass= ',(tmass(l),l=30,40)
-c		print *,'WETDEP:   tsplit= ',(tsplit(l),l=30,40)
-c		print *,'WETDEP:   tdiff= ',(tdiff(l),l=30,40)
-c		read(*,*), bnmdummy
-c		print *
-c		print *,'WETDEP: spname(371-381)= ',(spname(l),l=371,381)
-c		print *,'WETDEP: tmass(371-381)= ',(tmass(l),l=371,381)
-c		print *,'WETDEP: tsplit(371-381)= ',(tsplit(l),l=371,381)
-c		print *,'WETDEP: tdiff(371-381)= ',(tdiff(l),l=371,381)
-c		read(*,*), bnmdummy
-
-          endif		!EVAPORATES BEFORE REACHING BOTTOM??
-
- 20     continue	!COLUMNS
- 10   continue 		!ROWS
+          endif
+c
+ 20     continue
+ 10   continue
 c
       return
       end

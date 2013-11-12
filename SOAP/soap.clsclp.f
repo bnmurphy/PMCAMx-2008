@@ -1,7 +1,7 @@
       subroutine soap(ntot,caer,cgas,tempk,convfac,
      &                iout,igrdchm,ichm,jchm,kchm,lppm,
      &                cpre,mwpre,csatT)
-      implicit none
+c BNM-122308      implicit none
 c
 c**********************************************************************
 c                                                                     * 
@@ -132,6 +132,15 @@ c
       logical     lppm
 
       real        cpx, bb, cc, xend, fend, xmid, fmid, dx
+c BNM - declaring variables
+      dimension tarray2(2)
+
+c      Declare Variables for Hvap look-up table
+      integer tempcnt, icstar, ctemp, iter
+      real csat1, csat2
+
+c BNM - done declaring variables
+
 c
 c***********************************************************************
 c
@@ -159,6 +168,13 @@ c
 c
 c CHANGE SATURATION CONCENTRATIONS ACCORDING TO CURRENT TEMPERATURE
 c
+
+c BNM - timing
+c	tcpu = dtime(tarray2)
+c	print *,'Begining time for Hvap = ',tarray2(1)
+c BNM
+
+ccc Traditional Hvap calculation, Clausius Clapeyron ccc
       do i=1,ntot
          csatT(i)=csat(i)*(cstemp(i)/tempk)*exp((deltah(i)/8.314)
      &                *(1/cstemp(i)-1/tempk))
@@ -222,8 +238,6 @@ c CONCENTRATION (CGAS) FOR NON-SOLUTION-FORMING COMPOUNDS
 c COMPOUNDS THAT HAVE A CONCENTRATION OF LESS THAN conmin ARE IGN0RED
 c MAP COMPOUNDS THAT FORM SOLUTIONS ONTO ARRAYS
 c
-      do iflg = 1,5	!Loop Through Solutions to Test Mixing Assumptions (BNM, 11/04/09)
-			!Make sure this agrees with the highest flag in soapdat.f
       icont=0
       do i=1,ntot
          if (flagsoap(i).eq.0) then
@@ -232,9 +246,6 @@ c
          elseif (ctot(i).lt.conmin) then
             cgas(i) = ctot(i)
             caer(i) = 0.0
-	 elseif (flagsoap(i).ne.iflg) then	!Don't do anything if the species
-	    continue				!is not part of this solution. Just
-						!skip it (11/04/09)
          else
             icont=icont+1
             idx(icont) = i
@@ -245,7 +256,6 @@ c
          endif
       enddo
       nsol=icont
-
 c
 c Check for a trivial solution
 c
@@ -278,7 +288,7 @@ c Find the solution using a bi-section method (approach from max)
 c
       xend = 0.0
       do i = 1, nsol
-        xend = xend + sctot(i)/smw(i)
+        xend = xend + sctot(i)/smw(i)  !BNM density correction
       enddo
       xend = xend + cpx
       call spfcn (nsol,sctot,scsat,scaer,smw,cpx,xend,fend)
@@ -328,14 +338,11 @@ c
 c Convert to ppm if inputs in ppm
 c
  1000 continue
-      enddo	!End Solution Flag Loop (BNM 11/04/09)
-
       if (lppm) then
          do i=1,ntot
             cgas(i) = cgas(i)/(convfac*mwsoap(i))
          enddo
       endif
-
 c
       return
       end
