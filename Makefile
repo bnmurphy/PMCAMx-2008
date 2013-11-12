@@ -35,11 +35,11 @@ default:
 
 # Pavan Nandan Racherla (pavanracherla@cmu.edu) removed the -ipo flag, which performs inter procedural optimizations.
 # Date: Oct 1 2008.
-PMCAMx.exe:
+linux:
 	@rm -f $(INC)/camx.prm
 	@csh chktracer camx.prm.$(DOMAIN) PMCAMx.exe
 	@ln -s camx.prm.$(DOMAIN) $(INC)/camx.prm
-     make model FC="ifort" FLGS="-I$(INC) -pg -fpe3 -traceback -align dcommons -extend_source -convert big_endian -mcmodel=medium -shared-intel" TARGT="PMCAMx.exe" DUM=dummy
+        make model FC="ifort" FLGS="-I$(INC) -pg -fpe3 -traceback -align dcommons -extend_source -convert big_endian -mcmodel=medium -shared-intel" TARGT="PMCAMx.exe" DUM=dummy
 #	make model FC="pgf90" FLGS="-I$(INC) -O2 -tp p6 -pc 64 -Kieee -Mdalign -Mextend -Mnoframe -byteswapio -Wl,-Bstatic" TARGT="PMCAMx.exe" DUM=dummy
 #       make model FC="pgf90" FLGS="-I$(INC) -g -tp k8-64 -pc 64 -Kieee -Mdalign -Mextend -Mnoframe -byteswapio -Wl, -mcmodel=medium" TARGT="PMCAMx.exe" DUM=dummy
 
