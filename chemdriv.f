@@ -469,8 +469,6 @@ c        print *,'CHEMDRIV: Con(coo1,Before chem)=',con(KCOO1)
      &             ldark(i,j),water(i,j,k),atm,O2,CH4,H2,con,crad,
      &             avgrad,tcell,
      &             sddm,nddmsp,ngas,ddmjac5,lddm,nirrrxn,titrt,rrxn_irr,
-     &             lirr)
-=======
      &             lirr,rrxn)
 
 
@@ -848,9 +846,6 @@ cbk            endif
               enddo
             endif
 
-  89      continue  !col
-  90    continue    !row
-
 c BNM
 c       print *,'Layer: ',k
 c       print *,'  O3 = ',O3check/ncol/nrow
@@ -878,7 +873,6 @@ c$omp end parallel
 c
   91  continue
 c
-=======
 
 C BNM 	ADD UP MASS CONTRIBUTIONS OF CHEMISTRY AND PARTITIONOING FROM
 C	ALL ROWS, COLUMNS, AND LAYERS
