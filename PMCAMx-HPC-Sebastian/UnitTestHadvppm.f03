@@ -1,6 +1,6 @@
 program UnitTestHadvppm
     !IMPLICIT NONE
-    integer :: ii, nn, mynn, status, iEnd
+    integer :: ii, nn, status, iEnd
     character(len=10) :: arg
     real :: dt,dx,sigma
     real, allocatable, dimension(:) :: con,conInit,vel,area,areav,flxarr
