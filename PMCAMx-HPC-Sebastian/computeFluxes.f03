@@ -1,11 +1,11 @@
-SUBROUTINE computeFluxes(nn,mynn,dt,dx,fm,cl,dc,c6,vel,fp,cr,con)
+SUBROUTINE computeFluxes(nn,dt,dx,fm,cl,dc,c6,vel,fp,cr,con)
     IMPLICIT NONE
     INCLUDE "camx.prm"
     
-    INTEGER :: ii, nn, mynn
+    INTEGER :: ii, nn
     REAL :: dt, dx, x, TWO3RDS
-    REAL, DIMENSION(mynn) :: con,vel
-    REAL, DIMENSION(MXCELLS) :: fm,cl,dc,c6,fp,cr
+    REAL, DIMENSION(nn) :: con,vel
+    REAL, DIMENSION(nn) :: fm,cl,dc,c6,fp,cr
     
     !Compute fluxes from the parabolic distribution
     DO ii = 2,nn-1

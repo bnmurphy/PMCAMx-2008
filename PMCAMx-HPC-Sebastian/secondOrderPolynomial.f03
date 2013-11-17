@@ -1,12 +1,12 @@
-SUBROUTINE secondOrderPolynomial(nn,mynn,con,dc,cm,cr,cl)
+SUBROUTINE secondOrderPolynomial(nn,con,dc,cm,cr,cl)
     !Second order polynomial inside the domain
     
     IMPLICIT NONE
     INCLUDE "camx.prm"
     
-    INTEGER ii,nn,mynn
-    REAL, DIMENSION(mynn) :: con
-    REAL, DIMENSION(MXCELLS) :: dc,cm,cr,cl
+    INTEGER ii,nn
+    REAL, DIMENSION(nn) :: con
+    REAL, DIMENSION(nn) :: dc,cm,cr,cl
     
     DO ii = 3,nn-2
         !Compute average slope in the ii'th cell

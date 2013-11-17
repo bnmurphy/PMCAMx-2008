@@ -1,10 +1,10 @@
-SUBROUTINE generatePieceParDistri(nn,mynn,cr,con,cl,dc,c6)
+SUBROUTINE generatePieceParDistri(nn,cr,con,cl,dc,c6)
     IMPLICIT NONE
     INCLUDE "camx.prm"
     
-    INTEGER ::  ii,nn,mynn
-    REAL, DIMENSION(mynn) :: con
-    REAL, DIMENSION(MXCELLS) :: cr,cl,dc,c6
+    INTEGER ::  ii,nn
+    REAL, DIMENSION(nn) :: con
+    REAL, DIMENSION(nn) :: cr,cl,dc,c6
     
     DO ii = 2,nn-1
         !Monotonicity
