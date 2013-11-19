@@ -22,11 +22,11 @@ program UnitTestHadvppm
     
     !build test Gaussian test function  
     dt = 1.0
-    dx = 360000
-    sigma = 0.1
+    dx = 36000
+    sigma = 1.0
     
     do ii=1,nn
-        con(ii) = EXP((-(ii-nn/2) * (ii-nn/2)/2*sigma*sigma))
+        con(ii) = EXP((-(ii-10) * (ii-10)/2*sigma*sigma))
         vel(ii) = 150
         area(ii) = 1.
         areav(ii) = 1.
@@ -41,13 +41,13 @@ program UnitTestHadvppm
     end do
     
     !Output all for the data to a text file
-    print *,'Writing output data...'
-    open(unit=20,file='Flux_Out.dat')
-
-    
-    do ii = 1,nn
-        write(20,'(I2,4x,E9.4,2x,E9.4,2x,E9.4)') ii, conInit(ii), con(ii), flxarr(ii)
-    enddo
+!    print *,'Writing output data...'
+!    open(unit=20,file='Flux_Out.dat')
+!
+!    
+!    do ii = 1,nn
+!        write(20,'(I9,4x,E9.4,2x,E9.4,2x,E9.4)') ii, conInit(ii), con(ii), flxarr(ii)
+!    enddo
     
     !deallocate memory
     deallocate(con, stat = status)
