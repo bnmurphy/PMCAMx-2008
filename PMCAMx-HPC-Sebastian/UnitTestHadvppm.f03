@@ -20,6 +20,7 @@ program UnitTestHadvppm
     allocate(areav(nn), stat = status)
     allocate(flxarr(nn), stat = status)
     
+    
     !build test Gaussian test function  
     dt = 1.0
     dx = 36000
@@ -36,9 +37,9 @@ program UnitTestHadvppm
     conInit = con
     
     !repeatedly call the advection routine
-    do ii = 1,iEnd
-        call hadvppm(nn,dt,dx,con,vel,area,areav,flxarr)
-    end do
+    !do ii = 1,iEnd
+     !   call hadvppm(nn,dt,dx,con,vel,area,areav,flxarr)
+    !end do
     
     !Output all for the data to a text file
 !    print *,'Writing output data...'

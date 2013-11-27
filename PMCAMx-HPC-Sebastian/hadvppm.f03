@@ -1,12 +1,12 @@
 SUBROUTINE hadvppm(nn,dt,dx,con,vel,area,areav,flxarr)
     !this version is without STEEPEN
-    IMPLICIT NONE
+    !IMPLICIT NONE
     INCLUDE "camx.prm"
     
-    REAL :: dt, dx, x
-    INTEGER :: nn, ii, status !is this actually necessary?
-    REAL, DIMENSION(nn) :: con,vel,area,areav,flxarr
-    REAL, PARAMETER :: TWO3RDS=2./3.
+    !REAL :: dt, dx, x
+    INTEGER :: ii, status !is this actually necessary?
+    !REAL, DIMENSION(nn) :: con,vel,area,areav,flxarr
+    !REAL, PARAMETER :: TWO3RDS=2./3.
     !REAL, DIMENSION(nn) :: fm, fp, cm, cl, cr, dc, c6
     
     real, allocatable, dimension(:) :: fm, fp, cm, cl, cr, dc, c6
@@ -40,13 +40,13 @@ SUBROUTINE hadvppm(nn,dt,dx,con,vel,area,areav,flxarr)
     !note: for now I removed discontinuity capturing as included in CAMx, I can just put it into a function ;-)
     
     !Generate piecewise parabolic distributions    
-    CALL generatePieceParDistri(nn,cr,con,cl,dc,c6)
+    !CALL generatePieceParDistri(nn,cr,con,cl,dc,c6)
     
     !Compute fluxes
-    CALL computeFluxes(nn,dt,dx,fm,cl,dc,c6,vel,fp,cr,con)
+    !CALL computeFluxes(nn,dt,dx,fm,cl,dc,c6,vel,fp,cr,con)
     
     !Update concentrations
-    CALL updateConcentrations(nn,flxarr,con,area,areav,fp,fm)
+    !CALL updateConcentrations(nn,flxarr,con,area,areav,fp,fm)
     
     deallocate(fm,stat=status)
     deallocate(fp,stat=status)
