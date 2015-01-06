@@ -1,0 +1,5 @@
+In order to create a call tree with resource usage profile
+
+add the -pg flag to the makefile compile flags to generate a gmon.out status file. Then use the profiler script in the runfiles folder to process it into a visual call tree.
+
+Requirements: gprof, Python, and gprof2dot.py
