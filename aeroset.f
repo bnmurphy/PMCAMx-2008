@@ -93,7 +93,7 @@ c
      &'Invalid section cut-points ... must be monotonically increasing!'
           write(iout,'(1X,a,/)') 'Input cut-points are :'
           do n=1,nsecp1
-            write(iout,'(4X,i2,1X,D9.3)') n,dsec_i(n)
+            write(iout,'(4X,i2,1X,D10.3)') n,dsec_i(n)
           enddo
           call camxerr()
         endif
@@ -114,7 +114,7 @@ cbk      dfmax=dmax
       write(idiag,*) ' '
       write(idiag,*) 'Particle section cut-points:'
       do i=1,nsecp1
-        write(idiag,'(1x,i2,1x,d9.3)') i,dsecf_c(i)
+        write(idiag,'(1x,i2,1x,d10.3)') i,dsecf_c(i)
       enddo
       write(idiag,*) ' '
 

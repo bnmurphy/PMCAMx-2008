@@ -124,7 +124,7 @@ c
       real        caer(ntot), cgas(ntot), ctot(NSOAP), csatT(NSOAP)
       real        smw(NSOAP), scsat(NSOAP)
       real        sctot(NSOAP), scaer(NSOAP), scgas(NSOAP)
-      integer     idx(NSOAP)
+      integer     idx(NSOAP), iflg
 c
       real        mwpre, cpre, tempk, sum, convfac
       integer     iout, igrdchm, ichm, jchm, kchm

@@ -1,48 +1,45 @@
 #!/bin/csh
 #
 #   Script to Run PMCAMx for eastern US July 12-28, 2001 test case
-#    Ben Murphy obtained this code from Vlassis Karydis (Jan 2008)
-#    Is running with SAPRC inputs from July, 2001
-#    Runs commence approx 2-8-2008
-#    Output will be tested against original PMCAMx Code (from Tim
-#       Gaydos, c. 2004) for same inputs
 #
-set INPUT   = "/home/BaseInput/July"
-set INPUT99 = "/home/BaseInput/July/SAPRC"
-# set INPUTP = "/home/BaseInput/SAPRC/July/prep99/semivol"
+set INPUT  = "/nobackup/global/x_benmu/PMCAMx_Input/May_Europe"
+set INPUT2 = "/nobackup/global/x_benmu/PMCAMx_Input/May_Europe/ufeu/inputs"
+
 
 set DATE    = $1
 set DATE2   = $2
-@ DATE3   = $DATE - 1
+@ DATE3   = $DATE2 + 121
+@ DATE4   = $DATE2 + 120
 #
-set RUN     = "CAMx.NTSOA.Base.072109"
-set OUTPUT  = "/home/bnmurphy/Research/Output/SAPRC.July/$RUN"
+set RUN     = "PMCAMx2008_BASE_Europe"
+set OUTPUT  = "/nobackup/global/x_benmu/PMCAMx_Output/$RUN"
 #
-if ($DATE == "193") then
+if ($DATE == "01") then
   mkdir -p $OUTPUT
   set RST  = "false"
   set RSTF = ""
 else
   set RST  = "true"
-  set RSTF = $OUTPUT/4rpos.baseE.$DATE3.$RUN.inst.2
+  set RSTF = $OUTPUT/Eucaari.May.$DATE4.$RUN.inst.2
 endif 
-echo $OUTPUT/4rpos.baseE.$DATE3.$RUN.inst.2
+echo $OUTPUT/Eucaari.May.$DATE4.$RUN.inst.2
 #
 date 
 #
 #  --- Create the input file (always called CAMx.in)
 #
-cat << ieof > CAMx.in
+rm -f CAMx_in.txt
+cat << ieof > CAMx_in.txt
 CAMx Version       |VERSION4.0
-Run Message        |PMCAMx v4.0 eastern US PM Test Run July 1-31 2001
-Root output name   |$OUTPUT/4rpos.baseE.$DATE.$RUN
-Start yr/mo/dy/hr  |01 07 $DATE2 0000.
-End   yr/mo/dy/hr  |01 07 $DATE2 2400.
+Run Message        |PMCAMx v4.0 Europe PM May 01-29 2008
+Root output name   |$OUTPUT/Eucaari.May.$DATE4.$RUN
+Start yr/mo/dy/hr  |08 05 $DATE2 0000.
+End   yr/mo/dy/hr  |08 05 $DATE2 2400.
 DT:max,met,ems,out |15. 60. 60. 60.
-nx,ny,nz           |97   90   14
-sCoordinate ID     |LAMBERT
-xorg,yorg,dx,dy    |-900. -1620.  36.  36. -97 40 33 45
-time zone          |5
+nx,ny,nz           |150    162   14
+sCoordinate ID     |POLAR
+xorg,yorg,dx,dy    |0. 0. 36. 36. -32. 60. -27.528389 34.245880
+time zone          |0
 PiG parameters     |2000. 12.
 Avg output species |525
                    |NO        NO2       O3        PAN       PAN2      MPAN
@@ -104,8 +101,8 @@ Avg output species |525
                    |AAS4_2    AAS4_3    AAS4_4    AAS4_5    AAS4_6    AAS4_7
                    |AAS4_8    AAS4_9    AAS4_10   AAS5_1    AAS5_2    AAS5_3
                    |AAS5_4    AAS5_5    AAS5_6    AAS5_7    AAS5_8    AAS5_9
-                   |AAS5_10   ANS1_1    ANS1_2    ANS1_3    ANS1_4    ANS1_5
-                   |ANS1_6    ANS1_7    ANS1_8    ANS1_9    ANS1_10   ANS2_1
+                   |AAS5_10   ANS1_1    ANS1_2    ANS1_3    ANS1_4    ANS1_5 
+		   |ANS1_6    ANS1_7    ANS1_8    ANS1_9    ANS1_10   ANS2_1
                    |ANS2_2    ANS2_3    ANS2_4    ANS2_5    ANS2_6    ANS2_7
                    |ANS2_8    ANS2_9    ANS2_10   ANS3_1    ANS3_2    ANS3_3
                    |ANS3_4    ANS3_5    ANS3_6    ANS3_7    ANS3_8    ANS3_9
@@ -143,30 +140,38 @@ Wet dep            |true
 PiG submodel       |false
 Staggered winds    |false
 Treat area emiss   |true
-Treat point emiss  |true
+Treat point emiss  |false
 1-day emiss inputs |true
 3-D average file   |false
 Probing tools      |false
-Chemparam          |/home/bnmurphy/Research/PMCAMx/PMCAMx_NTSOA/Base/CAMx4.chemparam.5.NTSOA
-Photolysis rates   |$INPUT99/rate99/camx.rt.2001$DATE.EastUS.updt
-Landuse            |$INPUT/init/surf.4rpos.36.ld.bin
-Height/pressure    |$INPUT/pres/pres.2001$DATE.4rpos.36.14.mm5.ld.camx
-Wind               |$INPUT/wind/wind.2001$DATE.4rpos.36.14.mm5.ld.camx
-Temperature        |$INPUT/temp/temp.2001$DATE.4rpos.36.14.mm5.ld.camx
-Water vapor        |$INPUT/wvap/wvap.2001$DATE.4rpos.36.14.mm5.ld.camx
-Cloud/rain         |$INPUT/clranew/clra.2001$DATE.4rpos.36.14.mm5.ld.camx
-Vertical diffsvty  |$INPUT/vdif/vdif.2001$DATE.4rpos.36.14.mm5.ld.camx.PATCH
-Initial conditions |$INPUT/init/init.2001.4rpos.36.14.m3profile.ld.camx
-Boundary conditions|$INPUT/init/bndr.0701.4rpos.36.14.m3profile.ld.camx
-Top concentration  |$INPUT/init/topc.2001.4rpos.36.14.m3profile.ld.camx
-Albedo/haze/ozone  |$INPUT99/ahoz99/camx.ah.2001$DATE.updt
-Point emiss        |/home/bnmurphy/Emissions/inv9902/semivol/point.camx.9902.2001$DATE.bin
-Area emiss         |/home/bnmurphy/Emissions/inv9902/semivol/area.camx.9902.2001$DATE.bin
+Chemparam          |CAMx4.chemparam.5.NTSOA
+Photolysis rates   |$INPUT/photolysis_rates/tuv_euro_ps2str_S99.0805$DATE.txt
+Landuse            |$INPUT/Metfields/lu_d02.bin
+Height/pressure    |$INPUT/Metfields/zp_d02.200805$DATE.bin
+Wind               |$INPUT/Metfields/uv_d02.200805$DATE.bin
+Temperature        |$INPUT/Metfields/tp_d02.200805$DATE.bin
+Water vapor        |$INPUT/Metfields/qa_d02.200805$DATE.bin
+Cloud/rain         |$INPUT/cr_files/cr_patched/cr_d02.200805$DATE.patched.bin
+Vertical diffsvty  |$INPUT/Metfields/kv_d02.200805$DATE.patched.bin
+Initial conditions |$INPUT/IC_BC_TCs/ICs43_Eucaari_2.bin
+Boundary conditions|$INPUT/IC_BC_TCs/BCs43_Eucaari_2_edges.bin
+Top concentration  |$INPUT/IC_BC_TCs/TCs43_Eucaari_2.txt
+Albedo/haze/ozone  |$INPUT/ahomap/ahomap.monthEU.0805$DATE
+Point emiss        |
+Area emiss         |$INPUT/ufeu_emiss/emnnum.0805$DATE.bin
 Restart file name  |$RSTF
 ieof
 #
 #  --- Execute the model ---
 #
-/usr/bin/time /home/bnmurphy/Research/PMCAMx/PMCAMx_NTSOA/Base/CAMx.NTSOA.Base.072109
+setenv GMON_OUT_PREFIX mygmon
+
+cd ../
+/usr/bin/time ./PMCAMx.exe
+
+#setenv OMP_NUM_THREADS 16
+#setenv OMP_STACKSIZE 1024M
+#amplxe-cl -c hotspots -result-dir ${OUTPUT}/Vtune/Hotspots_$DATE -- ./PMCAMx.exe
+
 date 
 #

@@ -201,8 +201,8 @@ c
      +          igrdchm,ichm,jchm,kchm 
            write(iout,105) rtol*10,rtol,atol*10,atol
 105        format('The tolerances for LSODE will be reduced to'/
-     +          'Relative Tolerance: ',e10.4,'(old) ',e10.4,'(new)'/
-     +          'Absoulte Tolerance: ',e10.4,'(old) ',e10.4,'(new)'/
+     +          'Relative Tolerance: ',e11.4,'(old) ',e11.4,'(new)'/
+     +          'Absoulte Tolerance: ',e11.4,'(old) ',e11.4,'(new)'/
      +          'and the calculation will be repeated.')
            go to 101 
         endif

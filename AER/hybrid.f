@@ -56,7 +56,7 @@ c     gas phase "source" due to equilibrium with small sections (ppm/s)
 c      real*8  sdgas(ngas),sgasrate(ngas),residual(ngas)
 c      common / eqgas / sdgas,sgasrate,residual,t0c
 c     Equation for transition regime (Dahneke 1983)
-      f(yKnD, alfa)=(1.0d0+yKnD)/(1.0d0+2.0d0*yKnD*(1.0d0+yKnD)/alfa)
+      !f(yKnD, alfa)=(1.0d0+yKnD)/(1.0d0+2.0d0*yKnD*(1.0d0+yKnD)/alfa)
 c
 c     STEP 1/3: CALCULATE NUCLEATION RATE FOR THE WHOLE STEP
 c

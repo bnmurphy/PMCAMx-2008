@@ -128,7 +128,7 @@ c         endif
 
 cgy	 write(6,202)t,t-tlast,temp,rh,icount
       enddo
- 202  format(2g15.8,2g10.4,' number of steps=',i8)
+ 202  format(2g15.8,2g11.4,' number of steps=',i8)
 
       return
       

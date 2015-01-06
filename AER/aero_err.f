@@ -60,19 +60,19 @@ cbk      write(*,*) 'LWC         :',lwc(iptr3d(igrdchm)-1+n3d)
       write(*,*) ' Concentrations are :'
       do l=1,ngas
 	n4d = n3d + ncol(igrdchm)*nrow(igrdchm)*nlay(igrdchm)*(l-1)
-	write(*,'(a10,1x,e12.6)') spname(l),
+	write(*,'(a10,1x,e13.6)') spname(l),
      &                       conc(iptr4d(igrdchm)-1+n4d)/convfac
       enddo
       do l=ngas+1,nspec
 	n4d = n3d + ncol(igrdchm)*nrow(igrdchm)*nlay(igrdchm)*(l-1)
-	write(*,'(a10,1x,e12.6)') spname(l),conc(iptr4d(igrdchm)-1+n4d)
+	write(*,'(a10,1x,e13.6)') spname(l),conc(iptr4d(igrdchm)-1+n4d)
       enddo
 c
       write(*,*)
       write(*,*) ' Radicals are :'
       do l=1,nrad
 	n4d = n3d + ncol(igrdchm)*nrow(igrdchm)*nlay(igrdchm)*(l-1)
-	write(*,'(a10,1x,e12.6)') nmrad(l),cncrad(iptrad(igrdchm)-1+n4d)
+	write(*,'(a10,1x,e13.6)') nmrad(l),cncrad(iptrad(igrdchm)-1+n4d)
       enddo
 c
       write(iout,*) 
