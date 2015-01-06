@@ -898,7 +898,7 @@ c
 c   --- echo the irmb specific flags ---
 c
       if( lproca ) then
-         write(idiag,'(A,L10,/)/')
+         write(idiag,'(A,L10,//)')
      &                  'Integrated Process Rates Analysis :',lipr
          write(idiag,'(A,L10,//)')
      &                  'Integrated Reaction Rates Analysis:',lirr
